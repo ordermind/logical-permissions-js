@@ -1,3 +1,5 @@
+"use strict";
+
 OrdermindLogicalPermissions = {
   types: {},
   bypass_callback: null

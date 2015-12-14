@@ -2,7 +2,7 @@
   "name": "logical-permissions",
   "version": "0.1.0",
   "description": "Adds support for complex permissions through logic gates",
-  "main": "index.js",
+  "main": "./lib/OrdermindLogicalPermissions.js",
   "scripts": {
     "test": "test"
   },
