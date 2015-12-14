@@ -68,11 +68,10 @@ OrdermindLogicalPermissions.setBypassCallback = function(callback) {
 /**
  * Check access for a permission tree. Realm: Anywhere.
  * @param {Object} permissions - The permission tree to be evaluated
- * @param {Object} user - The user for which to check the access
- * @param {Object} [document] - The document for which to check the access, if relevant
+ * @param [free params]
  * @returns {Boolean} access
  */
-OrdermindLogicalPermissions.checkAccess = function(permissions, user, document) {
+OrdermindLogicalPermissions.checkAccess = function(permissions) {
   var self = this;
   var access = false;
   var allow_bypass = true;
@@ -83,15 +82,15 @@ OrdermindLogicalPermissions.checkAccess = function(permissions, user, document) 
       allow_bypass = !permissions_copy.no_bypass;
     }
     else if(variable_type === 'Object') { //Object containing permissions which act as conditions
-      allow_bypass = !self.dispatch(permissions_copy.no_bypass, user, document);
+      allow_bypass = !self.dispatch(permissions_copy.no_bypass, arguments);
     }
     delete permissions_copy.no_bypass;
   }
-  if(allow_bypass && self.checkBypassAccess(user)) {
+  if(allow_bypass && self.checkBypassAccess(arguments)) {
     access = true; 
   }
   else {
-    access = self.dispatch(permissions_copy, user, document);
+    access = self.dispatch(permissions_copy, arguments);
   }
   return access;
 };
@@ -101,21 +100,26 @@ OrdermindLogicalPermissions.getVariableType = function(variable) {
   return Object.prototype.toString.call(variable).match(/^\[object\s(.*)\]$/)[1];
 };
 
-OrdermindLogicalPermissions.checkBypassAccess = function(user) {
+OrdermindLogicalPermissions.checkBypassAccess = function() {
   var self = this;
-  return self.checkFlagBypassAccess(user);
+  var bypass_access = false;
+  var bypass_callback = self.getBypassCallback();
+  if(bypass_callback) {
+    bypass_access = bypass_callback.apply(arguments);
+  }
+  return bypass_access;
 };
 
-OrdermindLogicalPermissions.dispatch = function(permissions, user, document, type) {
+OrdermindLogicalPermissions.dispatch = function(permissions) {
   var self = this;
   var access = false;
   var key = '';
   var variable_type = self.getVariableType(permissions);
   if(variable_type === 'String') {
-    access = self.callMethod(permissions, user, document, type);
+    access = self.callMethod(permissions, arguments);
   }
   else if(variable_type === 'Array') {
-    access = self.processOR(permissions, user, document, type);
+    access = self.processOR(permissions, arguments);
   }
   else if(variable_type === 'Object') {
     for(var tmpkey in permissions) {
@@ -124,39 +128,39 @@ OrdermindLogicalPermissions.dispatch = function(permissions, user, document, typ
     }
     var value = permissions[key];
     if(key === 'AND') {
-      access = self.processAND(value, user, document, type);
+      access = self.processAND(value, arguments);
     }
     else if(key === 'NAND') {
-      access = self.processNAND(value, user, document, type);
+      access = self.processNAND(value, arguments);
     }
     else if(key === 'OR') {
-      access = self.processOR(value, user, document, type);
+      access = self.processOR(value, arguments);
     }
     else if(key === 'NOR') {
-      access = self.processNOR(value, user, document, type);
+      access = self.processNOR(value, arguments);
     }
     else if(key === 'XOR') {
-      access = self.processXOR(value, user, document, type);
+      access = self.processXOR(value, arguments);
     }
     else if(key === 'NOT') {
-      access = self.processNOT(value, user, document, type);
+      access = self.processNOT(value, arguments);
     }
     else {
       type = key; 
-      access = self.dispatch(value, user, document, type);
+      access = self.dispatch(value, arguments);
     }
   }
   return access;
 };
 
-OrdermindLogicalPermissions.processAND = function(permissions, user, document, type) {
+OrdermindLogicalPermissions.processAND = function(permissions) {
   var self = this;
   var access = true;
   var variable_type = self.getVariableType(permissions);
   if(variable_type === 'Array') {
     for(var i in permissions) {
       var permission = permissions[i];
-      access = access && self.callMethod(permission, user, document, type);
+      access = access && self.callMethod(permission, arguments);
       if(!access) {
         break; 
       }
@@ -166,7 +170,7 @@ OrdermindLogicalPermissions.processAND = function(permissions, user, document, t
     for(var key in permissions) {
       var subpermissions = {};
       subpermissions[key] = permissions[key];
-      access = access && self.dispatch(subpermissions, user, document, type);
+      access = access && self.dispatch(subpermissions, arguments);
       if(!access) {
         break; 
       }
@@ -178,20 +182,20 @@ OrdermindLogicalPermissions.processAND = function(permissions, user, document, t
   return access;
 };
 
-OrdermindLogicalPermissions.processNAND = function(permissions, user, document, type) {
+OrdermindLogicalPermissions.processNAND = function(permissions) {
   var self = this;
-  var access = self.processAND(permissions, user, document, type);
+  var access = self.processAND(permissions, arguments);
   return !access;
 };
 
-OrdermindLogicalPermissions.processOR = function(permissions, user, document, type) {
+OrdermindLogicalPermissions.processOR = function(permissions) {
   var self = this;
   var access = false;
   var variable_type = self.getVariableType(permissions);
   if(variable_type === 'Array') {
     for(var i in permissions) {
       var permission = permissions[i];
-      access = access || self.callMethod(permission, user, document, type);
+      access = access || self.callMethod(permission, arguments);
       if(access) {
         break; 
       }
@@ -201,7 +205,7 @@ OrdermindLogicalPermissions.processOR = function(permissions, user, document, ty
     for(var key in permissions) {
       var subpermissions = {};
       subpermissions[key] = permissions[key];
-      access = access || self.dispatch(subpermissions, user, document, type);
+      access = access || self.dispatch(subpermissions, arguments);
       if(access) {
         break; 
       }
@@ -210,13 +214,13 @@ OrdermindLogicalPermissions.processOR = function(permissions, user, document, ty
   return access;
 };
 
-OrdermindLogicalPermissions.processNOR = function(permissions, user, document, type) {
+OrdermindLogicalPermissions.processNOR = function(permissions) {
   var self = this;
-  var access = self.processOR(permissions, user, document, type);
+  var access = self.processOR(permissions, arguments);
   return !access;
 };
 
-OrdermindLogicalPermissions.processXOR = function(permissions, user, document, type) {
+OrdermindLogicalPermissions.processXOR = function(permissions) {
   var self = this;
   var access = false;
   var count_true = 0;
@@ -225,7 +229,7 @@ OrdermindLogicalPermissions.processXOR = function(permissions, user, document, t
   if(variable_type === 'Array') {
     for(var i in permissions) {
       var permission = permissions[i];
-      var this_access = self.callMethod(permission, user, document, type);
+      var this_access = self.callMethod(permission, arguments);
       if(this_access) {
         count_true++; 
       }
@@ -242,7 +246,7 @@ OrdermindLogicalPermissions.processXOR = function(permissions, user, document, t
     for(var key in permissions) {
       var subpermissions = {};
       subpermissions[key] = permissions[key];
-      var this_access = self.dispatch(subpermissions, user, document, type);
+      var this_access = self.dispatch(subpermissions, arguments);
       if(this_access) {
         count_true++; 
       }
@@ -258,26 +262,26 @@ OrdermindLogicalPermissions.processXOR = function(permissions, user, document, t
   return access;
 };
 
-OrdermindLogicalPermissions.processNOT = function(permissions, user, document, type) {
+OrdermindLogicalPermissions.processNOT = function(permissions) {
   var self = this;
   var access = false;
   var variable_type = self.getVariableType(permissions);
   if(variable_type === 'String') {
-    access = !self.callMethod(permissions, user, document, type);
+    access = !self.callMethod(permissions, arguments);
   }
   else if(variable_type === 'Object') {
-    access = !self.dispatch(permissions, user, document, type);
+    access = !self.dispatch(permissions, arguments);
   }
   return access;
 };
 
-OrdermindLogicalPermissions.callMethod = function(permission, user, document, type) {
+OrdermindLogicalPermissions.callMethod = function(permission) {
   var self = this;
   var access = false;
   var types = self.getTypes();
   if(types.hasOwnProperty(type)) {
     var func = types[type];
-    access = func.call(self, permission, user, document);
+    access = func.apply(self, arguments);
   }
   return access;
 };
