@@ -1,0 +1,11 @@
+{
+  "name": "logical-permissions",
+  "version": "0.1.0",
+  "description": "Adds support for complex permissions through logic gates",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "author": "Kristofer Tengström",
+  "license": "ISC"
+}
