@@ -287,3 +287,5 @@ OrdermindLogicalPermissions.prototype.checkAccess = function(permissions) {
   }
   return access;
 };
+
+exports.OrdermindLogicalPermissions = OrdermindLogicalPermissions;
