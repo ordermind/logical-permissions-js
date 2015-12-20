@@ -6,6 +6,5 @@
   "scripts": {
     "test": "test"
   },
-  "author": "Kristofer Tengström",
-  "license": "ISC"
+  "author": "Kristofer Tengström"
 }
