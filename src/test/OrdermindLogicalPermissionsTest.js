@@ -12,43 +12,43 @@ describe('OrdermindLogicalPermissions', function() {
   /*-----------OrdermindLogicalPermissions::addType()-------------*/
 
   describe('testAddTypeParamNameMissing', function() {
-    it('should call OrdermindLogicalPermissions::addType() with no "name" parameter and catch an exception', function() {
+    it('should call OrdermindLogicalPermissions::addType() with no "name" parameter and catch a MissingArgumentException exception', function() {
       var lp = new OrdermindLogicalPermissions();
       assert.throws(function() {
         lp.addType();
-      });
+      }, function(err) {return err.name === 'MissingArgumentException';});
     });
   });
   describe('testAddTypeParamNameWrongType', function() {
-    it('should call OrdermindLogicalPermissions::addType() with the wrong data type for the "name" parameter and catch an exception', function() {
+    it('should call OrdermindLogicalPermissions::addType() with the wrong data type for the "name" parameter and catch an InvalidArgumentTypeException exception', function() {
       var lp = new OrdermindLogicalPermissions();
       assert.throws(function() {
         lp.addType(0, function(){});
-      });
+      }, function(err) {return err.name === 'InvalidArgumentTypeException';});
     });
   });
   describe('testAddTypeParamNameEmpty', function() {
-    it('should call OrdermindLogicalPermissions::addType() with an empty string for "name" parameter and catch an exception', function() {
+    it('should call OrdermindLogicalPermissions::addType() with an empty string for "name" parameter and catch an InvalidArgumentValueException exception', function() {
       var lp = new OrdermindLogicalPermissions();
       assert.throws(function() {
         lp.addType('', function(){});
-      });
+      }, function(err) {return err.name === 'InvalidArgumentValueException';});
     });
   });
   describe('testAddTypeParamCallbackMissing', function() {
-    it('should call OrdermindLogicalPermissions::addType() with no "callback" parameter and catch an exception', function() {
+    it('should call OrdermindLogicalPermissions::addType() with no "callback" parameter and catch a MissingArgumentException exception', function() {
       var lp = new OrdermindLogicalPermissions();
       assert.throws(function() {
         lp.addType('test');
-      });
+      }, function(err) {return err.name === 'MissingArgumentException';});
     });
   });
   describe('testAddTypeParamCallbackWrongType', function() {
-    it('should call OrdermindLogicalPermissions::addType() with the wrong data type for the "name" parameter and catch an exception', function() {
+    it('should call OrdermindLogicalPermissions::addType() with the wrong data type for the "name" parameter and catch an InvalidArgumentTypeException exception', function() {
       var lp = new OrdermindLogicalPermissions();
       assert.throws(function() {
         lp.addType('test', 0);
-      });
+      }, function(err) {return err.name === 'InvalidArgumentTypeException';});
     });
   });
   describe('testAddType', function() {
@@ -62,35 +62,35 @@ describe('OrdermindLogicalPermissions', function() {
   /*-------------LogicalPermissions::removeType()--------------*/
   
   describe('testRemoveTypeParamNameMissing', function() {
-    it('should call OrdermindLogicalPermissions::removeType() with no "name" parameter and catch an exception', function() {
+    it('should call OrdermindLogicalPermissions::removeType() with no "name" parameter and catch a MissingArgumentException exception', function() {
       var lp = new OrdermindLogicalPermissions();
       assert.throws(function() {
         lp.removeType();
-      });
+      }, function(err) {return err.name === 'MissingArgumentException';});
     });
   });
   describe('testRemoveTypeParamNameWrongType', function() {
-    it('should call OrdermindLogicalPermissions::removeType() with the wrong data type for the "name" parameter and catch an exception', function() {
+    it('should call OrdermindLogicalPermissions::removeType() with the wrong data type for the "name" parameter and catch an InvalidArgumentTypeException exception', function() {
       var lp = new OrdermindLogicalPermissions();
       assert.throws(function() {
         lp.removeType(0);
-      });
+      }, function(err) {return err.name === 'InvalidArgumentTypeException';});
     });
   });
   describe('testRemoveTypeParamNameEmpty', function() {
-    it('should call OrdermindLogicalPermissions::removeType() with an empty string for "name" parameter and catch an exception', function() {
+    it('should call OrdermindLogicalPermissions::removeType() with an empty string for "name" parameter and catch an InvalidArgumentValueException exception', function() {
       var lp = new OrdermindLogicalPermissions();
       assert.throws(function() {
         lp.removeType('');
-      });
+      }, function(err) {return err.name === 'InvalidArgumentValueException';});
     });
   });
   describe('testRemoveTypeParamNameDoesntExist', function() {
-    it('should call OrdermindLogicalPermissions::removeType() with a "name" parameter that is not registered and catch an exception', function() {
+    it('should call OrdermindLogicalPermissions::removeType() with a "name" parameter that is not registered and catch a PermissionTypeNotRegisteredException exception', function() {
       var lp = new OrdermindLogicalPermissions();
       assert.throws(function() {
         lp.removeType('test');
-      });
+      }, function(err) {return err.name === 'PermissionTypeNotRegisteredException';});
     });
   });
   describe('testRemoveType', function() {

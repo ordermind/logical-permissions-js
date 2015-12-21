@@ -3,6 +3,7 @@
 require('module');
 
 var OrdermindLogicalPermissions = function OrdermindLogicalPermissions(){
+
   /*-----Private properties-------*/
   
   var types = {};
@@ -18,20 +19,21 @@ var OrdermindLogicalPermissions = function OrdermindLogicalPermissions(){
   this.addType = function(name, callback) {
     var self = this;
     if(name === undefined) {
-      throw new Error('The name parameter is required.');
+      throw {name: 'MissingArgumentException', message: 'The name parameter is required.'};
     }
     if(getVariableType(name) !== 'String') {
-      throw new Error('The name parameter must be a string.'); 
+      throw {name: 'InvalidArgumentTypeException', message: 'The name parameter must be a string.'};
     }
     if(!name) {
-      throw new Error('The name parameter cannot be empty.'); 
+      throw {name: 'InvalidArgumentValueException', message: 'The name parameter cannot be empty.'};
     }
     if(callback === undefined) {
-      throw new Error('The callback parameter is required.');
+      throw {name: 'MissingArgumentException', message: 'The callback parameter is required.'};
     }
     if(getVariableType(callback) !== 'Function') {
-      throw new Error('The callback parameter must be a function.');
+      throw {name: 'InvalidArgumentTypeException', message: 'The callback parameter must be a function.'};
     }
+
     types[name] = callback;
   };
 
@@ -42,20 +44,19 @@ var OrdermindLogicalPermissions = function OrdermindLogicalPermissions(){
   this.removeType = function(name) {
     var self = this;
     if(name === undefined) {
-      throw new Error('The name parameter is required.');
+      throw {name: 'MissingArgumentException', message: 'The name parameter is required.'};
     }
     if(getVariableType(name) !== 'String') {
-      throw new Error('The name parameter must be a string.'); 
+      throw {name: 'InvalidArgumentTypeException', message: 'The name parameter must be a string.'};
     }
     if(!name) {
-      throw new Error('The name parameter cannot be empty.'); 
+      throw {name: 'InvalidArgumentValueException', message: 'The name parameter cannot be empty.'};
     }
-    if(self.typeExists(name)) {
-      delete types[name];
+    if(!self.typeExists(name)) {
+      throw {name: 'PermissionTypeNotRegisteredException', message: 'The permission type "' + name + '" has not been registered. Please use LogicalPermissions::addType() or LogicalPermissions::setTypes() to register permission types.'};
     }
-    else {
-      throw new Error('The permission type "' + name + '" has not been registered. Please use LogicalPermissions::addType() or LogicalPermissions::setTypes() to register permission types.'); 
-    }
+
+    delete types[name];
   };
 
   /**
@@ -66,14 +67,15 @@ var OrdermindLogicalPermissions = function OrdermindLogicalPermissions(){
   this.typeExists = function(name) {
     var self = this;
     if(name === undefined) {
-      throw new Error('The name parameter is required.');
+      throw {name: 'MissingArgumentException', message: 'The name parameter is required.'};
     }
     if(getVariableType(name) !== 'String') {
-      throw new Error('The name parameter must be a string.'); 
+      throw {name: 'InvalidArgumentTypeException', message: 'The name parameter must be a string.'};
     }
     if(!name) {
-      throw new Error('The name parameter cannot be empty.'); 
+      throw {name: 'InvalidArgumentValueException', message: 'The name parameter cannot be empty.'};
     }
+
     var types = self.getTypes();
     return types.hasOwnProperty(name);
   }
