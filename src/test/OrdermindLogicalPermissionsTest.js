@@ -12,7 +12,9 @@ describe('OrdermindLogicalPermissions', function() {
   describe('testAddTypeParamNameWrongType', function() {
     it('should call OrdermindLogicalPermissions::addType() with the wrong data type for the "name" parameter and catch an exception', function() {
       var lp = new OrdermindLogicalPermissions();
-      lp.addType(0, function(){});
+      assert.throws(function() {
+        lp.addType(0, function(){});
+      });
     });
   });
 }); 
