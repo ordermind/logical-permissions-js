@@ -101,5 +101,40 @@ describe('OrdermindLogicalPermissions', function() {
       assert(!lp.typeExists('test'));
     });
   });
+  
+  /*-------------LogicalPermissions::typeExists()--------------*/
+  
+  describe('testTypeExistsParamNameMissing', function() {
+    it('should call OrdermindLogicalPermissions::typeExists() with no "name" parameter and catch a MissingArgumentException exception', function() {
+      var lp = new OrdermindLogicalPermissions();
+      assert.throws(function() {
+        lp.typeExists();
+      }, function(err) {return err.name === 'MissingArgumentException';});
+    });
+  });
+  describe('testTypeExistsParamNameWrongType', function() {
+    it('should call OrdermindLogicalPermissions::typeExists() with the wrong data type for the "name" parameter and catch an InvalidArgumentTypeException exception', function() {
+      var lp = new OrdermindLogicalPermissions();
+      assert.throws(function() {
+        lp.typeExists(0);
+      }, function(err) {return err.name === 'InvalidArgumentTypeException';});
+    });
+  });
+  describe('testTypeExistsParamNameEmpty', function() {
+    it('should call OrdermindLogicalPermissions::typeExists() with an empty string for "name" parameter and catch an InvalidArgumentValueException exception', function() {
+      var lp = new OrdermindLogicalPermissions();
+      assert.throws(function() {
+        lp.typeExists('');
+      }, function(err) {return err.name === 'InvalidArgumentValueException';});
+    });
+  });
+  describe('testTypeExists', function() {
+    it('should call OrdermindLogicalPermissions::typeExists() and assert that a created type exists', function() {
+      var lp = new OrdermindLogicalPermissions();
+      assert(!lp.typeExists('test'));
+      lp.addType('test', function(){});
+      assert(lp.typeExists('test'));
+    });
+  });
 
 }); 
