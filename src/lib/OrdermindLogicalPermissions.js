@@ -112,7 +112,7 @@ var OrdermindLogicalPermissions = function OrdermindLogicalPermissions(){
     var self = this;
     var this_types = {};
     for(var type in types) {
-      this_types[type] = types[type]; 
+      this_types[type] = types[type];
     }
     return this_types;
   };

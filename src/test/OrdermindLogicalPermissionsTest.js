@@ -179,5 +179,20 @@ describe('OrdermindLogicalPermissions', function() {
       assert.strictEqual(lp.getTypeCallback('test'), callback);
     });
   });
+  
+  /*-------------OrdermindLogicalPermissions::getTypes()--------------*/
+  
+  describe('testGetTypes', function() {
+    it('should call OrdermindLogicalPermissions::getTypes() and successfully get all registered types', function() {
+      var lp = new OrdermindLogicalPermissions();
+      var callback = function(){};
+      lp.addType('test', callback);
+      var types = lp.getTypes();
+      for(var name in types) {
+        assert.equal(name, 'test');
+        assert.strictEqual(types[name], callback);
+      }
+    });
+  });
 
 }); 
