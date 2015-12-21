@@ -59,7 +59,7 @@ describe('OrdermindLogicalPermissions', function() {
     });
   });
   
-  /*-------------LogicalPermissions::removeType()--------------*/
+  /*-------------OrdermindLogicalPermissions::removeType()--------------*/
   
   describe('testRemoveTypeParamNameMissing', function() {
     it('should call OrdermindLogicalPermissions::removeType() with no "name" parameter and catch a MissingArgumentException exception', function() {
@@ -102,7 +102,7 @@ describe('OrdermindLogicalPermissions', function() {
     });
   });
   
-  /*-------------LogicalPermissions::typeExists()--------------*/
+  /*-------------OrdermindLogicalPermissions::typeExists()--------------*/
   
   describe('testTypeExistsParamNameMissing', function() {
     it('should call OrdermindLogicalPermissions::typeExists() with no "name" parameter and catch a MissingArgumentException exception', function() {
@@ -134,6 +134,49 @@ describe('OrdermindLogicalPermissions', function() {
       assert(!lp.typeExists('test'));
       lp.addType('test', function(){});
       assert(lp.typeExists('test'));
+    });
+  });
+  
+  /*-------------OrdermindLogicalPermissions::getTypeCallback()--------------*/
+  
+  describe('testGetTypeCallbackParamNameMissing', function() {
+    it('should call OrdermindLogicalPermissions::getTypeCallback() with no "name" parameter and catch a MissingArgumentException exception', function() {
+      var lp = new OrdermindLogicalPermissions();
+      assert.throws(function() {
+        lp.getTypeCallback();
+      }, function(err) {return err.name === 'MissingArgumentException';});
+    });
+  });
+  describe('testGetTypeCallbackParamNameWrongType', function() {
+    it('should call OrdermindLogicalPermissions::getTypeCallback() with the wrong data type for the "name" parameter and catch an InvalidArgumentTypeException exception', function() {
+      var lp = new OrdermindLogicalPermissions();
+      assert.throws(function() {
+        lp.getTypeCallback(0);
+      }, function(err) {return err.name === 'InvalidArgumentTypeException';});
+    });
+  });
+  describe('testGetTypeCallbackParamNameEmpty', function() {
+    it('should call OrdermindLogicalPermissions::getTypeCallback() with an empty string for "name" parameter and catch an InvalidArgumentValueException exception', function() {
+      var lp = new OrdermindLogicalPermissions();
+      assert.throws(function() {
+        lp.getTypeCallback('');
+      }, function(err) {return err.name === 'InvalidArgumentValueException';});
+    });
+  });
+  describe('testGetTypeCallbackParamNameDoesntExist', function() {
+    it('should call OrdermindLogicalPermissions::getTypeCallback() with a "name" parameter that is not registered and catch a PermissionTypeNotRegisteredException exception', function() {
+      var lp = new OrdermindLogicalPermissions();
+      assert.throws(function() {
+        lp.getTypeCallback('test');
+      }, function(err) {return err.name === 'PermissionTypeNotRegisteredException';});
+    });
+  });
+  describe('testGetTypeCallback', function() {
+    it('should call OrdermindLogicalPermissions::getTypeCallback() and successfully get a registered permission type callback', function() {
+      var lp = new OrdermindLogicalPermissions();
+      var callback = function(){};
+      lp.addType('test', callback);
+      assert.strictEqual(lp.getTypeCallback('test'), callback);
     });
   });
 

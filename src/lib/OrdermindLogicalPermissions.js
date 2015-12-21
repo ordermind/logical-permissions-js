@@ -16,7 +16,7 @@ var OrdermindLogicalPermissions = function OrdermindLogicalPermissions(){
    * @param {String} name - The name of the permission type
    * @param {Function} callback - The callback that evaluates the permission type
    */
-  this.addType = function(name, callback) {
+  this.addType = function addType(name, callback) {
     var self = this;
     if(name === undefined) {
       throw {name: 'MissingArgumentException', message: 'The name parameter is required.'};
@@ -41,7 +41,7 @@ var OrdermindLogicalPermissions = function OrdermindLogicalPermissions(){
    * Remove a permission type.
    * @param {String} name - The name of the permission type.
    */
-  this.removeType = function(name) {
+  this.removeType = function removeType(name) {
     var self = this;
     if(name === undefined) {
       throw {name: 'MissingArgumentException', message: 'The name parameter is required.'};
@@ -53,7 +53,7 @@ var OrdermindLogicalPermissions = function OrdermindLogicalPermissions(){
       throw {name: 'InvalidArgumentValueException', message: 'The name parameter cannot be empty.'};
     }
     if(!self.typeExists(name)) {
-      throw {name: 'PermissionTypeNotRegisteredException', message: 'The permission type "' + name + '" has not been registered. Please use LogicalPermissions::addType() or LogicalPermissions::setTypes() to register permission types.'};
+      throw {name: 'PermissionTypeNotRegisteredException', message: 'The permission type "' + name + '" has not been registered. Please use OrdermindLogicalPermissions::addType() or OrdermindLogicalPermissions::setTypes() to register permission types.'};
     }
 
     delete types[name];
@@ -64,7 +64,7 @@ var OrdermindLogicalPermissions = function OrdermindLogicalPermissions(){
    * @param {String} name - The name of the permission type.
    * @returns {Boolean} TRUE if the type is found or FALSE if the type isn't found.
    */
-  this.typeExists = function(name) {
+  this.typeExists = function typeExists(name) {
     var self = this;
     if(name === undefined) {
       throw {name: 'MissingArgumentException', message: 'The name parameter is required.'};
@@ -78,13 +78,37 @@ var OrdermindLogicalPermissions = function OrdermindLogicalPermissions(){
 
     var types = self.getTypes();
     return types.hasOwnProperty(name);
-  }
+  };
+  
+  /**
+  * Get the callback for a permission type.
+  * @param {String} name - The name of the permission type.
+  * @returns {Function} Callback for the permission type.
+  */
+  this.getTypeCallback = function getTypeCallback(name) {
+    var self = this;
+    if(name === undefined) {
+      throw {name: 'MissingArgumentException', message: 'The name parameter is required.'};
+    }
+    if(getVariableType(name) !== 'String') {
+      throw {name: 'InvalidArgumentTypeException', message: 'The name parameter must be a string.'};
+    }
+    if(!name) {
+      throw {name: 'InvalidArgumentValueException', message: 'The name parameter cannot be empty.'};
+    }
+    if(!self.typeExists(name)) {
+      throw {name: 'PermissionTypeNotRegisteredException', message: 'The permission type "' + name + '" has not been registered. Please use OrdermindLogicalPermissions::addType() or OrdermindLogicalPermissions::setTypes() to register permission types.'};
+    }
+    
+    var types = self.getTypes();
+    return types[name];
+  };
 
   /**
    * Get all defined permission types.
    * @returns {Object} permission types with the structure {name: callback, name2: callback2, ...}. This object is shallow cloned.
    */
-  this.getTypes = function() {
+  this.getTypes = function getTypes() {
     var self = this;
     var this_types = {};
     for(var type in types) {
@@ -97,7 +121,7 @@ var OrdermindLogicalPermissions = function OrdermindLogicalPermissions(){
    * Overwrite all defined permission types.
    * @param {Object} types - permission types with the structure {name: callback, name2: callback2, ...}. This object is shallow cloned.
    */
-  this.setTypes = function(types) {
+  this.setTypes = function setTypes(types) {
     var self = this;
     self.types = {};
     for(var type in types) {
@@ -109,7 +133,7 @@ var OrdermindLogicalPermissions = function OrdermindLogicalPermissions(){
    * Get the current bypass access callback.
    * @returns {Function} callback for checking access bypass.
    */
-  this.getBypassCallback = function() {
+  this.getBypassCallback = function getBypassCallback() {
     var self = this;
     return self.bypass_callback;
   };
@@ -118,7 +142,7 @@ var OrdermindLogicalPermissions = function OrdermindLogicalPermissions(){
    * Set the bypass access callback.
    * @param {Function} callback for checking access bypass.
    */
-  this.setBypassCallback = function(callback) {
+  this.setBypassCallback = function setBypassCallback(callback) {
     var self = this;
     self.bypass_callback = callback;
   };
@@ -129,7 +153,7 @@ var OrdermindLogicalPermissions = function OrdermindLogicalPermissions(){
    * @param [free params]
    * @returns {Boolean} access
    */
-  this.checkAccess = function(permissions) {
+  this.checkAccess = function checkAccess(permissions) {
     var self = this;
     var access = false;
     var allow_bypass = true;
@@ -155,12 +179,12 @@ var OrdermindLogicalPermissions = function OrdermindLogicalPermissions(){
   
   /*--------Private methods--------*/
   
-  var getVariableType = function(variable) {
+  var getVariableType = function getVariableType(variable) {
     var self = this;
     return Object.prototype.toString.call(variable).match(/^\[object\s(.*)\]$/)[1];
   };
 
-  var checkBypassAccess = function() {
+  var checkBypassAccess = function checkBypassAccess() {
     var self = this;
     var bypass_access = false;
     var bypass_callback = self.getBypassCallback();
@@ -170,7 +194,7 @@ var OrdermindLogicalPermissions = function OrdermindLogicalPermissions(){
     return bypass_access;
   };
 
-  var dispatch = function(permissions) {
+  var dispatch = function dispatch(permissions) {
     var self = this;
     var access = false;
     var key = '';
@@ -213,7 +237,7 @@ var OrdermindLogicalPermissions = function OrdermindLogicalPermissions(){
     return access;
   };
 
-  var processAND = function(permissions) {
+  var processAND = function processAND(permissions) {
     var self = this;
     var access = true;
     var variable_type = self.getVariableType(permissions);
@@ -242,13 +266,13 @@ var OrdermindLogicalPermissions = function OrdermindLogicalPermissions(){
     return access;
   };
 
-  var processNAND = function(permissions) {
+  var processNAND = function processNAND(permissions) {
     var self = this;
     var access = self.processAND(permissions, arguments);
     return !access;
   };
 
-  var processOR = function(permissions) {
+  var processOR = function processOR(permissions) {
     var self = this;
     var access = false;
     var variable_type = self.getVariableType(permissions);
@@ -274,13 +298,13 @@ var OrdermindLogicalPermissions = function OrdermindLogicalPermissions(){
     return access;
   };
 
-  var processNOR = function(permissions) {
+  var processNOR = function processNOR(permissions) {
     var self = this;
     var access = self.processOR(permissions, arguments);
     return !access;
   };
 
-  var processXOR = function(permissions) {
+  var processXOR = function processXOR(permissions) {
     var self = this;
     var access = false;
     var count_true = 0;
@@ -322,7 +346,7 @@ var OrdermindLogicalPermissions = function OrdermindLogicalPermissions(){
     return access;
   };
 
-  var processNOT = function(permissions) {
+  var processNOT = function processNOT(permissions) {
     var self = this;
     var access = false;
     var variable_type = self.getVariableType(permissions);
@@ -335,7 +359,7 @@ var OrdermindLogicalPermissions = function OrdermindLogicalPermissions(){
     return access;
   };
 
-  var callMethod = function(permission) {
+  var callMethod = function callMethod(permission) {
     var self = this;
     var access = false;
     var types = self.getTypes();
