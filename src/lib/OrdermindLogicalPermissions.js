@@ -150,7 +150,7 @@ var OrdermindLogicalPermissions = function OrdermindLogicalPermissions(){
    */
   this.getBypassCallback = function getBypassCallback() {
     var self = this;
-    return self.bypass_callback;
+    return bypass_callback;
   };
 
   /**
@@ -159,7 +159,14 @@ var OrdermindLogicalPermissions = function OrdermindLogicalPermissions(){
    */
   this.setBypassCallback = function setBypassCallback(callback) {
     var self = this;
-    self.bypass_callback = callback;
+    if(callback === undefined) {
+      throw {name: 'MissingArgumentException', message: 'The callback parameter is required.'};
+    }
+    if(getVariableType(callback) !== 'Function') {
+      throw {name: 'InvalidArgumentTypeException', message: 'The callback parameter must be a function.'};
+    }
+
+    bypass_callback = callback;
   };
 
   /**

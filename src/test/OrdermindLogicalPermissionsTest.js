@@ -264,5 +264,32 @@ describe('OrdermindLogicalPermissions', function() {
       assert.equal(lp.getBypassCallback(), null);
     });
   });
+  
+  /*-------------OrdermindLogicalPermissions::setBypassCallback()--------------*/
+  
+  describe('testSetBypassCallbackParamCallbackMissing', function() {
+    it('should call OrdermindLogicalPermissions::setBypassCallback() with no "callback" parameter and catch a MissingArgumentException exception', function() {
+      var lp = new OrdermindLogicalPermissions();
+      assert.throws(function() {
+        lp.setBypassCallback();
+      }, function(err) {return err.name === 'MissingArgumentException';});
+    });
+  });
+  describe('testSetBypassCallbackParamCallbackWrongType', function() {
+    it('should call OrdermindLogicalPermissions::setBypassCallback() with the wrong data type for the "callback" parameter and catch an InvalidArgumentTypeException exception', function() {
+      var lp = new OrdermindLogicalPermissions();
+      assert.throws(function() {
+        lp.setBypassCallback(0);
+      }, function(err) {return err.name === 'InvalidArgumentTypeException';});
+    });
+  });
+  describe('testSetBypassCallback', function() {
+    it('should call OrdermindLogicalPermissions::setBypassCallback() and successfully register a bypass callback', function() {
+      var lp = new OrdermindLogicalPermissions();
+      var callback = function(){};
+      lp.setBypassCallback(callback);
+      assert.strictEqual(lp.getBypassCallback(), callback);
+    });
+  });
 
 }); 
