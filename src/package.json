@@ -1,10 +1,7 @@
 {
   "name": "logical-permissions",
-  "version": "0.1.0",
+  "version": "0.5.0",
   "description": "Adds support for complex permissions through logic gates",
   "main": "./lib/OrdermindLogicalPermissions.js",
-  "scripts": {
-    "test": "test"
-  },
   "author": "Kristofer Tengström"
 }
