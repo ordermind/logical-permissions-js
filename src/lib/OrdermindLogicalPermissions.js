@@ -111,21 +111,36 @@ var OrdermindLogicalPermissions = function OrdermindLogicalPermissions(){
   this.getTypes = function getTypes() {
     var self = this;
     var this_types = {};
-    for(var type in types) {
-      this_types[type] = types[type];
+    for(var name in types) {
+      this_types[name] = types[name];
     }
     return this_types;
   };
 
   /**
    * Overwrite all defined permission types.
-   * @param {Object} types - permission types with the structure {name: callback, name2: callback2, ...}. This object is shallow cloned.
+   * @param {Object} new_types - permission types with the structure {name: callback, name2: callback2, ...}. This object is shallow cloned.
    */
-  this.setTypes = function setTypes(types) {
+  this.setTypes = function setTypes(new_types) {
     var self = this;
-    self.types = {};
-    for(var type in types) {
-      self.types[type] = types[type]; 
+    if(new_types === undefined) {
+      throw {name: 'MissingArgumentException', message: 'The new_types parameter is required.'};
+    }
+    if(getVariableType(new_types) !== 'Object') {
+      throw {name: 'InvalidArgumentTypeException', message: 'The new_types parameter must be an object.'};
+    }
+    types = {};
+    for(var name in new_types) {
+      if(isNumeric(name) || getVariableType(name) !== 'String') {
+        throw {name: 'InvalidArgumentValueException', message: 'The new_types keys must be strings.'};
+      }
+      if(!name) {
+        throw {name: 'InvalidArgumentValueException', message: 'The name for a type cannot be empty.'};
+      }
+      if(getVariableType(new_types[name]) !== 'Function') {
+        throw {name: 'InvalidArgumentValueException', message: 'The type callbacks must be functions.'};
+      }
+      types[name] = new_types[name]; 
     }
   };
 
@@ -182,6 +197,10 @@ var OrdermindLogicalPermissions = function OrdermindLogicalPermissions(){
   var getVariableType = function getVariableType(variable) {
     var self = this;
     return Object.prototype.toString.call(variable).match(/^\[object\s(.*)\]$/)[1];
+  };
+  
+  var isNumeric = function(variable) {
+    return !isNaN(parseFloat(variable)) && isFinite(variable);
   };
 
   var checkBypassAccess = function checkBypassAccess() {

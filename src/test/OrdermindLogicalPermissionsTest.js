@@ -194,5 +194,64 @@ describe('OrdermindLogicalPermissions', function() {
       }
     });
   });
+  
+/*-------------OrdermindLogicalPermissions::setTypes()--------------*/
+
+  describe('testSetTypesParamTypesMissing', function() {
+    it('should call OrdermindLogicalPermissions::setTypes() with no "types" parameter and catch a MissingArgumentException exception', function() {
+      var lp = new OrdermindLogicalPermissions();
+      assert.throws(function() {
+        lp.setTypes();
+      }, function(err) {return err.name === 'MissingArgumentException';});
+    });
+  });
+  describe('testSetTypesParamTypesWrongType', function() {
+    it('should call OrdermindLogicalPermissions::setTypes() with the wrong data type for the "types" parameter and catch an InvalidArgumentTypeException exception', function() {
+      var lp = new OrdermindLogicalPermissions();
+      assert.throws(function() {
+        lp.setTypes(0);
+      }, function(err) {return err.name === 'InvalidArgumentTypeException';});
+    });
+  });
+  describe('testSetTypesParamTypesNameWrongType', function() {
+    it('should call OrdermindLogicalPermissions::setTypes() with the wrong data type for a type name key and catch an InvalidArgumentValueException exception', function() {
+      var lp = new OrdermindLogicalPermissions();
+      assert.throws(function() {
+        var types = {0: function(){}};
+        lp.setTypes(types);
+      }, function(err) {return err.name === 'InvalidArgumentValueException';});
+    });
+  });
+  describe('testSetTypesParamTypesNameEmpty', function() {
+    it('should call OrdermindLogicalPermissions::setTypes() with an empty type name key and catch an InvalidArgumentValueException exception', function() {
+      var lp = new OrdermindLogicalPermissions();
+      assert.throws(function() {
+        var types = {'': function(){}};
+        lp.setTypes(types);
+      }, function(err) {return err.name === 'InvalidArgumentValueException';});
+    });
+  });
+  describe('testSetTypesParamTypesCallbackWrongType', function() {
+    it('should call OrdermindLogicalPermissions::setTypes() with the wrong data type for a type callback and catch an InvalidArgumentValueException exception', function() {
+      var lp = new OrdermindLogicalPermissions();
+      assert.throws(function() {
+        var types = {'test': 'hej'};
+        lp.setTypes(types);
+      }, function(err) {return err.name === 'InvalidArgumentValueException';});
+    });
+  });
+  describe('testSetTypes', function() {
+    it('should call OrdermindLogicalPermissions::setTypes() and successfully overwrite all types', function() {
+      var lp = new OrdermindLogicalPermissions();
+      var callback = function(){};
+      var types = {'test': callback};
+      lp.setTypes(types);
+      var existing_types = lp.getTypes();
+      for(var name in existing_types) {
+        assert.equal(name, 'test');
+        assert.strictEqual(types[name], callback);
+      }
+    });
+  });
 
 }); 
