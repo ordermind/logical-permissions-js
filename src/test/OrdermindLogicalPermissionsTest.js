@@ -192,10 +192,12 @@ describe('OrdermindLogicalPermissions', function() {
         assert.equal(name, 'test');
         assert.strictEqual(types[name], callback);
       }
+      types.test2 = function(){};
+      assert(!lp.getTypes().hasOwnProperty('test2'));
     });
   });
   
-/*-------------OrdermindLogicalPermissions::setTypes()--------------*/
+  /*-------------OrdermindLogicalPermissions::setTypes()--------------*/
 
   describe('testSetTypesParamTypesMissing', function() {
     it('should call OrdermindLogicalPermissions::setTypes() with no "types" parameter and catch a MissingArgumentException exception', function() {
@@ -251,6 +253,15 @@ describe('OrdermindLogicalPermissions', function() {
         assert.equal(name, 'test');
         assert.strictEqual(types[name], callback);
       }
+    });
+  });
+
+  /*-------------OrdermindLogicalPermissions::getBypassCallback()--------------*/
+  
+  describe('testGetBypassCallback', function() {
+    it('should call OrdermindLogicalPermissions::getBypassCallback() and check that the callback is null', function() {
+      var lp = new OrdermindLogicalPermissions();
+      assert.equal(lp.getBypassCallback(), null);
     });
   });
 
