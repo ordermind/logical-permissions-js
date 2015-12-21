@@ -17,12 +17,27 @@ var OrdermindLogicalPermissions = function OrdermindLogicalPermissions(){
    */
   this.addType = function(name, callback) {
     var self = this;
+    if(name === undefined) {
+      throw new Error('The name parameter is required.');
+    }
+    if(getVariableType(name) !== 'String') {
+      throw new Error('The name parameter must be a string.'); 
+    }
+    if(!name) {
+      throw new Error('The name parameter cannot be empty.'); 
+    }
+    if(callback === undefined) {
+      throw new Error('The callback parameter is required.');
+    }
+    if(getVariableType(callback) !== 'Function') {
+      throw new Error('The callback parameter must be a function.');
+    }
     types[name] = callback;
   };
 
   /**
    * Remove a permission type.
-   * @param {Object} name - The name of the permission type
+   * @param {String} name - The name of the permission type.
    */
   this.removeType = function(name) {
     var self = this;
@@ -30,16 +45,36 @@ var OrdermindLogicalPermissions = function OrdermindLogicalPermissions(){
   };
 
   /**
+   * Checks whether a permission type is registered.
+   * @param {String} name - The name of the permission type.
+   * @returns {Boolean} TRUE if the type is found or FALSE if the type isn't found.
+   */
+  this.typeExists = function(name) {
+    var self = this;
+    if(name === undefined) {
+      throw new Error('The name parameter is required.');
+    }
+    if(getVariableType(name) !== 'String') {
+      throw new Error('The name parameter must be a string.'); 
+    }
+    if(!name) {
+      throw new Error('The name parameter cannot be empty.'); 
+    }
+    var types = self.getTypes();
+    return types.hasOwnProperty(name);
+  }
+
+  /**
    * Get all defined permission types.
    * @returns {Object} permission types with the structure {name: callback, name2: callback2, ...}. This object is shallow cloned.
    */
   this.getTypes = function() {
     var self = this;
-    var types = {};
-    for(var type in self.types) {
-      types[type] = self.types[type]; 
+    var this_types = {};
+    for(var type in types) {
+      this_types[type] = types[type]; 
     }
-    return types;
+    return this_types;
   };
 
   /**
