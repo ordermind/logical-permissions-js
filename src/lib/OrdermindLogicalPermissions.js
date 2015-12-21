@@ -41,7 +41,21 @@ var OrdermindLogicalPermissions = function OrdermindLogicalPermissions(){
    */
   this.removeType = function(name) {
     var self = this;
-    delete self.types[name];
+    if(name === undefined) {
+      throw new Error('The name parameter is required.');
+    }
+    if(getVariableType(name) !== 'String') {
+      throw new Error('The name parameter must be a string.'); 
+    }
+    if(!name) {
+      throw new Error('The name parameter cannot be empty.'); 
+    }
+    if(self.typeExists(name)) {
+      delete types[name];
+    }
+    else {
+      throw new Error('The permission type "' + name + '" has not been registered. Please use LogicalPermissions::addType() or LogicalPermissions::setTypes() to register permission types.'); 
+    }
   };
 
   /**
