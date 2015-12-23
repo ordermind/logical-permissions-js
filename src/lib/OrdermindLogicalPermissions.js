@@ -501,11 +501,14 @@ var OrdermindLogicalPermissions = function OrdermindLogicalPermissions(){
 
   var externalAccessCheck = function externalAccessCheck(permission, type, context) {
     var self = this;
+    if(!self.typeExists(type)) {
+      throw {name: 'PermissionTypeNotRegisteredException', message: 'The permission type "' + type + '" has not been registered. Please use OrdermindLogicalPermissions::addType() or OrdermindLogicalPermissions::setTypes() to register permission types.'};
+    }
+
     var access = false;
-    var types = self.getTypes();
-    if(types.hasOwnProperty(type)) {
-      var func = types[type];
-      access = func.apply(self, arguments);
+    var callback = self.getTypeCallback(type);
+    if(getVariableType(callback) === 'Function') {
+      access = callback(permission, context);
     }
     return access;
   };
