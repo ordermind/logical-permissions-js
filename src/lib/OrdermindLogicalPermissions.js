@@ -452,7 +452,7 @@ var OrdermindLogicalPermissions = function OrdermindLogicalPermissions(){
       }
     }
     else if(variable_type === 'Object') {
-      if(objectLength(permission) < 2) {
+      if(objectLength(permissions) < 2) {
         throw {name: 'InvalidValueForLogicGate', message: 'The value object of an XOR gate must contain a minimum of two elements. Current value: ' + permissions};
       }
 
@@ -478,16 +478,24 @@ var OrdermindLogicalPermissions = function OrdermindLogicalPermissions(){
     return access;
   };
 
-  var processNOT = function processNOT(permissions) {
+  var processNOT = function processNOT(permissions, type, context) {
     var self = this;
-    var access = false;
     var variable_type = self.getVariableType(permissions);
-    if(variable_type === 'String') {
-      access = !self.callMethod(permissions, arguments);
+    if(variable_type === 'Object') {
+      if(objectLength(permissions) != 1) {
+        throw {name: 'InvalidValueForLogicGate', message: 'A NOT permission must have exactly one child in the value array. Current value: ' + permissions};
+      }
     }
-    else if(variable_type === 'Object') {
-      access = !self.dispatch(permissions, arguments);
+    else if(variable_type === 'String') {
+      if(!permissions) {
+        throw {name: 'InvalidValueForLogicGate', message: 'A NOT permission cannot have an empty string as its value.'};
+      }
     }
+    else {
+      throw {name: 'InvalidValueForLogicGate', message: 'The value of a NOT gate must either be an object or a string. Current value: ' + permissions};
+    }
+
+    var access = !self.dispatch(permissions, type, context);
     return access;
   };
 
