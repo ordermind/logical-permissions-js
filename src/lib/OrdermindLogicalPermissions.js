@@ -219,8 +219,16 @@ var OrdermindLogicalPermissions = function OrdermindLogicalPermissions(){
     return Object.prototype.toString.call(variable).match(/^\[object\s(.*)\]$/)[1];
   };
   
-  var isNumeric = function(variable) {
+  var isNumeric = function isNumeric(variable) {
     return !isNaN(parseFloat(variable)) && isFinite(variable);
+  };
+  
+  var objectLength = function objectLength(obj) {
+    var size = 0, key;
+    for (key in obj) {
+      if (obj.hasOwnProperty(key)) size++;
+    }
+    return size;
   };
 
   var checkBypassAccess = function checkBypassAccess(context) {
@@ -276,7 +284,7 @@ var OrdermindLogicalPermissions = function OrdermindLogicalPermissions(){
             type = key;
           }
           else {
-            throw {name: 'InvalidArgumentValueException', message: 'You cannot put a permission type as a descendant to another permission type. Existing type: $type. Evaluated permissions: ' + value};
+            throw {name: 'InvalidArgumentValueException', message: 'You cannot put a permission type as a descendant to another permission type. Existing type: ' + type + '. Evaluated permissions: ' + value};
           }
         }
         var value_vartype = getVariableType(value);
@@ -294,11 +302,12 @@ var OrdermindLogicalPermissions = function OrdermindLogicalPermissions(){
     return access;
   };
 
-  var processAND = function processAND(permissions) {
+  var processAND = function processAND(permissions, type, context) {
     var self = this;
-    var access = true;
+    var access = false;
     var variable_type = self.getVariableType(permissions);
     if(variable_type === 'Array') {
+      access = true;
       for(var i in permissions) {
         var permission = permissions[i];
         access = access && self.callMethod(permission, arguments);
@@ -308,6 +317,7 @@ var OrdermindLogicalPermissions = function OrdermindLogicalPermissions(){
       }
     }
     else if(variable_type === 'Object') {
+      access = true;
       for(var key in permissions) {
         var subpermissions = {};
         subpermissions[key] = permissions[key];
@@ -318,7 +328,7 @@ var OrdermindLogicalPermissions = function OrdermindLogicalPermissions(){
       }
     }
     else {
-      access = false; 
+      throw {name: 'InvalidValueForLogicGate', message: 'The value of an AND gate must be an array or object. Current value: ' + permissions};
     }
     return access;
   };
