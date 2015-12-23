@@ -310,7 +310,7 @@ var OrdermindLogicalPermissions = function OrdermindLogicalPermissions(){
   var processAND = function processAND(permissions, type, context) {
     var self = this;
     var access = false;
-    var variable_type = self.getVariableType(permissions);
+    var variable_type = getVariableType(permissions);
     if(variable_type === 'Array') {
       if(permissions.length < 1) {
         throw {name: 'InvalidValueForLogicGate', message: 'The value array of an AND gate must contain a minimum of one element. Current value: ' + permissions}; 
@@ -348,7 +348,7 @@ var OrdermindLogicalPermissions = function OrdermindLogicalPermissions(){
 
   var processNAND = function processNAND(permissions, type, context) {
     var self = this;
-    var variable_type = self.getVariableType(permissions);
+    var variable_type = getVariableType(permissions);
     if(variable_type === 'Array') {
       if(permissions.length < 1) {
         throw {name: 'InvalidValueForLogicGate', message: 'The value array of a NAND gate must contain a minimum of one element. Current value: ' + permissions}; 
@@ -369,25 +369,36 @@ var OrdermindLogicalPermissions = function OrdermindLogicalPermissions(){
   var processOR = function processOR(permissions) {
     var self = this;
     var access = false;
-    var variable_type = self.getVariableType(permissions);
+    var variable_type = getVariableType(permissions);
     if(variable_type === 'Array') {
+      if(permissions.length < 1) {
+        throw {name: 'InvalidValueForLogicGate', message: 'The value array of an OR gate must contain a minimum of one element. Current value: ' + permissions}; 
+      }
+
       for(var i in permissions) {
         var permission = permissions[i];
-        access = access || self.callMethod(permission, arguments);
+        access = access && dispatch(permission, type, context);
         if(access) {
           break; 
         }
       }
     }
     else if(variable_type === 'Object') {
+      if(objectLength(permissions) < 1) {
+        throw {name: 'InvalidValueForLogicGate', message: 'The value object of an OR gate must contain a minimum of one element. Current value: ' + permissions}; 
+      }
+
       for(var key in permissions) {
         var subpermissions = {};
         subpermissions[key] = permissions[key];
-        access = access || self.dispatch(subpermissions, arguments);
+        access = access && dispatch(subpermissions, type, context);
         if(access) {
           break; 
         }
       }
+    }
+    else {
+      throw {name: 'InvalidValueForLogicGate', message: 'The value of an OR gate must be an array or object. Current value: ' + permissions};
     }
     return access;
   };
