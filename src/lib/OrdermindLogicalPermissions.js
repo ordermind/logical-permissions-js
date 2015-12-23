@@ -366,7 +366,7 @@ var OrdermindLogicalPermissions = function OrdermindLogicalPermissions(){
     return access;
   };
 
-  var processOR = function processOR(permissions) {
+  var processOR = function processOR(permissions, type, context) {
     var self = this;
     var access = false;
     var variable_type = getVariableType(permissions);
@@ -403,10 +403,24 @@ var OrdermindLogicalPermissions = function OrdermindLogicalPermissions(){
     return access;
   };
 
-  var processNOR = function processNOR(permissions) {
+  var processNOR = function processNOR(permissions, type, context) {
     var self = this;
-    var access = self.processOR(permissions, arguments);
-    return !access;
+    var variable_type = getVariableType(permissions);
+    if(variable_type === 'Array') {
+      if(permissions.length < 1) {
+        throw {name: 'InvalidValueForLogicGate', message: 'The value array of a NOR gate must contain a minimum of one element. Current value: ' + permissions}; 
+      }
+    }
+    else if(variable_type === 'Object') {
+      if(objectLength(permissions) < 1) {
+        throw {name: 'InvalidValueForLogicGate', message: 'The value object of a NOR gate must contain a minimum of one element. Current value: ' + permissions}; 
+      }
+    }
+    else {
+      throw {name: 'InvalidValueForLogicGate', message: 'The value of a NOR gate must be an array or object. Current value: ' + permissions};
+    }
+    var access = !processOR(permissions, type, context);
+    return access;
   };
 
   var processXOR = function processXOR(permissions) {
