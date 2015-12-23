@@ -172,7 +172,7 @@ var OrdermindLogicalPermissions = function OrdermindLogicalPermissions(){
   /**
    * Check access for a permission tree. Realm: Anywhere.
    * @param {Object} permissions - The permission tree to be evaluated
-   * @param [free params]
+   * @param {Object} context - A context array that could for example contain the evaluated user and document.
    * @returns {Boolean} access
    */
   this.checkAccess = function checkAccess(permissions, context) {
@@ -223,12 +223,12 @@ var OrdermindLogicalPermissions = function OrdermindLogicalPermissions(){
     return !isNaN(parseFloat(variable)) && isFinite(variable);
   };
 
-  var checkBypassAccess = function checkBypassAccess() {
+  var checkBypassAccess = function checkBypassAccess(context) {
     var self = this;
     var bypass_access = false;
     var bypass_callback = self.getBypassCallback();
-    if(bypass_callback) {
-      bypass_access = bypass_callback.apply(arguments);
+    if(getVariableType(bypass_callback) === 'Function') {
+      bypass_access = bypass_callback(context);
     }
     return bypass_access;
   };
