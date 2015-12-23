@@ -254,46 +254,51 @@ var OrdermindLogicalPermissions = function OrdermindLogicalPermissions(){
       }
     }
     else if(variable_type === 'Object') {
-      var key = '';
-      for(var tmpkey in permissions) {
-        key = tmpkey;
-        break;
-      }
-      var value = permissions[key];
-      if(key === 'AND') {
-        access = processAND(value, type, context);
-      }
-      else if(key === 'NAND') {
-        access = processNAND(value, type, context);
-      }
-      else if(key === 'OR') {
-        access = processOR(value, type, context);
-      }
-      else if(key === 'NOR') {
-        access = processNOR(value, type, context);
-      }
-      else if(key === 'XOR') {
-        access = processXOR(value, type, context);
-      }
-      else if(key === 'NOT') {
-        access = processNOT(value, type, context);
-      }
-      else {
-        if(!isNumeric(key)) {
-          if(type === undefined) {
-            type = key;
-          }
-          else {
-            throw {name: 'InvalidArgumentValueException', message: 'You cannot put a permission type as a descendant to another permission type. Existing type: ' + type + '. Evaluated permissions: ' + value};
-          }
+      if(objectLength(permissions) == 1) {
+        var key = '';
+        for(var tmpkey in permissions) {
+          key = tmpkey;
+          break;
         }
-        var value_vartype = getVariableType(value);
-        if(value_vartype === 'Array' || value_vartype === 'Object') {
+        var value = permissions[key];
+        if(key === 'AND') {
+          access = processAND(value, type, context);
+        }
+        else if(key === 'NAND') {
+          access = processNAND(value, type, context);
+        }
+        else if(key === 'OR') {
           access = processOR(value, type, context);
         }
+        else if(key === 'NOR') {
+          access = processNOR(value, type, context);
+        }
+        else if(key === 'XOR') {
+          access = processXOR(value, type, context);
+        }
+        else if(key === 'NOT') {
+          access = processNOT(value, type, context);
+        }
         else {
-          access = dispatch(value, type, context);
-        }       
+          if(!isNumeric(key)) {
+            if(type === undefined) {
+              type = key;
+            }
+            else {
+              throw {name: 'InvalidArgumentValueException', message: 'You cannot put a permission type as a descendant to another permission type. Existing type: ' + type + '. Evaluated permissions: ' + value};
+            }
+          }
+          var value_vartype = getVariableType(value);
+          if(value_vartype === 'Array' || value_vartype === 'Object') {
+            access = processOR(value, type, context);
+          }
+          else {
+            access = dispatch(value, type, context);
+          }       
+        }
+      }
+      else if(objectLength(permissions) > 1) {
+        access = processOR(permissions, type, context); 
       }
     }
     else {
@@ -307,21 +312,29 @@ var OrdermindLogicalPermissions = function OrdermindLogicalPermissions(){
     var access = false;
     var variable_type = self.getVariableType(permissions);
     if(variable_type === 'Array') {
+      if(permissions.length < 1) {
+        throw {name: 'InvalidValueForLogicGate', message: 'The value array of an AND gate must contain a minimum of one element. Current value: ' + permissions}; 
+      }
+
       access = true;
       for(var i in permissions) {
         var permission = permissions[i];
-        access = access && self.callMethod(permission, arguments);
+        access = access && dispatch(permission, type, context);
         if(!access) {
           break; 
         }
       }
     }
     else if(variable_type === 'Object') {
+      if(objectLength(permissions) < 1) {
+        throw {name: 'InvalidValueForLogicGate', message: 'The value object of an AND gate must contain a minimum of one element. Current value: ' + permissions}; 
+      }
+
       access = true;
       for(var key in permissions) {
         var subpermissions = {};
         subpermissions[key] = permissions[key];
-        access = access && self.dispatch(subpermissions, arguments);
+        access = access && dispatch(subpermissions, type, context);
         if(!access) {
           break; 
         }
