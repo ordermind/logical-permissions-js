@@ -362,6 +362,7 @@ var OrdermindLogicalPermissions = function OrdermindLogicalPermissions(){
     else {
       throw {name: 'InvalidValueForLogicGate', message: 'The value of a NAND gate must be an array or object. Current value: ' + permissions};
     }
+
     var access = !processAND(permissions, type, context);
     return access;
   };
@@ -419,20 +420,25 @@ var OrdermindLogicalPermissions = function OrdermindLogicalPermissions(){
     else {
       throw {name: 'InvalidValueForLogicGate', message: 'The value of a NOR gate must be an array or object. Current value: ' + permissions};
     }
+
     var access = !processOR(permissions, type, context);
     return access;
   };
 
-  var processXOR = function processXOR(permissions) {
+  var processXOR = function processXOR(permissions, type, context) {
     var self = this;
     var access = false;
     var count_true = 0;
     var count_false = 0;
     var variable_type = self.getVariableType(permissions);
     if(variable_type === 'Array') {
+      if(permissions.length < 2) {
+        throw {name: 'InvalidValueForLogicGate', message: 'The value array of an XOR gate must contain a minimum of two elements. Current value: ' + permissions};
+      }
+
       for(var i in permissions) {
         var permission = permissions[i];
-        var this_access = self.callMethod(permission, arguments);
+        var this_access = dispatch(permission, type, context);
         if(this_access) {
           count_true++; 
         }
@@ -446,10 +452,14 @@ var OrdermindLogicalPermissions = function OrdermindLogicalPermissions(){
       }
     }
     else if(variable_type === 'Object') {
+      if(objectLength(permission) < 2) {
+        throw {name: 'InvalidValueForLogicGate', message: 'The value object of an XOR gate must contain a minimum of two elements. Current value: ' + permissions};
+      }
+
       for(var key in permissions) {
         var subpermissions = {};
         subpermissions[key] = permissions[key];
-        var this_access = self.dispatch(subpermissions, arguments);
+        var this_access = dispatch(subpermissions, type, context);
         if(this_access) {
           count_true++; 
         }
@@ -461,6 +471,9 @@ var OrdermindLogicalPermissions = function OrdermindLogicalPermissions(){
           break; 
         }
       }
+    }
+    else {
+      throw {name: 'InvalidValueForLogicGate', message: 'The value of an XOR gate must be an array or object. Current value: ' + permissions};
     }
     return access;
   };
