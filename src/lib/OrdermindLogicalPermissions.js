@@ -199,7 +199,7 @@ var OrdermindLogicalPermissions = function OrdermindLogicalPermissions(){
         allow_bypass = !permissions_copy.no_bypass;
       }
       else if(variable_type === 'Object') { //Object containing permissions which act as conditions
-        allow_bypass = !dispatch(permissions_copy.no_bypass, arguments);
+        allow_bypass = !dispatch(permissions_copy.no_bypass, undefined, context);
       }
       delete permissions_copy.no_bypass;
     }
@@ -207,7 +207,7 @@ var OrdermindLogicalPermissions = function OrdermindLogicalPermissions(){
       access = true; 
     }
     else {
-      access = processOR(permissions_copy, context);
+      access = processOR(permissions_copy, undefined, context);
     }
     return access;
   };
@@ -233,45 +233,63 @@ var OrdermindLogicalPermissions = function OrdermindLogicalPermissions(){
     return bypass_access;
   };
 
-  var dispatch = function dispatch(permissions) {
+  var dispatch = function dispatch(permissions, type, context) {
     var self = this;
     var access = false;
-    var key = '';
-    var variable_type = self.getVariableType(permissions);
+    var variable_type = getVariableType(permissions);
     if(variable_type === 'String') {
-      access = self.callMethod(permissions, arguments);
+      access = externalAccessCheck(permissions, type, context);
     }
     else if(variable_type === 'Array') {
-      access = self.processOR(permissions, arguments);
+      if(permissions.length > 0) {
+        access = processOR(permissions, type, context);
+      }
     }
     else if(variable_type === 'Object') {
+      var key = '';
       for(var tmpkey in permissions) {
         key = tmpkey;
         break;
       }
       var value = permissions[key];
       if(key === 'AND') {
-        access = self.processAND(value, arguments);
+        access = processAND(value, type, context);
       }
       else if(key === 'NAND') {
-        access = self.processNAND(value, arguments);
+        access = processNAND(value, type, context);
       }
       else if(key === 'OR') {
-        access = self.processOR(value, arguments);
+        access = processOR(value, type, context);
       }
       else if(key === 'NOR') {
-        access = self.processNOR(value, arguments);
+        access = processNOR(value, type, context);
       }
       else if(key === 'XOR') {
-        access = self.processXOR(value, arguments);
+        access = processXOR(value, type, context);
       }
       else if(key === 'NOT') {
-        access = self.processNOT(value, arguments);
+        access = processNOT(value, type, context);
       }
       else {
-        type = key; 
-        access = self.dispatch(value, arguments);
+        if(!isNumeric(key)) {
+          if(type === undefined) {
+            type = key;
+          }
+          else {
+            throw {name: 'InvalidArgumentValueException', message: 'You cannot put a permission type as a descendant to another permission type. Existing type: $type. Evaluated permissions: ' + value};
+          }
+        }
+        var value_vartype = getVariableType(value);
+        if(value_vartype === 'Array' || value_vartype === 'Object') {
+          access = processOR(value, type, context);
+        }
+        else {
+          access = dispatch(value, type, context);
+        }       
       }
+    }
+    else {
+      throw {name: 'InvalidArgumentTypeException', message: 'A permission must either be a string or an array. Evaluated permissions: ' + permissions};
     }
     return access;
   };
@@ -398,7 +416,7 @@ var OrdermindLogicalPermissions = function OrdermindLogicalPermissions(){
     return access;
   };
 
-  var callMethod = function callMethod(permission) {
+  var externalAccessCheck = function externalAccessCheck(permission, type, context) {
     var self = this;
     var access = false;
     var types = self.getTypes();
