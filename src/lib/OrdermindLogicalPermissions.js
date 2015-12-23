@@ -346,10 +346,24 @@ var OrdermindLogicalPermissions = function OrdermindLogicalPermissions(){
     return access;
   };
 
-  var processNAND = function processNAND(permissions) {
+  var processNAND = function processNAND(permissions, type, context) {
     var self = this;
-    var access = self.processAND(permissions, arguments);
-    return !access;
+    var variable_type = self.getVariableType(permissions);
+    if(variable_type === 'Array') {
+      if(permissions.length < 1) {
+        throw {name: 'InvalidValueForLogicGate', message: 'The value array of a NAND gate must contain a minimum of one element. Current value: ' + permissions}; 
+      }
+    }
+    else if(variable_type === 'Object') {
+      if(objectLength(permissions) < 1) {
+        throw {name: 'InvalidValueForLogicGate', message: 'The value object of a NAND gate must contain a minimum of one element. Current value: ' + permissions}; 
+      }
+    }
+    else {
+      throw {name: 'InvalidValueForLogicGate', message: 'The value of a NAND gate must be an array or object. Current value: ' + permissions};
+    }
+    var access = !processAND(permissions, type, context);
+    return access;
   };
 
   var processOR = function processOR(permissions) {
