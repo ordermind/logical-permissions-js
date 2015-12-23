@@ -175,26 +175,39 @@ var OrdermindLogicalPermissions = function OrdermindLogicalPermissions(){
    * @param [free params]
    * @returns {Boolean} access
    */
-  this.checkAccess = function checkAccess(permissions) {
+  this.checkAccess = function checkAccess(permissions, context) {
     var self = this;
+    if(permissions === undefined) {
+      throw {name: 'MissingArgumentException', message: 'The permissions parameter is required.'};
+    }
+    if(getVariableType(permissions) !== 'Object') {
+      throw {name: 'InvalidArgumentTypeException', message: 'The permissions parameter must be an object.'};
+    }
+    if(context === undefined) {
+      throw {name: 'MissingArgumentException', message: 'The context parameter is required.'};
+    }
+    if(getVariableType(context) !== 'Object') {
+      throw {name: 'InvalidArgumentTypeException', message: 'The context parameter must be an object.'};
+    }
+
     var access = false;
     var allow_bypass = true;
     var permissions_copy = JSON.parse(JSON.stringify(permissions));
     if(permissions_copy.hasOwnProperty('no_bypass')) {
-      var variable_type = self.getVariableType(permissions_copy.no_bypass);
+      var variable_type = getVariableType(permissions_copy.no_bypass);
       if(variable_type === 'Boolean') {
         allow_bypass = !permissions_copy.no_bypass;
       }
       else if(variable_type === 'Object') { //Object containing permissions which act as conditions
-        allow_bypass = !self.dispatch(permissions_copy.no_bypass, arguments);
+        allow_bypass = !dispatch(permissions_copy.no_bypass, arguments);
       }
       delete permissions_copy.no_bypass;
     }
-    if(allow_bypass && self.checkBypassAccess(arguments)) {
+    if(allow_bypass && checkBypassAccess(context)) {
       access = true; 
     }
     else {
-      access = self.dispatch(permissions_copy, arguments);
+      access = processOR(permissions_copy, context);
     }
     return access;
   };

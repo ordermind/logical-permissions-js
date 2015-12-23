@@ -291,5 +291,9 @@ describe('OrdermindLogicalPermissions', function() {
       assert.strictEqual(lp.getBypassCallback(), callback);
     });
   });
+ 
+  /*-------------OrdermindLogicalPermissions::checkAccess()--------------*/
+  
+  
 
 }); 
