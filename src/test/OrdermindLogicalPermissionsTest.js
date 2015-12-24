@@ -294,6 +294,42 @@ describe('OrdermindLogicalPermissions', function() {
  
   /*-------------OrdermindLogicalPermissions::checkAccess()--------------*/
   
+  describe('testCheckAccessParamPermissionsMissing', function() {
+    it('should call OrdermindLogicalPermissions::checkAccess() with no "permissions" parameter and catch a MissingArgumentException exception', function() {
+      var lp = new OrdermindLogicalPermissions();
+      assert.throws(function() {
+        lp.checkAccess();
+      }, function(err) {return err.name === 'MissingArgumentException';});
+    });
+  });
+  
+  describe('testCheckAccessParamPermissionsWrongType', function() {
+    it('should call OrdermindLogicalPermissions::checkAccess() with the wrong data type for the "permissions" parameter and catch an InvalidArgumentTypeException exception', function() {
+      var lp = new OrdermindLogicalPermissions();
+      assert.throws(function() {
+        lp.checkAccess([]);
+      }, function(err) {return err.name === 'InvalidArgumentTypeException';});
+    });
+  });
+  
+  describe('testCheckAccessParamPermissionsWrongPermissionType', function() {
+    it('should call OrdermindLogicalPermissions::checkAccess() with an invalid permission value and catch an InvalidArgumentTypeException exception', function() {
+      var lp = new OrdermindLogicalPermissions();
+      var types = {
+        flag: function() {
+          return true; 
+        }
+      };
+      lp.setTypes(types);
+      var permissions = {
+        flag: true
+      };
+      assert.throws(function() {
+        lp.checkAccess(permissions, {});
+      }, function(err) {return err.name === 'InvalidArgumentTypeException';});
+    });
+  });
+  
   
 
 }); 
