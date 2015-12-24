@@ -198,7 +198,9 @@ var OrdermindLogicalPermissions = function OrdermindLogicalPermissions(){
       access = true; 
     }
     else {
-      access = processOR(permissions_copy, undefined, context);
+      if(objectLength(permissions_copy) > 0) {
+        access = processOR(permissions_copy, undefined, context);
+      }
     }
     return access;
   };
@@ -273,7 +275,7 @@ var OrdermindLogicalPermissions = function OrdermindLogicalPermissions(){
               type = key;
             }
             else {
-              throw {name: 'InvalidArgumentValueException', message: 'You cannot put a permission type as a descendant to another permission type. Existing type: ' + type + '. Evaluated permissions: ' + value};
+              throw {name: 'InvalidArgumentValueException', message: 'You cannot put a permission type as a descendant to another permission type. Existing type: ' + type + '. Evaluated permissions: ' + JSON.stringify(permissions)};
             }
           }
           var value_vartype = getVariableType(value);

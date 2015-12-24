@@ -302,7 +302,6 @@ describe('OrdermindLogicalPermissions', function() {
       }, function(err) {return err.name === 'MissingArgumentException';});
     });
   });
-  
   describe('testCheckAccessParamPermissionsWrongType', function() {
     it('should call OrdermindLogicalPermissions::checkAccess() with the wrong data type for the "permissions" parameter and catch an InvalidArgumentTypeException exception', function() {
       var lp = new OrdermindLogicalPermissions();
@@ -311,16 +310,9 @@ describe('OrdermindLogicalPermissions', function() {
       }, function(err) {return err.name === 'InvalidArgumentTypeException';});
     });
   });
-  
   describe('testCheckAccessParamPermissionsWrongPermissionType', function() {
     it('should call OrdermindLogicalPermissions::checkAccess() with an invalid permission value and catch an InvalidArgumentTypeException exception', function() {
       var lp = new OrdermindLogicalPermissions();
-      var types = {
-        flag: function() {
-          return true; 
-        }
-      };
-      lp.setTypes(types);
       var permissions = {
         flag: true
       };
@@ -329,7 +321,333 @@ describe('OrdermindLogicalPermissions', function() {
       }, function(err) {return err.name === 'InvalidArgumentTypeException';});
     });
   });
-  
-  
+  describe('testCheckAccessParamPermissionsNestedTypes', function() {
+    it('should call OrdermindLogicalPermissions::checkAccess() with nested permission types and catch an InvalidArgumentValueException exception', function() {
+      var lp = new OrdermindLogicalPermissions();
 
-}); 
+      //Directly nested
+      var permissions = {
+        flag: {
+          flag: 'testflag' 
+        }
+      };
+      assert.throws(function() {
+        lp.checkAccess(permissions, {});
+      }, function(err) {return err.name === 'InvalidArgumentValueException';});
+      
+      //Indirectly nested
+      var permissions = {
+        flag: {
+          OR: {
+            flag: 'testflag'
+          }
+        }
+      };
+      assert.throws(function() {
+        lp.checkAccess(permissions, {});
+      }, function(err) {return err.name === 'InvalidArgumentValueException';});
+    });
+  });
+  describe('testCheckAccessParamPermissionsUnregisteredType', function() {
+    it('should call OrdermindLogicalPermissions::checkAccess() with an unregistered permission type and catch a PermissionTypeNotRegisteredException exception', function() {
+      var lp = new OrdermindLogicalPermissions();
+      var permissions = {
+        flag: 'testflag'
+      };
+      assert.throws(function() {
+        lp.checkAccess(permissions, {});
+      }, function(err) {return err.name === 'PermissionTypeNotRegisteredException';});
+    });
+  });
+  describe('testCheckAccessParamContextMissing', function() {
+    it('should call OrdermindLogicalPermissions::checkAccess() with no "context" parameter and catch a MissingArgumentException exception', function() {
+      var lp = new OrdermindLogicalPermissions();
+      assert.throws(function() {
+        lp.checkAccess({});
+      }, function(err) {return err.name === 'MissingArgumentException';});
+    });
+  });
+  describe('testCheckAccessParamContextWrongType', function() {
+    it('should call OrdermindLogicalPermissions::checkAccess() with the wrong data type for the "context" parameter and catch an InvalidArgumentTypeException exception', function() {
+      var lp = new OrdermindLogicalPermissions();
+      assert.throws(function() {
+        lp.checkAccess({}, []);
+      }, function(err) {return err.name === 'InvalidArgumentTypeException';});
+    });
+  });
+  describe('testCheckAccessCheckContextPassing', function() {
+    it('should call OrdermindLogicalPermissions::checkAccess() and check that the context parameter is passed to the registered callback', function() {
+      var lp = new OrdermindLogicalPermissions();
+      var user = {
+        id: 1
+      };
+      var bypass_callback = function(context) {
+        assert(context.hasOwnProperty('user'));
+        assert.equal(context.user, user);
+        return true;
+      };
+      lp.setBypassCallback(bypass_callback);
+      lp.checkAccess({}, {user: user});
+    });
+  });
+  describe('testCheckAccessBypassAccessAllow', function() {
+    it('should call OrdermindLogicalPermissions::checkAccess() and allow access due to bypassing access', function() {
+      var lp = new OrdermindLogicalPermissions();
+      var bypass_callback = function(context) {
+        return true;
+      };
+      lp.setBypassCallback(bypass_callback);
+      assert(lp.checkAccess({}, {}));
+    });
+  });
+  describe('testCheckAccessBypassAccessDeny', function() {
+    it('should call OrdermindLogicalPermissions::checkAccess() and deny access due to no bypassing access and no regular access', function() {
+      var lp = new OrdermindLogicalPermissions();
+      var bypass_callback = function(context) {
+        return false;
+      };
+      lp.setBypassCallback(bypass_callback);
+      assert(!lp.checkAccess({}, {}));
+    });
+  });
+  describe('testCheckAccessNoBypassAccessBooleanAllow', function() {
+    it('should call OrdermindLogicalPermissions::checkAccess() with no_bypass set to false and allow access due to bypassing access', function() {
+      var lp = new OrdermindLogicalPermissions();
+      var bypass_callback = function(context) {
+        return true;
+      };
+      lp.setBypassCallback(bypass_callback);
+      assert(lp.checkAccess({no_bypass: false}, {}));
+    });
+  });
+  describe('testCheckAccessNoBypassAccessBooleanDeny', function() {
+    it('should call OrdermindLogicalPermissions::checkAccess() with no_bypass set to true and deny access due to forbidden access bypass and no regular access', function() {
+      var lp = new OrdermindLogicalPermissions();
+      var bypass_callback = function(context) {
+        return true;
+      };
+      lp.setBypassCallback(bypass_callback);
+      assert(!lp.checkAccess({no_bypass: true}, {}));
+    });
+  });
+  describe('testCheckAccessNoBypassAccessObjectAllow', function() {
+    it('should call OrdermindLogicalPermissions::checkAccess() with no_bypass set to an object and allow access due to bypassing access', function() {
+      var lp = new OrdermindLogicalPermissions();
+      var types = {
+        flag: function(flag, context) {
+          var access = false;
+          if(flag === 'never_bypass') {
+            if(context.hasOwnProperty('user') && context.user.hasOwnProperty('never_bypass')) {
+              access = !!context.user.never_bypass; 
+            }
+            return access;
+          }
+        }
+      };
+      lp.setTypes(types);
+      var bypass_callback = function(context) {
+        return true;
+      };
+      lp.setBypassCallback(bypass_callback);
+      var permissions = {
+        no_bypass: {
+          flag: 'never_bypass' 
+        }
+      };
+      var user = {
+        id: 1,
+        never_bypass: false
+      };
+      assert(lp.checkAccess(permissions, {user: user}));
+    });
+  });
+  describe('testCheckAccessNoBypassAccessObjectDeny', function() {
+    it('should call OrdermindLogicalPermissions::checkAccess() with no_bypass set to an object and deny access due to forbidden access bypass and no regular access', function() {
+      var lp = new OrdermindLogicalPermissions();
+      var types = {
+        flag: function(flag, context) {
+          var access = false;
+          if(flag === 'never_bypass') {
+            if(context.hasOwnProperty('user') && context.user.hasOwnProperty('never_bypass')) {
+              access = !!context.user.never_bypass; 
+            }
+            return access;
+          }
+        }
+      };
+      lp.setTypes(types);
+      var bypass_callback = function(context) {
+        return true;
+      };
+      lp.setBypassCallback(bypass_callback);
+      var permissions = {
+        no_bypass: {
+          flag: 'never_bypass' 
+        }
+      };
+      var user = {
+        id: 1,
+        never_bypass: true
+      };
+      assert(!lp.checkAccess(permissions, {user: user}));
+    });
+  });
+  describe('testCheckAccessSingleItemAllow', function() {
+    it('should call OrdermindLogicalPermissions::checkAccess() with single flag and allow access', function() {
+      var lp = new OrdermindLogicalPermissions();
+      var types = {
+        flag: function(flag, context) {
+          var access = false;
+          if(flag === 'testflag') {
+            if(context.hasOwnProperty('user') && context.user.hasOwnProperty('testflag')) {
+              access = !!context.user.testflag; 
+            }
+            return access;
+          }
+        }
+      };
+      lp.setTypes(types);
+      var permissions = {
+        no_bypass: {
+          flag: 'never_bypass'
+        },
+        flag: 'testflag'
+      };
+      var user = {
+        id: 1,
+        testflag: true
+      };
+      assert(lp.checkAccess(permissions, {user: user}));
+    });
+  });
+  describe('testCheckAccessSingleItemDeny', function() {
+    it('should call OrdermindLogicalPermissions::checkAccess() with single flag and deny access', function() {
+      var lp = new OrdermindLogicalPermissions();
+      var types = {
+        flag: function(flag, context) {
+          var access = false;
+          if(flag === 'testflag') {
+            if(context.hasOwnProperty('user') && context.user.hasOwnProperty('testflag')) {
+              access = !!context.user.testflag; 
+            }
+            return access;
+          }
+        }
+      };
+      lp.setTypes(types);
+      var permissions = {
+        flag: 'testflag'
+      };
+      var user = {
+        id: 1
+      };
+      assert(!lp.checkAccess(permissions, {user: user}));
+    });
+  });
+  describe('testCheckAccessMultipleTypesShorthandOR', function() {
+    it('should call OrdermindLogicalPermissions::checkAccess() with multiple permission types (shorthand OR)', function() {
+      var lp = new OrdermindLogicalPermissions();
+      var types = {
+        flag: function(flag, context) {
+          var access = false;
+          if(flag === 'testflag') {
+            if(context.hasOwnProperty('user') && context.user.hasOwnProperty('testflag')) {
+              access = !!context.user.testflag; 
+            }
+            return access;
+          }
+        },
+        role: function(role, context) {
+          var access = false;
+          if(context.hasOwnProperty('user') && context.user.hasOwnProperty('roles')) {
+            access = context.user.roles.indexOf(role) > -1; 
+          }
+          return access;
+        },
+        misc: function(item, context) {
+          var access = false;
+          if(context.hasOwnProperty('user') && context.user.hasOwnProperty(item)) {
+            access = !!context.user[item]; 
+          }
+          return access;
+        }
+      };
+      lp.setTypes(types);
+      var permissions = {
+        no_bypass: {
+          flag: 'never_bypass' 
+        },
+        flag: 'testflag',
+        role: 'admin',
+        misc: 'test'
+      };
+      var user = {
+        id: 1
+      };
+      //OR truth table
+      //0 0 0
+      assert(!lp.checkAccess(permissions, {user: user}));
+      //0 0 1
+      user.test = true;
+      assert(lp.checkAccess(permissions, {user: user}));
+      //0 1 0
+      user.test = false;
+      user.roles = ['admin'];
+      assert(lp.checkAccess(permissions, {user: user}));
+      //0 1 1
+      user.test = true;
+      assert(lp.checkAccess(permissions, {user: user}));
+      //1 0 0
+      user = {
+        id: 1,
+        testflag: true
+      };
+      assert(lp.checkAccess(permissions, {user: user}));
+      //1 0 1
+      user.test = true;
+      assert(lp.checkAccess(permissions, {user: user}));
+      //1 1 0
+      user.test = false;
+      user.roles = ['admin'];
+      assert(lp.checkAccess(permissions, {user: user}));
+      //1 1 1
+      user.test = true;
+      assert(lp.checkAccess(permissions, {user: user}));
+    });
+  });
+  describe('testCheckAccessMultipleTypesShorthandOR', function() {
+    it('should call OrdermindLogicalPermissions::checkAccess() with multiple permission type items (shorthand OR)', function() {
+      var lp = new OrdermindLogicalPermissions();
+      var types = {
+        role: function(role, context) {
+          var access = false;
+          if(context.hasOwnProperty('user') && context.user.hasOwnProperty('roles')) {
+            access = context.user.roles.indexOf(role) > -1; 
+          }
+          return access;
+        }
+      };
+      lp.setTypes(types);
+      var permissions = {
+        role: ['admin', 'editor']
+      };
+      var user = {id: 1};
+      //OR truth table
+      //0 0
+      assert(!lp.checkAccess(permissions, {user: user}));
+      user.roles = [];
+      assert(!lp.checkAccess(permissions, {user: user}));
+      //0 1
+      user.roles = ['editor'];
+      assert(lp.checkAccess(permissions, {user: user}));
+      //1 0
+      user.roles = ['admin'];
+      assert(lp.checkAccess(permissions, {user: user}));
+      //1 1
+      user.roles = ['editor', 'admin'];
+      assert(lp.checkAccess(permissions, {user: user}));
+    });
+  });
+
+  //Kom ihåg att testa stöd för blandade arrays och objekt, t ex permissions = {role: {AND: ['admin', {0: 'editor', 1: 'writer'}]}};
+});
