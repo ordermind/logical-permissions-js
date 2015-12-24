@@ -316,7 +316,7 @@ var OrdermindLogicalPermissions = function OrdermindLogicalPermissions(){
     }
     else if(variable_type === 'Object') {
       if(objectLength(permissions) < 1) {
-        throw {name: 'InvalidValueForLogicGate', message: 'The value object of an AND gate must contain a minimum of one element. Current value: ' + permissions}; 
+        throw {name: 'InvalidValueForLogicGate', message: 'The value object of an AND gate must contain a minimum of one element. Current value: ' + JSON.stringify(permissions)}; 
       }
 
       access = true;
