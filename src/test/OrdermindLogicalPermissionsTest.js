@@ -1561,5 +1561,127 @@ describe('OrdermindLogicalPermissions', function() {
       assert(lp.checkAccess(permissions, {user: user}));
     });
   });
-  //Kom ihåg att testa stöd för blandade arrays och objekt, t ex permissions = {role: {AND: ['admin', {0: 'editor', 1: 'writer'}]}};
+  describe('testCheckAccessNestedLogic', function() {
+    it('should call OrdermindLogicalPermissions::checkAccess() with nested logic', function() {
+      var lp = new OrdermindLogicalPermissions();
+      var types = {
+        role: function(role, context) {
+          var access = false;
+          if(context.hasOwnProperty('user') && context.user.hasOwnProperty('roles')) {
+            access = context.user.roles.indexOf(role) > -1; 
+          }
+          return access;
+        }
+      };
+      lp.setTypes(types);
+      var permissions = {
+        'role': {
+          'OR': {
+            'NOT': {
+              'AND': [
+                'admin',
+                'editor',
+              ]
+            }
+          }
+        }
+      };
+      var user = {
+        id: 1,
+        roles: ['admin', 'editor']
+      };
+      assert(!lp.checkAccess(permissions, {user: user}));
+      delete user.roles;
+      assert(lp.checkAccess(permissions, {user: user}));
+      user.roles = ['editor'];
+      assert(lp.checkAccess(permissions, {user: user}));
+    });
+  });
+  describe('testCheckAccessLogicGateFirst', function() {
+    it('should call OrdermindLogicalPermissions::checkAccess() with nested logic and a logic gate as first element', function() {
+      var lp = new OrdermindLogicalPermissions();
+      var types = {
+        role: function(role, context) {
+          var access = false;
+          if(context.hasOwnProperty('user') && context.user.hasOwnProperty('roles')) {
+            access = context.user.roles.indexOf(role) > -1; 
+          }
+          return access;
+        }
+      };
+      lp.setTypes(types);
+      var permissions = {
+        AND: {
+          'role': {
+            'OR': {
+              'NOT': {
+                'AND': [
+                  'admin',
+                  'editor',
+                ]
+              }
+            }
+          }
+        }
+      };
+      var user = {
+        id: 1,
+        roles: ['admin', 'editor']
+      };
+      assert(!lp.checkAccess(permissions, {user: user}));
+      delete user.roles;
+      assert(lp.checkAccess(permissions, {user: user}));
+      user.roles = ['editor'];
+      assert(lp.checkAccess(permissions, {user: user}));
+    });
+  });
+  describe('testCheckAccessShorthandORMixedObjectsArrays', function() {
+    it('should call OrdermindLogicalPermissions::checkAccess() with shorthand OR and mixed objects and arrays', function() {
+      var lp = new OrdermindLogicalPermissions();
+      var types = {
+        role: function(role, context) {
+          var access = false;
+          if(context.hasOwnProperty('user') && context.user.hasOwnProperty('roles')) {
+            access = context.user.roles.indexOf(role) > -1; 
+          }
+          return access;
+        }
+      };
+      lp.setTypes(types);
+      var permissions = {
+        'role': [
+          'admin',
+          {
+            'AND': [
+              'editor',
+              'writer',
+              {
+                'OR': [
+                  'role1',
+                  'role2'
+                ]
+              }
+            ]
+          }
+        ]
+      };
+      var user = {
+        id: 1,
+        roles: ['admin']
+      };
+      assert(lp.checkAccess(permissions, {user: user}));
+      delete user.roles;
+      assert(!lp.checkAccess(permissions, {user: user}));
+      user.roles = ['editor'];
+      assert(!lp.checkAccess(permissions, {user: user}));
+      user.roles = ['editor', 'writer'];
+      assert(!lp.checkAccess(permissions, {user: user}));
+      user.roles = ['editor', 'writer', 'role1'];
+      assert(lp.checkAccess(permissions, {user: user}));
+      user.roles = ['editor', 'writer', 'role2'];
+      assert(lp.checkAccess(permissions, {user: user}));
+      user.roles = ['admin', 'writer'];
+      assert(lp.checkAccess(permissions, {user: user}));
+    });
+  });
 });
