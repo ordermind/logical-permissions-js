@@ -60,7 +60,7 @@ var LogicalPermissions = function LogicalPermissions() {
   /**
    * Checks whether a permission type is registered.
    * @param {String} name - The name of the permission type.
-   * @returns {Boolean} TRUE if the type is found or FALSE if the type isn't found.
+   * @returns {Boolean} true if the type is found or false if the type isn't found.
    */
   this.typeExists = function typeExists(name) {
     if(name === undefined) {
