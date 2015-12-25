@@ -302,7 +302,7 @@ var OrdermindLogicalPermissions = function OrdermindLogicalPermissions(){
     var variable_type = getVariableType(permissions);
     if(variable_type === 'Array') {
       if(permissions.length < 1) {
-        throw {name: 'InvalidValueForLogicGate', message: 'The value array of an AND gate must contain a minimum of one element. Current value: ' + permissions}; 
+        throw {name: 'InvalidValueForLogicGate', message: 'The value array of an AND gate must contain a minimum of one element. Current value: ' + JSON.stringify(permissions)}; 
       }
 
       access = true;
@@ -339,12 +339,12 @@ var OrdermindLogicalPermissions = function OrdermindLogicalPermissions(){
     var variable_type = getVariableType(permissions);
     if(variable_type === 'Array') {
       if(permissions.length < 1) {
-        throw {name: 'InvalidValueForLogicGate', message: 'The value array of a NAND gate must contain a minimum of one element. Current value: ' + permissions}; 
+        throw {name: 'InvalidValueForLogicGate', message: 'The value array of a NAND gate must contain a minimum of one element. Current value: ' + JSON.stringify(permissions)}; 
       }
     }
     else if(variable_type === 'Object') {
       if(objectLength(permissions) < 1) {
-        throw {name: 'InvalidValueForLogicGate', message: 'The value object of a NAND gate must contain a minimum of one element. Current value: ' + permissions}; 
+        throw {name: 'InvalidValueForLogicGate', message: 'The value object of a NAND gate must contain a minimum of one element. Current value: ' + JSON.stringify(permissions)}; 
       }
     }
     else {
@@ -360,7 +360,7 @@ var OrdermindLogicalPermissions = function OrdermindLogicalPermissions(){
     var variable_type = getVariableType(permissions);
     if(variable_type === 'Array') {
       if(permissions.length < 1) {
-        throw {name: 'InvalidValueForLogicGate', message: 'The value array of an OR gate must contain a minimum of one element. Current value: ' + permissions}; 
+        throw {name: 'InvalidValueForLogicGate', message: 'The value array of an OR gate must contain a minimum of one element. Current value: ' + JSON.stringify(permissions)}; 
       }
 
       for(var i in permissions) {
@@ -373,7 +373,7 @@ var OrdermindLogicalPermissions = function OrdermindLogicalPermissions(){
     }
     else if(variable_type === 'Object') {
       if(objectLength(permissions) < 1) {
-        throw {name: 'InvalidValueForLogicGate', message: 'The value object of an OR gate must contain a minimum of one element. Current value: ' + permissions}; 
+        throw {name: 'InvalidValueForLogicGate', message: 'The value object of an OR gate must contain a minimum of one element. Current value: ' + JSON.stringify(permissions)}; 
       }
 
       for(var key in permissions) {
@@ -396,12 +396,12 @@ var OrdermindLogicalPermissions = function OrdermindLogicalPermissions(){
     var variable_type = getVariableType(permissions);
     if(variable_type === 'Array') {
       if(permissions.length < 1) {
-        throw {name: 'InvalidValueForLogicGate', message: 'The value array of a NOR gate must contain a minimum of one element. Current value: ' + permissions}; 
+        throw {name: 'InvalidValueForLogicGate', message: 'The value array of a NOR gate must contain a minimum of one element. Current value: ' + JSON.stringify(permissions)}; 
       }
     }
     else if(variable_type === 'Object') {
       if(objectLength(permissions) < 1) {
-        throw {name: 'InvalidValueForLogicGate', message: 'The value object of a NOR gate must contain a minimum of one element. Current value: ' + permissions}; 
+        throw {name: 'InvalidValueForLogicGate', message: 'The value object of a NOR gate must contain a minimum of one element. Current value: ' + JSON.stringify(permissions)}; 
       }
     }
     else {
@@ -419,7 +419,7 @@ var OrdermindLogicalPermissions = function OrdermindLogicalPermissions(){
     var variable_type = self.getVariableType(permissions);
     if(variable_type === 'Array') {
       if(permissions.length < 2) {
-        throw {name: 'InvalidValueForLogicGate', message: 'The value array of an XOR gate must contain a minimum of two elements. Current value: ' + permissions};
+        throw {name: 'InvalidValueForLogicGate', message: 'The value array of an XOR gate must contain a minimum of two elements. Current value: ' + JSON.stringify(permissions)};
       }
 
       for(var i in permissions) {
@@ -439,7 +439,7 @@ var OrdermindLogicalPermissions = function OrdermindLogicalPermissions(){
     }
     else if(variable_type === 'Object') {
       if(objectLength(permissions) < 2) {
-        throw {name: 'InvalidValueForLogicGate', message: 'The value object of an XOR gate must contain a minimum of two elements. Current value: ' + permissions};
+        throw {name: 'InvalidValueForLogicGate', message: 'The value object of an XOR gate must contain a minimum of two elements. Current value: ' + JSON.stringify(permissions)};
       }
 
       for(var key in permissions) {
@@ -468,7 +468,7 @@ var OrdermindLogicalPermissions = function OrdermindLogicalPermissions(){
     var variable_type = self.getVariableType(permissions);
     if(variable_type === 'Object') {
       if(objectLength(permissions) != 1) {
-        throw {name: 'InvalidValueForLogicGate', message: 'A NOT permission must have exactly one child in the value array. Current value: ' + permissions};
+        throw {name: 'InvalidValueForLogicGate', message: 'A NOT permission must have exactly one child in the value array. Current value: ' + JSON.stringify(permissions)};
       }
     }
     else if(variable_type === 'String') {
