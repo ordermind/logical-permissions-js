@@ -2,7 +2,7 @@
 
 require('module');
 
-var LogicalPermissions = function LogicalPermissions(){
+var LogicalPermissions = function LogicalPermissions() {
 
   /*-----Private properties-------*/
   var self = this;
