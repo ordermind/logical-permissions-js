@@ -2,6 +2,7 @@
 !/.gitignore
 !/package.json
 !/README.md
+!/.travis.yml
 !/lib
 !/lib/*
 !/test
