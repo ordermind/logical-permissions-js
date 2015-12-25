@@ -465,10 +465,10 @@ var OrdermindLogicalPermissions = function OrdermindLogicalPermissions(){
   };
 
   var processNOT = function processNOT(permissions, type, context) {
-    var variable_type = self.getVariableType(permissions);
+    var variable_type = getVariableType(permissions);
     if(variable_type === 'Object') {
       if(objectLength(permissions) != 1) {
-        throw {name: 'InvalidValueForLogicGate', message: 'A NOT permission must have exactly one child in the value array. Current value: ' + JSON.stringify(permissions)};
+        throw {name: 'InvalidValueForLogicGate', message: 'A NOT permission must have exactly one child in the value object. Current value: ' + JSON.stringify(permissions)};
       }
     }
     else if(variable_type === 'String') {
@@ -480,7 +480,7 @@ var OrdermindLogicalPermissions = function OrdermindLogicalPermissions(){
       throw {name: 'InvalidValueForLogicGate', message: 'The value of a NOT gate must either be an object or a string. Current value: ' + permissions};
     }
 
-    var access = !self.dispatch(permissions, type, context);
+    var access = !dispatch(permissions, type, context);
     return access;
   };
 

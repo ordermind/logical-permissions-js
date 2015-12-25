@@ -1413,5 +1413,153 @@ describe('OrdermindLogicalPermissions', function() {
       runTruthTable(permissions);
     });
   });
+  describe('testCheckAccessNOTWrongValueType', function() {
+    it('should call OrdermindLogicalPermissions::checkAccess() with an illegal NOT value type and catch an InvalidValueForLogicGate exception', function() {
+      var lp = new OrdermindLogicalPermissions();
+      var types = {
+        role: function(role, context) {
+          var access = false;
+          if(context.hasOwnProperty('user') && context.user.hasOwnProperty('roles')) {
+            access = context.user.roles.indexOf(role) > -1; 
+          }
+          return access;
+        }
+      };
+      lp.setTypes(types);
+      var permissions = {
+        role: {
+          NOT: true
+        }
+      };
+      var user = {
+        id: 1,
+        roles: ['admin']
+      };
+      assert.throws(function() {
+        lp.checkAccess(permissions, {user: user});
+      }, function(err) {return err.name === 'InvalidValueForLogicGate';});
+    });
+  });
+  describe('testCheckAccessNOTTooFewElements', function() {
+    it('should call OrdermindLogicalPermissions::checkAccess() with too few elements in NOT value and catch an InvalidValueForLogicGate exception', function() {
+      var lp = new OrdermindLogicalPermissions();
+      var types = {
+        role: function(role, context) {
+          var access = false;
+          if(context.hasOwnProperty('user') && context.user.hasOwnProperty('roles')) {
+            access = context.user.roles.indexOf(role) > -1; 
+          }
+          return access;
+        }
+      };
+      lp.setTypes(types);
+      var user = {
+        id: 1,
+        roles: ['admin']
+      };
+      var permissions = {
+        role: {
+          NOT: ''
+        }
+      };
+      assert.throws(function() {
+        lp.checkAccess(permissions, {user: user});
+      }, function(err) {return err.name === 'InvalidValueForLogicGate';});
+      
+      permissions = {
+        role: {
+          NOT: {}
+        }
+      };
+      assert.throws(function() {
+        lp.checkAccess(permissions, {user: user});
+      }, function(err) {return err.name === 'InvalidValueForLogicGate';});
+    });
+  });
+  describe('testCheckAccessMultipleItemsNOT', function() {
+    it('should call OrdermindLogicalPermissions::checkAccess() with multiple NOT values and catch an InvalidValueForLogicGate exception', function() {
+      var lp = new OrdermindLogicalPermissions();
+      var types = {
+        role: function(role, context) {
+          var access = false;
+          if(context.hasOwnProperty('user') && context.user.hasOwnProperty('roles')) {
+            access = context.user.roles.indexOf(role) > -1; 
+          }
+          return access;
+        }
+      };
+      lp.setTypes(types);
+      var permissions = {
+        role: {
+          NOT: {
+            0: 'admin',
+            1: 'editor',
+            2: 'writer'
+          }
+        }
+      };
+      assert.throws(function() {
+        lp.checkAccess(permissions, {});
+      }, function(err) {return err.name === 'InvalidValueForLogicGate';});
+    });
+  });
+  describe('testCheckAccessSingleItemNOTString', function() {
+    it('should call OrdermindLogicalPermissions::checkAccess() with single NOT string', function() {
+      var lp = new OrdermindLogicalPermissions();
+      var types = {
+        role: function(role, context) {
+          var access = false;
+          if(context.hasOwnProperty('user') && context.user.hasOwnProperty('roles')) {
+            access = context.user.roles.indexOf(role) > -1; 
+          }
+          return access;
+        }
+      };
+      lp.setTypes(types);
+      var permissions = {
+        role: {
+          NOT: 'admin'
+        }
+      };
+      var user = {
+        id: 1,
+        roles: ['admin', 'editor']
+      };
+      assert(!lp.checkAccess(permissions, {user: user}));
+      delete user.roles;
+      assert(lp.checkAccess(permissions, {user: user}));
+      user.roles = ['editor'];
+      assert(lp.checkAccess(permissions, {user: user}));
+    });
+  });
+  describe('testCheckAccessSingleItemNOTObject', function() {
+    it('should call OrdermindLogicalPermissions::checkAccess() with single NOT object', function() {
+      var lp = new OrdermindLogicalPermissions();
+      var types = {
+        role: function(role, context) {
+          var access = false;
+          if(context.hasOwnProperty('user') && context.user.hasOwnProperty('roles')) {
+            access = context.user.roles.indexOf(role) > -1; 
+          }
+          return access;
+        }
+      };
+      lp.setTypes(types);
+      var permissions = {
+        role: {
+          NOT: {5: 'admin'}
+        }
+      };
+      var user = {
+        id: 1,
+        roles: ['admin', 'editor']
+      };
+      assert(!lp.checkAccess(permissions, {user: user}));
+      delete user.roles;
+      assert(lp.checkAccess(permissions, {user: user}));
+      user.roles = ['editor'];
+      assert(lp.checkAccess(permissions, {user: user}));
+    });
+  });
   //Kom ihåg att testa stöd för blandade arrays och objekt, t ex permissions = {role: {AND: ['admin', {0: 'editor', 1: 'writer'}]}};
 });
