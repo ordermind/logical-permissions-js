@@ -297,7 +297,7 @@ Set the bypass access callback.
 
 **Parameters**
 
-**callback**: `function`, for checking access bypass.
+**callback**: `function`, The callback that evaluates access bypassing.
 
 
 
