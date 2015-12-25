@@ -416,7 +416,7 @@ var OrdermindLogicalPermissions = function OrdermindLogicalPermissions(){
     var access = false;
     var count_true = 0;
     var count_false = 0;
-    var variable_type = self.getVariableType(permissions);
+    var variable_type = getVariableType(permissions);
     if(variable_type === 'Array') {
       if(permissions.length < 2) {
         throw {name: 'InvalidValueForLogicGate', message: 'The value array of an XOR gate must contain a minimum of two elements. Current value: ' + JSON.stringify(permissions)};
