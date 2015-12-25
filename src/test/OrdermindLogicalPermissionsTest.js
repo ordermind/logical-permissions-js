@@ -1107,5 +1107,158 @@ describe('OrdermindLogicalPermissions', function() {
       runTruthTable(permissions);
     });
   });
+  describe('testCheckAccessNORWrongValueType', function() {
+    it('should call OrdermindLogicalPermissions::checkAccess() with an illegal NOR value type and catch an InvalidValueForLogicGate exception', function() {
+      var lp = new OrdermindLogicalPermissions();
+      var types = {
+        role: function(role, context) {
+          var access = false;
+          if(context.hasOwnProperty('user') && context.user.hasOwnProperty('roles')) {
+            access = context.user.roles.indexOf(role) > -1; 
+          }
+          return access;
+        }
+      };
+      lp.setTypes(types);
+      var permissions = {
+        role: {
+          NOR: 'admin'
+        }
+      };
+      var user = {
+        id: 1,
+        roles: ['admin']
+      };
+      assert.throws(function() {
+        lp.checkAccess(permissions, {user: user});
+      }, function(err) {return err.name === 'InvalidValueForLogicGate';});
+    });
+  });
+  describe('testCheckAccessNORTooFewElements', function() {
+    it('should call OrdermindLogicalPermissions::checkAccess() with too few elements in NOR value and catch an InvalidValueForLogicGate exception', function() {
+      var lp = new OrdermindLogicalPermissions();
+      var types = {
+        role: function(role, context) {
+          var access = false;
+          if(context.hasOwnProperty('user') && context.user.hasOwnProperty('roles')) {
+            access = context.user.roles.indexOf(role) > -1; 
+          }
+          return access;
+        }
+      };
+      lp.setTypes(types);
+      var user = {
+        id: 1,
+        roles: ['admin']
+      };
+      var permissions = {
+        role: {
+          NOR: []
+        }
+      };
+      assert.throws(function() {
+        lp.checkAccess(permissions, {user: user});
+      }, function(err) {return err.name === 'InvalidValueForLogicGate';});
+      
+      permissions = {
+        role: {
+          NOR: {}
+        }
+      };
+      assert.throws(function() {
+        lp.checkAccess(permissions, {user: user});
+      }, function(err) {return err.name === 'InvalidValueForLogicGate';});
+    });
+  });
+  describe('testCheckAccessMultipleItemsNOR', function() {
+    it('should call OrdermindLogicalPermissions::checkAccess() with multiple NOR values', function() {
+      var lp = new OrdermindLogicalPermissions();
+      var types = {
+        role: function(role, context) {
+          var access = false;
+          if(context.hasOwnProperty('user') && context.user.hasOwnProperty('roles')) {
+            access = context.user.roles.indexOf(role) > -1; 
+          }
+          return access;
+        }
+      };
+      lp.setTypes(types);
+      var runTruthTable = function runTruthTable(permissions) {
+        var user = {id: 1};
+        //OR truth table
+        //0 0 0
+        assert(lp.checkAccess(permissions, {user: user}));
+        user.roles = [];
+        assert(lp.checkAccess(permissions, {user: user}));
+        //0 0 1
+        user.roles = ['writer'];
+        assert(!lp.checkAccess(permissions, {user: user}));
+        //0 1 0
+        user.roles = ['editor'];
+        assert(!lp.checkAccess(permissions, {user: user}));
+        //0 1 1
+        user.roles = ['editor', 'writer'];
+        assert(!lp.checkAccess(permissions, {user: user}));
+        //1 0 0
+        user.roles = ['admin'];
+        assert(!lp.checkAccess(permissions, {user: user}));
+        //1 0 1
+        user.roles = ['admin', 'writer'];
+        assert(!lp.checkAccess(permissions, {user: user}));
+        //1 1 0
+        user.roles = ['admin', 'editor'];
+        assert(!lp.checkAccess(permissions, {user: user}));
+        //1 1 1
+        user.roles = ['admin', 'editor', 'writer'];
+        assert(!lp.checkAccess(permissions, {user: user}));
+      };
+
+      //Test array values
+      var permissions = {
+        role: {
+          NOR: [
+            'admin',
+            'editor',
+            'writer'
+          ]
+        }
+      };
+      runTruthTable(permissions);
+
+      //Test object values
+      permissions = {
+        role: {
+          NOR: {
+            0: 'admin',
+            1: 'editor',
+            2: 'writer'
+          }
+        }
+      };
+      runTruthTable(permissions);
+
+      //Test array/object mixes
+      permissions = {
+        role: {
+          NOR: [
+            ['admin'],
+            {0: 'editor'},
+            'writer'
+          ]
+        }
+      };
+      runTruthTable(permissions);
+      permissions = {
+        role: {
+          NOR: {
+            0: ['admin'],
+            1: {0: 'editor'},
+            2: 'writer'
+          }
+        }
+      };
+      runTruthTable(permissions);
+    });
+  });
   //Kom ihåg att testa stöd för blandade arrays och objekt, t ex permissions = {role: {AND: ['admin', {0: 'editor', 1: 'writer'}]}};
 });
