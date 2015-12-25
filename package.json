@@ -1,6 +1,6 @@
 {
   "name": "logical-permissions",
-  "version": "v0.9.0",
+  "version": "0.9.1",
   "description": "Provides support for object-based permissions with logic gates such as AND and OR.",
   "main": "./lib/LogicalPermissions.js",
   "author": "Kristofer Tengström",
@@ -8,4 +8,5 @@
     "type": "git",
     "url": "git://github.com:Ordermind/logical-permissions-js.git"
   },
+  "keywords": ["permissions"]
 }
