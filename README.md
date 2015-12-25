@@ -10,7 +10,7 @@ This is a generic library that provides support for object-based permissions wit
 
 ### Usage
 
-The main api method is [`LogicalPermissions::checkAccess()`](#checkaccess), which checks the access for a **permission tree**. A permission tree is a bundle of permissions that apply to a specific action. Let's say for example that you want to restrict access for updating a user. You'd like only users with the role "admin" to be able to update any user, but users should also be able to update their own user data (or at least some of it). With the structure this package provides, these conditions could be expressed elegantly in a permission tree as such:
+The main api method is `LogicalPermissions::checkAccess()`, which checks the access for a **permission tree**. A permission tree is a bundle of permissions that apply to a specific action. Let's say for example that you want to restrict access for updating a user. You'd like only users with the role "admin" to be able to update any user, but users should also be able to update their own user data (or at least some of it). With the structure this package provides, these conditions could be expressed elegantly in a permission tree as such:
 
 ```javascript
 {
@@ -21,10 +21,10 @@ The main api method is [`LogicalPermissions::checkAccess()`](#checkaccess), whic
 }
 ```
 
-In this example `role` and `flag` are the evaluated permission types. For this example to work you will need to register the permission types 'role' and 'flag' so that the class knows which callbacks are responsible for evaluating the respective permission types. You can do that with [`LogicalPermissions::addType()`](#addtype).
+In this example `role` and `flag` are the evaluated permission types. For this example to work you will need to register the permission types 'role' and 'flag' so that the class knows which callbacks are responsible for evaluating the respective permission types. You can do that with `LogicalPermissions::addType()`.
 
 ### Bypassing permissions
-This packages also supports rules for bypassing permissions completely for superusers. In order to use this functionality you need to register a callback with [`LogicalPermissions::setBypassCallback()`](#setbypasscallback). The registered callback will run on every permission check and if it returns `true`, access will automatically be granted. If you want to make exceptions you can do so by adding `'no_bypass': true` to the first level of a permission tree. You can even use permissions as conditions for `no_bypass`.
+This packages also supports rules for bypassing permissions completely for superusers. In order to use this functionality you need to register a callback with `LogicalPermissions::setBypassCallback()`. The registered callback will run on every permission check and if it returns `true`, access will automatically be granted. If you want to make exceptions you can do so by adding `'no_bypass': true` to the first level of a permission tree. You can even use permissions as conditions for `no_bypass`.
 
 Examples: 
 
@@ -222,3 +222,93 @@ Examples:
 
 
 ## API Documentation
+
+### addType(name, callback) 
+
+Add a permission type.
+
+**Parameters**
+
+**name**: `String`, The name of the permission type
+
+**callback**: `function`, The callback that evaluates the permission type
+
+
+
+### removeType(name) 
+
+Remove a permission type.
+
+**Parameters**
+
+**name**: `String`, The name of the permission type.
+
+
+
+### typeExists(name) 
+
+Checks whether a permission type is registered.
+
+**Parameters**
+
+**name**: `String`, The name of the permission type.
+
+**Returns**: `Boolean`, true if the type is found or false if the type isn't found.
+
+
+### getTypeCallback(name) 
+
+Get the callback for a permission type.
+
+**Parameters**
+
+**name**: `String`, The name of the permission type.
+
+**Returns**: `function`, Callback for the permission type.
+
+
+### getTypes() 
+
+Get all defined permission types.
+
+**Returns**: `Object`, permission types with the structure {name: callback, name2: callback2, ...}. This object is shallow cloned.
+
+
+### setTypes(new_types) 
+
+Overwrite all defined permission types.
+
+**Parameters**
+
+**new_types**: `Object`, permission types with the structure {name: callback, name2: callback2, ...}. This object is shallow cloned.
+
+
+
+### getBypassCallback() 
+
+Get the current bypass access callback.
+
+**Returns**: `function`, callback for checking access bypass.
+
+
+### setBypassCallback(callback) 
+
+Set the bypass access callback.
+
+**Parameters**
+
+**callback**: `function`, for checking access bypass.
+
+
+
+### checkAccess(permissions, context) 
+
+Check access for a permission tree.
+
+**Parameters**
+
+**permissions**: `Object`, The permission tree to be evaluated
+
+**context**: `Object`, A context array that could for example contain the evaluated user and document.
+
+**Returns**: `Boolean`, access
