@@ -2,7 +2,7 @@
 
 require('module');
 
-var OrdermindLogicalPermissions = function OrdermindLogicalPermissions(){
+var LogicalPermissions = function LogicalPermissions(){
 
   /*-----Private properties-------*/
   var self = this;
@@ -51,7 +51,7 @@ var OrdermindLogicalPermissions = function OrdermindLogicalPermissions(){
       throw {name: 'InvalidArgumentValueException', message: 'The name parameter cannot be empty.'};
     }
     if(!self.typeExists(name)) {
-      throw {name: 'PermissionTypeNotRegisteredException', message: 'The permission type "' + name + '" has not been registered. Please use OrdermindLogicalPermissions::addType() or OrdermindLogicalPermissions::setTypes() to register permission types.'};
+      throw {name: 'PermissionTypeNotRegisteredException', message: 'The permission type "' + name + '" has not been registered. Please use LogicalPermissions::addType() or LogicalPermissions::setTypes() to register permission types.'};
     }
 
     delete types[name];
@@ -93,7 +93,7 @@ var OrdermindLogicalPermissions = function OrdermindLogicalPermissions(){
       throw {name: 'InvalidArgumentValueException', message: 'The name parameter cannot be empty.'};
     }
     if(!self.typeExists(name)) {
-      throw {name: 'PermissionTypeNotRegisteredException', message: 'The permission type "' + name + '" has not been registered. Please use OrdermindLogicalPermissions::addType() or OrdermindLogicalPermissions::setTypes() to register permission types.'};
+      throw {name: 'PermissionTypeNotRegisteredException', message: 'The permission type "' + name + '" has not been registered. Please use LogicalPermissions::addType() or LogicalPermissions::setTypes() to register permission types.'};
     }
     
     var types = self.getTypes();
@@ -486,7 +486,7 @@ var OrdermindLogicalPermissions = function OrdermindLogicalPermissions(){
 
   var externalAccessCheck = function externalAccessCheck(permission, type, context) {
     if(!self.typeExists(type)) {
-      throw {name: 'PermissionTypeNotRegisteredException', message: 'The permission type "' + type + '" has not been registered. Please use OrdermindLogicalPermissions::addType() or OrdermindLogicalPermissions::setTypes() to register permission types.'};
+      throw {name: 'PermissionTypeNotRegisteredException', message: 'The permission type "' + type + '" has not been registered. Please use LogicalPermissions::addType() or LogicalPermissions::setTypes() to register permission types.'};
     }
 
     var access = false;
@@ -499,4 +499,4 @@ var OrdermindLogicalPermissions = function OrdermindLogicalPermissions(){
 
 };
 
-module.exports = OrdermindLogicalPermissions;
+module.exports = LogicalPermissions;

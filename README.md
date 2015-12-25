@@ -8,11 +8,11 @@ This is a generic library that provides support for object-based permissions wit
 
 ### Installation
 
-`meteor add ordermind:logical-permissions`
+`npm install logical-permissions`
 
 ### Usage
 
-The main api method is `OrdermindLogicalPermissions.checkAccess()`, which checks the access for a **permission tree**. It can be called from either client or server. A permission tree is a bundle of permissions that apply to a specific action. Let's say for example that you want to restrict access for updating a user. You'd like only users with the role "admin" to be able to update any user, but users should also be able to update their own user data (or at least some of it). With the structure this package provides, these conditions could be expressed elegantly in a permission tree as such:
+The main api method is `LogicalPermissions.checkAccess()`, which checks the access for a **permission tree**. It can be called from either client or server. A permission tree is a bundle of permissions that apply to a specific action. Let's say for example that you want to restrict access for updating a user. You'd like only users with the role "admin" to be able to update any user, but users should also be able to update their own user data (or at least some of it). With the structure this package provides, these conditions could be expressed elegantly in a permission tree as such:
 
 ```javascript
 {
@@ -105,7 +105,7 @@ If I then want to check the access for updating a user, I could for example do i
 Meteor.methods({
   'checkAccessUserUpdate': function(user, document) {
     var permissions = GlobalPermissionsObject;
-    var access = OrdermindLogicalPermissions.checkAccess(permissions.collections.users.update, user, document);
+    var access = LogicalPermissions.checkAccess(permissions.collections.users.update, user, document);
     return access;
   }
 });
@@ -516,7 +516,7 @@ Examples:
 Meteor.startup(function () {
   "use strict";
 
-  OrdermindLogicalPermissions.addFlag(my_flag, function() {
+  LogicalPermissions.addFlag(my_flag, function() {
     //Code for evaluating the flag
   });
 }); 
@@ -527,7 +527,7 @@ Meteor.startup(function () {
 Meteor.startup(function () {
   "use strict";
 
-  OrdermindLogicalPermissions.addType(my_type, function() {
+  LogicalPermissions.addType(my_type, function() {
     //Code for evaluating the type
   });
 }); 

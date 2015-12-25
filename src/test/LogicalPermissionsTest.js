@@ -1,190 +1,190 @@
-var OrdermindLogicalPermissions = require('../lib/OrdermindLogicalPermissions.js');
+var LogicalPermissions = require('../lib/LogicalPermissions.js');
 var assert = require('assert');
-describe('OrdermindLogicalPermissions', function() {
+describe('LogicalPermissions', function() {
 
   describe('creation', function () {
-    it('should create a OrdermindLogicalPermissions instance', function () {
-      var lp = new OrdermindLogicalPermissions();
-      assert(lp instanceof OrdermindLogicalPermissions);
+    it('should create a LogicalPermissions instance', function () {
+      var lp = new LogicalPermissions();
+      assert(lp instanceof LogicalPermissions);
     });
   });
 
-  /*-----------OrdermindLogicalPermissions::addType()-------------*/
+  /*-----------LogicalPermissions::addType()-------------*/
 
   describe('testAddTypeParamNameMissing', function() {
-    it('should call OrdermindLogicalPermissions::addType() with no "name" parameter and catch a MissingArgumentException exception', function() {
-      var lp = new OrdermindLogicalPermissions();
+    it('should call LogicalPermissions::addType() with no "name" parameter and catch a MissingArgumentException exception', function() {
+      var lp = new LogicalPermissions();
       assert.throws(function() {
         lp.addType();
       }, function(err) {return err.name === 'MissingArgumentException';});
     });
   });
   describe('testAddTypeParamNameWrongType', function() {
-    it('should call OrdermindLogicalPermissions::addType() with the wrong data type for the "name" parameter and catch an InvalidArgumentTypeException exception', function() {
-      var lp = new OrdermindLogicalPermissions();
+    it('should call LogicalPermissions::addType() with the wrong data type for the "name" parameter and catch an InvalidArgumentTypeException exception', function() {
+      var lp = new LogicalPermissions();
       assert.throws(function() {
         lp.addType(0, function(){});
       }, function(err) {return err.name === 'InvalidArgumentTypeException';});
     });
   });
   describe('testAddTypeParamNameEmpty', function() {
-    it('should call OrdermindLogicalPermissions::addType() with an empty string for "name" parameter and catch an InvalidArgumentValueException exception', function() {
-      var lp = new OrdermindLogicalPermissions();
+    it('should call LogicalPermissions::addType() with an empty string for "name" parameter and catch an InvalidArgumentValueException exception', function() {
+      var lp = new LogicalPermissions();
       assert.throws(function() {
         lp.addType('', function(){});
       }, function(err) {return err.name === 'InvalidArgumentValueException';});
     });
   });
   describe('testAddTypeParamCallbackMissing', function() {
-    it('should call OrdermindLogicalPermissions::addType() with no "callback" parameter and catch a MissingArgumentException exception', function() {
-      var lp = new OrdermindLogicalPermissions();
+    it('should call LogicalPermissions::addType() with no "callback" parameter and catch a MissingArgumentException exception', function() {
+      var lp = new LogicalPermissions();
       assert.throws(function() {
         lp.addType('test');
       }, function(err) {return err.name === 'MissingArgumentException';});
     });
   });
   describe('testAddTypeParamCallbackWrongType', function() {
-    it('should call OrdermindLogicalPermissions::addType() with the wrong data type for the "name" parameter and catch an InvalidArgumentTypeException exception', function() {
-      var lp = new OrdermindLogicalPermissions();
+    it('should call LogicalPermissions::addType() with the wrong data type for the "name" parameter and catch an InvalidArgumentTypeException exception', function() {
+      var lp = new LogicalPermissions();
       assert.throws(function() {
         lp.addType('test', 0);
       }, function(err) {return err.name === 'InvalidArgumentTypeException';});
     });
   });
   describe('testAddType', function() {
-    it('should call OrdermindLogicalPermissions::addType() and assert that the type was indeed added', function() {
-      var lp = new OrdermindLogicalPermissions();
+    it('should call LogicalPermissions::addType() and assert that the type was indeed added', function() {
+      var lp = new LogicalPermissions();
       lp.addType('test', function(){});
       assert(lp.typeExists('test'));
     });
   });
   
-  /*-------------OrdermindLogicalPermissions::removeType()--------------*/
+  /*-------------LogicalPermissions::removeType()--------------*/
   
   describe('testRemoveTypeParamNameMissing', function() {
-    it('should call OrdermindLogicalPermissions::removeType() with no "name" parameter and catch a MissingArgumentException exception', function() {
-      var lp = new OrdermindLogicalPermissions();
+    it('should call LogicalPermissions::removeType() with no "name" parameter and catch a MissingArgumentException exception', function() {
+      var lp = new LogicalPermissions();
       assert.throws(function() {
         lp.removeType();
       }, function(err) {return err.name === 'MissingArgumentException';});
     });
   });
   describe('testRemoveTypeParamNameWrongType', function() {
-    it('should call OrdermindLogicalPermissions::removeType() with the wrong data type for the "name" parameter and catch an InvalidArgumentTypeException exception', function() {
-      var lp = new OrdermindLogicalPermissions();
+    it('should call LogicalPermissions::removeType() with the wrong data type for the "name" parameter and catch an InvalidArgumentTypeException exception', function() {
+      var lp = new LogicalPermissions();
       assert.throws(function() {
         lp.removeType(0);
       }, function(err) {return err.name === 'InvalidArgumentTypeException';});
     });
   });
   describe('testRemoveTypeParamNameEmpty', function() {
-    it('should call OrdermindLogicalPermissions::removeType() with an empty string for "name" parameter and catch an InvalidArgumentValueException exception', function() {
-      var lp = new OrdermindLogicalPermissions();
+    it('should call LogicalPermissions::removeType() with an empty string for "name" parameter and catch an InvalidArgumentValueException exception', function() {
+      var lp = new LogicalPermissions();
       assert.throws(function() {
         lp.removeType('');
       }, function(err) {return err.name === 'InvalidArgumentValueException';});
     });
   });
   describe('testRemoveTypeParamNameDoesntExist', function() {
-    it('should call OrdermindLogicalPermissions::removeType() with a "name" parameter that is not registered and catch a PermissionTypeNotRegisteredException exception', function() {
-      var lp = new OrdermindLogicalPermissions();
+    it('should call LogicalPermissions::removeType() with a "name" parameter that is not registered and catch a PermissionTypeNotRegisteredException exception', function() {
+      var lp = new LogicalPermissions();
       assert.throws(function() {
         lp.removeType('test');
       }, function(err) {return err.name === 'PermissionTypeNotRegisteredException';});
     });
   });
   describe('testRemoveType', function() {
-    it('should call OrdermindLogicalPermissions::removeType() and successfully remove a registered permission type', function() {
-      var lp = new OrdermindLogicalPermissions();
+    it('should call LogicalPermissions::removeType() and successfully remove a registered permission type', function() {
+      var lp = new LogicalPermissions();
       lp.addType('test', function(){});
       lp.removeType('test');
       assert(!lp.typeExists('test'));
     });
   });
   
-  /*-------------OrdermindLogicalPermissions::typeExists()--------------*/
+  /*-------------LogicalPermissions::typeExists()--------------*/
   
   describe('testTypeExistsParamNameMissing', function() {
-    it('should call OrdermindLogicalPermissions::typeExists() with no "name" parameter and catch a MissingArgumentException exception', function() {
-      var lp = new OrdermindLogicalPermissions();
+    it('should call LogicalPermissions::typeExists() with no "name" parameter and catch a MissingArgumentException exception', function() {
+      var lp = new LogicalPermissions();
       assert.throws(function() {
         lp.typeExists();
       }, function(err) {return err.name === 'MissingArgumentException';});
     });
   });
   describe('testTypeExistsParamNameWrongType', function() {
-    it('should call OrdermindLogicalPermissions::typeExists() with the wrong data type for the "name" parameter and catch an InvalidArgumentTypeException exception', function() {
-      var lp = new OrdermindLogicalPermissions();
+    it('should call LogicalPermissions::typeExists() with the wrong data type for the "name" parameter and catch an InvalidArgumentTypeException exception', function() {
+      var lp = new LogicalPermissions();
       assert.throws(function() {
         lp.typeExists(0);
       }, function(err) {return err.name === 'InvalidArgumentTypeException';});
     });
   });
   describe('testTypeExistsParamNameEmpty', function() {
-    it('should call OrdermindLogicalPermissions::typeExists() with an empty string for "name" parameter and catch an InvalidArgumentValueException exception', function() {
-      var lp = new OrdermindLogicalPermissions();
+    it('should call LogicalPermissions::typeExists() with an empty string for "name" parameter and catch an InvalidArgumentValueException exception', function() {
+      var lp = new LogicalPermissions();
       assert.throws(function() {
         lp.typeExists('');
       }, function(err) {return err.name === 'InvalidArgumentValueException';});
     });
   });
   describe('testTypeExists', function() {
-    it('should call OrdermindLogicalPermissions::typeExists() and assert that a created type exists', function() {
-      var lp = new OrdermindLogicalPermissions();
+    it('should call LogicalPermissions::typeExists() and assert that a created type exists', function() {
+      var lp = new LogicalPermissions();
       assert(!lp.typeExists('test'));
       lp.addType('test', function(){});
       assert(lp.typeExists('test'));
     });
   });
   
-  /*-------------OrdermindLogicalPermissions::getTypeCallback()--------------*/
+  /*-------------LogicalPermissions::getTypeCallback()--------------*/
   
   describe('testGetTypeCallbackParamNameMissing', function() {
-    it('should call OrdermindLogicalPermissions::getTypeCallback() with no "name" parameter and catch a MissingArgumentException exception', function() {
-      var lp = new OrdermindLogicalPermissions();
+    it('should call LogicalPermissions::getTypeCallback() with no "name" parameter and catch a MissingArgumentException exception', function() {
+      var lp = new LogicalPermissions();
       assert.throws(function() {
         lp.getTypeCallback();
       }, function(err) {return err.name === 'MissingArgumentException';});
     });
   });
   describe('testGetTypeCallbackParamNameWrongType', function() {
-    it('should call OrdermindLogicalPermissions::getTypeCallback() with the wrong data type for the "name" parameter and catch an InvalidArgumentTypeException exception', function() {
-      var lp = new OrdermindLogicalPermissions();
+    it('should call LogicalPermissions::getTypeCallback() with the wrong data type for the "name" parameter and catch an InvalidArgumentTypeException exception', function() {
+      var lp = new LogicalPermissions();
       assert.throws(function() {
         lp.getTypeCallback(0);
       }, function(err) {return err.name === 'InvalidArgumentTypeException';});
     });
   });
   describe('testGetTypeCallbackParamNameEmpty', function() {
-    it('should call OrdermindLogicalPermissions::getTypeCallback() with an empty string for "name" parameter and catch an InvalidArgumentValueException exception', function() {
-      var lp = new OrdermindLogicalPermissions();
+    it('should call LogicalPermissions::getTypeCallback() with an empty string for "name" parameter and catch an InvalidArgumentValueException exception', function() {
+      var lp = new LogicalPermissions();
       assert.throws(function() {
         lp.getTypeCallback('');
       }, function(err) {return err.name === 'InvalidArgumentValueException';});
     });
   });
   describe('testGetTypeCallbackParamNameDoesntExist', function() {
-    it('should call OrdermindLogicalPermissions::getTypeCallback() with a "name" parameter that is not registered and catch a PermissionTypeNotRegisteredException exception', function() {
-      var lp = new OrdermindLogicalPermissions();
+    it('should call LogicalPermissions::getTypeCallback() with a "name" parameter that is not registered and catch a PermissionTypeNotRegisteredException exception', function() {
+      var lp = new LogicalPermissions();
       assert.throws(function() {
         lp.getTypeCallback('test');
       }, function(err) {return err.name === 'PermissionTypeNotRegisteredException';});
     });
   });
   describe('testGetTypeCallback', function() {
-    it('should call OrdermindLogicalPermissions::getTypeCallback() and successfully get a registered permission type callback', function() {
-      var lp = new OrdermindLogicalPermissions();
+    it('should call LogicalPermissions::getTypeCallback() and successfully get a registered permission type callback', function() {
+      var lp = new LogicalPermissions();
       var callback = function(){};
       lp.addType('test', callback);
       assert.strictEqual(lp.getTypeCallback('test'), callback);
     });
   });
   
-  /*-------------OrdermindLogicalPermissions::getTypes()--------------*/
+  /*-------------LogicalPermissions::getTypes()--------------*/
   
   describe('testGetTypes', function() {
-    it('should call OrdermindLogicalPermissions::getTypes() and successfully get all registered types', function() {
-      var lp = new OrdermindLogicalPermissions();
+    it('should call LogicalPermissions::getTypes() and successfully get all registered types', function() {
+      var lp = new LogicalPermissions();
       var callback = function(){};
       lp.addType('test', callback);
       var types = lp.getTypes();
@@ -197,27 +197,27 @@ describe('OrdermindLogicalPermissions', function() {
     });
   });
   
-  /*-------------OrdermindLogicalPermissions::setTypes()--------------*/
+  /*-------------LogicalPermissions::setTypes()--------------*/
 
   describe('testSetTypesParamTypesMissing', function() {
-    it('should call OrdermindLogicalPermissions::setTypes() with no "types" parameter and catch a MissingArgumentException exception', function() {
-      var lp = new OrdermindLogicalPermissions();
+    it('should call LogicalPermissions::setTypes() with no "types" parameter and catch a MissingArgumentException exception', function() {
+      var lp = new LogicalPermissions();
       assert.throws(function() {
         lp.setTypes();
       }, function(err) {return err.name === 'MissingArgumentException';});
     });
   });
   describe('testSetTypesParamTypesWrongType', function() {
-    it('should call OrdermindLogicalPermissions::setTypes() with the wrong data type for the "types" parameter and catch an InvalidArgumentTypeException exception', function() {
-      var lp = new OrdermindLogicalPermissions();
+    it('should call LogicalPermissions::setTypes() with the wrong data type for the "types" parameter and catch an InvalidArgumentTypeException exception', function() {
+      var lp = new LogicalPermissions();
       assert.throws(function() {
         lp.setTypes(0);
       }, function(err) {return err.name === 'InvalidArgumentTypeException';});
     });
   });
   describe('testSetTypesParamTypesNameWrongType', function() {
-    it('should call OrdermindLogicalPermissions::setTypes() with the wrong data type for a type name key and catch an InvalidArgumentValueException exception', function() {
-      var lp = new OrdermindLogicalPermissions();
+    it('should call LogicalPermissions::setTypes() with the wrong data type for a type name key and catch an InvalidArgumentValueException exception', function() {
+      var lp = new LogicalPermissions();
       assert.throws(function() {
         var types = {0: function(){}};
         lp.setTypes(types);
@@ -225,8 +225,8 @@ describe('OrdermindLogicalPermissions', function() {
     });
   });
   describe('testSetTypesParamTypesNameEmpty', function() {
-    it('should call OrdermindLogicalPermissions::setTypes() with an empty type name key and catch an InvalidArgumentValueException exception', function() {
-      var lp = new OrdermindLogicalPermissions();
+    it('should call LogicalPermissions::setTypes() with an empty type name key and catch an InvalidArgumentValueException exception', function() {
+      var lp = new LogicalPermissions();
       assert.throws(function() {
         var types = {'': function(){}};
         lp.setTypes(types);
@@ -234,8 +234,8 @@ describe('OrdermindLogicalPermissions', function() {
     });
   });
   describe('testSetTypesParamTypesCallbackWrongType', function() {
-    it('should call OrdermindLogicalPermissions::setTypes() with the wrong data type for a type callback and catch an InvalidArgumentValueException exception', function() {
-      var lp = new OrdermindLogicalPermissions();
+    it('should call LogicalPermissions::setTypes() with the wrong data type for a type callback and catch an InvalidArgumentValueException exception', function() {
+      var lp = new LogicalPermissions();
       assert.throws(function() {
         var types = {'test': 'hej'};
         lp.setTypes(types);
@@ -243,8 +243,8 @@ describe('OrdermindLogicalPermissions', function() {
     });
   });
   describe('testSetTypes', function() {
-    it('should call OrdermindLogicalPermissions::setTypes() and successfully overwrite all types', function() {
-      var lp = new OrdermindLogicalPermissions();
+    it('should call LogicalPermissions::setTypes() and successfully overwrite all types', function() {
+      var lp = new LogicalPermissions();
       var callback = function(){};
       var types = {'test': callback};
       lp.setTypes(types);
@@ -256,63 +256,63 @@ describe('OrdermindLogicalPermissions', function() {
     });
   });
 
-  /*-------------OrdermindLogicalPermissions::getBypassCallback()--------------*/
+  /*-------------LogicalPermissions::getBypassCallback()--------------*/
   
   describe('testGetBypassCallback', function() {
-    it('should call OrdermindLogicalPermissions::getBypassCallback() and check that the callback is null', function() {
-      var lp = new OrdermindLogicalPermissions();
+    it('should call LogicalPermissions::getBypassCallback() and check that the callback is null', function() {
+      var lp = new LogicalPermissions();
       assert.equal(lp.getBypassCallback(), null);
     });
   });
   
-  /*-------------OrdermindLogicalPermissions::setBypassCallback()--------------*/
+  /*-------------LogicalPermissions::setBypassCallback()--------------*/
   
   describe('testSetBypassCallbackParamCallbackMissing', function() {
-    it('should call OrdermindLogicalPermissions::setBypassCallback() with no "callback" parameter and catch a MissingArgumentException exception', function() {
-      var lp = new OrdermindLogicalPermissions();
+    it('should call LogicalPermissions::setBypassCallback() with no "callback" parameter and catch a MissingArgumentException exception', function() {
+      var lp = new LogicalPermissions();
       assert.throws(function() {
         lp.setBypassCallback();
       }, function(err) {return err.name === 'MissingArgumentException';});
     });
   });
   describe('testSetBypassCallbackParamCallbackWrongType', function() {
-    it('should call OrdermindLogicalPermissions::setBypassCallback() with the wrong data type for the "callback" parameter and catch an InvalidArgumentTypeException exception', function() {
-      var lp = new OrdermindLogicalPermissions();
+    it('should call LogicalPermissions::setBypassCallback() with the wrong data type for the "callback" parameter and catch an InvalidArgumentTypeException exception', function() {
+      var lp = new LogicalPermissions();
       assert.throws(function() {
         lp.setBypassCallback(0);
       }, function(err) {return err.name === 'InvalidArgumentTypeException';});
     });
   });
   describe('testSetBypassCallback', function() {
-    it('should call OrdermindLogicalPermissions::setBypassCallback() and successfully register a bypass callback', function() {
-      var lp = new OrdermindLogicalPermissions();
+    it('should call LogicalPermissions::setBypassCallback() and successfully register a bypass callback', function() {
+      var lp = new LogicalPermissions();
       var callback = function(){};
       lp.setBypassCallback(callback);
       assert.strictEqual(lp.getBypassCallback(), callback);
     });
   });
  
-  /*-------------OrdermindLogicalPermissions::checkAccess()--------------*/
+  /*-------------LogicalPermissions::checkAccess()--------------*/
   
   describe('testCheckAccessParamPermissionsMissing', function() {
-    it('should call OrdermindLogicalPermissions::checkAccess() with no "permissions" parameter and catch a MissingArgumentException exception', function() {
-      var lp = new OrdermindLogicalPermissions();
+    it('should call LogicalPermissions::checkAccess() with no "permissions" parameter and catch a MissingArgumentException exception', function() {
+      var lp = new LogicalPermissions();
       assert.throws(function() {
         lp.checkAccess();
       }, function(err) {return err.name === 'MissingArgumentException';});
     });
   });
   describe('testCheckAccessParamPermissionsWrongType', function() {
-    it('should call OrdermindLogicalPermissions::checkAccess() with the wrong data type for the "permissions" parameter and catch an InvalidArgumentTypeException exception', function() {
-      var lp = new OrdermindLogicalPermissions();
+    it('should call LogicalPermissions::checkAccess() with the wrong data type for the "permissions" parameter and catch an InvalidArgumentTypeException exception', function() {
+      var lp = new LogicalPermissions();
       assert.throws(function() {
         lp.checkAccess([]);
       }, function(err) {return err.name === 'InvalidArgumentTypeException';});
     });
   });
   describe('testCheckAccessParamPermissionsWrongPermissionType', function() {
-    it('should call OrdermindLogicalPermissions::checkAccess() with an invalid permission value and catch an InvalidArgumentTypeException exception', function() {
-      var lp = new OrdermindLogicalPermissions();
+    it('should call LogicalPermissions::checkAccess() with an invalid permission value and catch an InvalidArgumentTypeException exception', function() {
+      var lp = new LogicalPermissions();
       var permissions = {
         flag: true
       };
@@ -322,8 +322,8 @@ describe('OrdermindLogicalPermissions', function() {
     });
   });
   describe('testCheckAccessParamPermissionsNestedTypes', function() {
-    it('should call OrdermindLogicalPermissions::checkAccess() with nested permission types and catch an InvalidArgumentValueException exception', function() {
-      var lp = new OrdermindLogicalPermissions();
+    it('should call LogicalPermissions::checkAccess() with nested permission types and catch an InvalidArgumentValueException exception', function() {
+      var lp = new LogicalPermissions();
 
       //Directly nested
       var permissions = {
@@ -349,8 +349,8 @@ describe('OrdermindLogicalPermissions', function() {
     });
   });
   describe('testCheckAccessParamPermissionsUnregisteredType', function() {
-    it('should call OrdermindLogicalPermissions::checkAccess() with an unregistered permission type and catch a PermissionTypeNotRegisteredException exception', function() {
-      var lp = new OrdermindLogicalPermissions();
+    it('should call LogicalPermissions::checkAccess() with an unregistered permission type and catch a PermissionTypeNotRegisteredException exception', function() {
+      var lp = new LogicalPermissions();
       var permissions = {
         flag: 'testflag'
       };
@@ -360,24 +360,24 @@ describe('OrdermindLogicalPermissions', function() {
     });
   });
   describe('testCheckAccessParamContextMissing', function() {
-    it('should call OrdermindLogicalPermissions::checkAccess() with no "context" parameter and catch a MissingArgumentException exception', function() {
-      var lp = new OrdermindLogicalPermissions();
+    it('should call LogicalPermissions::checkAccess() with no "context" parameter and catch a MissingArgumentException exception', function() {
+      var lp = new LogicalPermissions();
       assert.throws(function() {
         lp.checkAccess({});
       }, function(err) {return err.name === 'MissingArgumentException';});
     });
   });
   describe('testCheckAccessParamContextWrongType', function() {
-    it('should call OrdermindLogicalPermissions::checkAccess() with the wrong data type for the "context" parameter and catch an InvalidArgumentTypeException exception', function() {
-      var lp = new OrdermindLogicalPermissions();
+    it('should call LogicalPermissions::checkAccess() with the wrong data type for the "context" parameter and catch an InvalidArgumentTypeException exception', function() {
+      var lp = new LogicalPermissions();
       assert.throws(function() {
         lp.checkAccess({}, []);
       }, function(err) {return err.name === 'InvalidArgumentTypeException';});
     });
   });
   describe('testCheckAccessCheckContextPassing', function() {
-    it('should call OrdermindLogicalPermissions::checkAccess() and check that the context parameter is passed to the registered callback', function() {
-      var lp = new OrdermindLogicalPermissions();
+    it('should call LogicalPermissions::checkAccess() and check that the context parameter is passed to the registered callback', function() {
+      var lp = new LogicalPermissions();
       var user = {
         id: 1
       };
@@ -391,8 +391,8 @@ describe('OrdermindLogicalPermissions', function() {
     });
   });
   describe('testCheckAccessBypassAccessAllow', function() {
-    it('should call OrdermindLogicalPermissions::checkAccess() and allow access due to bypassing access', function() {
-      var lp = new OrdermindLogicalPermissions();
+    it('should call LogicalPermissions::checkAccess() and allow access due to bypassing access', function() {
+      var lp = new LogicalPermissions();
       var bypass_callback = function(context) {
         return true;
       };
@@ -401,8 +401,8 @@ describe('OrdermindLogicalPermissions', function() {
     });
   });
   describe('testCheckAccessBypassAccessDeny', function() {
-    it('should call OrdermindLogicalPermissions::checkAccess() and deny access due to no bypassing access and no regular access', function() {
-      var lp = new OrdermindLogicalPermissions();
+    it('should call LogicalPermissions::checkAccess() and deny access due to no bypassing access and no regular access', function() {
+      var lp = new LogicalPermissions();
       var bypass_callback = function(context) {
         return false;
       };
@@ -411,8 +411,8 @@ describe('OrdermindLogicalPermissions', function() {
     });
   });
   describe('testCheckAccessNoBypassAccessBooleanAllow', function() {
-    it('should call OrdermindLogicalPermissions::checkAccess() with no_bypass set to false and allow access due to bypassing access', function() {
-      var lp = new OrdermindLogicalPermissions();
+    it('should call LogicalPermissions::checkAccess() with no_bypass set to false and allow access due to bypassing access', function() {
+      var lp = new LogicalPermissions();
       var bypass_callback = function(context) {
         return true;
       };
@@ -421,8 +421,8 @@ describe('OrdermindLogicalPermissions', function() {
     });
   });
   describe('testCheckAccessNoBypassAccessBooleanDeny', function() {
-    it('should call OrdermindLogicalPermissions::checkAccess() with no_bypass set to true and deny access due to forbidden access bypass and no regular access', function() {
-      var lp = new OrdermindLogicalPermissions();
+    it('should call LogicalPermissions::checkAccess() with no_bypass set to true and deny access due to forbidden access bypass and no regular access', function() {
+      var lp = new LogicalPermissions();
       var bypass_callback = function(context) {
         return true;
       };
@@ -431,8 +431,8 @@ describe('OrdermindLogicalPermissions', function() {
     });
   });
   describe('testCheckAccessNoBypassAccessObjectAllow', function() {
-    it('should call OrdermindLogicalPermissions::checkAccess() with no_bypass set to an object and allow access due to bypassing access', function() {
-      var lp = new OrdermindLogicalPermissions();
+    it('should call LogicalPermissions::checkAccess() with no_bypass set to an object and allow access due to bypassing access', function() {
+      var lp = new LogicalPermissions();
       var types = {
         flag: function(flag, context) {
           var access = false;
@@ -462,8 +462,8 @@ describe('OrdermindLogicalPermissions', function() {
     });
   });
   describe('testCheckAccessNoBypassAccessObjectDeny', function() {
-    it('should call OrdermindLogicalPermissions::checkAccess() with no_bypass set to an object and deny access due to forbidden access bypass and no regular access', function() {
-      var lp = new OrdermindLogicalPermissions();
+    it('should call LogicalPermissions::checkAccess() with no_bypass set to an object and deny access due to forbidden access bypass and no regular access', function() {
+      var lp = new LogicalPermissions();
       var types = {
         flag: function(flag, context) {
           var access = false;
@@ -493,8 +493,8 @@ describe('OrdermindLogicalPermissions', function() {
     });
   });
   describe('testCheckAccessSingleItemAllow', function() {
-    it('should call OrdermindLogicalPermissions::checkAccess() with single flag and allow access', function() {
-      var lp = new OrdermindLogicalPermissions();
+    it('should call LogicalPermissions::checkAccess() with single flag and allow access', function() {
+      var lp = new LogicalPermissions();
       var types = {
         flag: function(flag, context) {
           var access = false;
@@ -521,8 +521,8 @@ describe('OrdermindLogicalPermissions', function() {
     });
   });
   describe('testCheckAccessSingleItemDeny', function() {
-    it('should call OrdermindLogicalPermissions::checkAccess() with single flag and deny access', function() {
-      var lp = new OrdermindLogicalPermissions();
+    it('should call LogicalPermissions::checkAccess() with single flag and deny access', function() {
+      var lp = new LogicalPermissions();
       var types = {
         flag: function(flag, context) {
           var access = false;
@@ -545,8 +545,8 @@ describe('OrdermindLogicalPermissions', function() {
     });
   });
   describe('testCheckAccessMultipleTypesShorthandOR', function() {
-    it('should call OrdermindLogicalPermissions::checkAccess() with multiple permission types (shorthand OR)', function() {
-      var lp = new OrdermindLogicalPermissions();
+    it('should call LogicalPermissions::checkAccess() with multiple permission types (shorthand OR)', function() {
+      var lp = new LogicalPermissions();
       var types = {
         flag: function(flag, context) {
           var access = false;
@@ -616,8 +616,8 @@ describe('OrdermindLogicalPermissions', function() {
     });
   });
   describe('testCheckAccessMultipleTypesShorthandOR', function() {
-    it('should call OrdermindLogicalPermissions::checkAccess() with multiple permission type items (shorthand OR)', function() {
-      var lp = new OrdermindLogicalPermissions();
+    it('should call LogicalPermissions::checkAccess() with multiple permission type items (shorthand OR)', function() {
+      var lp = new LogicalPermissions();
       var types = {
         role: function(role, context) {
           var access = false;
@@ -649,8 +649,8 @@ describe('OrdermindLogicalPermissions', function() {
     });
   });
   describe('testCheckAccessANDWrongValueType', function() {
-    it('should call OrdermindLogicalPermissions::checkAccess() with an illegal AND value type and catch an InvalidValueForLogicGate exception', function() {
-      var lp = new OrdermindLogicalPermissions();
+    it('should call LogicalPermissions::checkAccess() with an illegal AND value type and catch an InvalidValueForLogicGate exception', function() {
+      var lp = new LogicalPermissions();
       var types = {
         role: function(role, context) {
           var access = false;
@@ -676,8 +676,8 @@ describe('OrdermindLogicalPermissions', function() {
     });
   });
   describe('testCheckAccessANDTooFewElements', function() {
-    it('should call OrdermindLogicalPermissions::checkAccess() with too few elements in AND value and catch an InvalidValueForLogicGate exception', function() {
-      var lp = new OrdermindLogicalPermissions();
+    it('should call LogicalPermissions::checkAccess() with too few elements in AND value and catch an InvalidValueForLogicGate exception', function() {
+      var lp = new LogicalPermissions();
       var types = {
         role: function(role, context) {
           var access = false;
@@ -712,8 +712,8 @@ describe('OrdermindLogicalPermissions', function() {
     });
   });
   describe('testCheckAccessMultipleItemsAND', function() {
-    it('should call OrdermindLogicalPermissions::checkAccess() with multiple AND values', function() {
-      var lp = new OrdermindLogicalPermissions();
+    it('should call LogicalPermissions::checkAccess() with multiple AND values', function() {
+      var lp = new LogicalPermissions();
       var types = {
         role: function(role, context) {
           var access = false;
@@ -802,8 +802,8 @@ describe('OrdermindLogicalPermissions', function() {
     });
   });
   describe('testCheckAccessNANDWrongValueType', function() {
-    it('should call OrdermindLogicalPermissions::checkAccess() with an illegal NAND value type and catch an InvalidValueForLogicGate exception', function() {
-      var lp = new OrdermindLogicalPermissions();
+    it('should call LogicalPermissions::checkAccess() with an illegal NAND value type and catch an InvalidValueForLogicGate exception', function() {
+      var lp = new LogicalPermissions();
       var types = {
         role: function(role, context) {
           var access = false;
@@ -829,8 +829,8 @@ describe('OrdermindLogicalPermissions', function() {
     });
   });
   describe('testCheckAccessNANDTooFewElements', function() {
-    it('should call OrdermindLogicalPermissions::checkAccess() with too few elements in NAND value and catch an InvalidValueForLogicGate exception', function() {
-      var lp = new OrdermindLogicalPermissions();
+    it('should call LogicalPermissions::checkAccess() with too few elements in NAND value and catch an InvalidValueForLogicGate exception', function() {
+      var lp = new LogicalPermissions();
       var types = {
         role: function(role, context) {
           var access = false;
@@ -865,8 +865,8 @@ describe('OrdermindLogicalPermissions', function() {
     });
   });
   describe('testCheckAccessMultipleItemsNAND', function() {
-    it('should call OrdermindLogicalPermissions::checkAccess() with multiple NAND values', function() {
-      var lp = new OrdermindLogicalPermissions();
+    it('should call LogicalPermissions::checkAccess() with multiple NAND values', function() {
+      var lp = new LogicalPermissions();
       var types = {
         role: function(role, context) {
           var access = false;
@@ -955,8 +955,8 @@ describe('OrdermindLogicalPermissions', function() {
     });
   });
   describe('testCheckAccessORWrongValueType', function() {
-    it('should call OrdermindLogicalPermissions::checkAccess() with an illegal OR value type and catch an InvalidValueForLogicGate exception', function() {
-      var lp = new OrdermindLogicalPermissions();
+    it('should call LogicalPermissions::checkAccess() with an illegal OR value type and catch an InvalidValueForLogicGate exception', function() {
+      var lp = new LogicalPermissions();
       var types = {
         role: function(role, context) {
           var access = false;
@@ -982,8 +982,8 @@ describe('OrdermindLogicalPermissions', function() {
     });
   });
   describe('testCheckAccessORTooFewElements', function() {
-    it('should call OrdermindLogicalPermissions::checkAccess() with too few elements in OR value and catch an InvalidValueForLogicGate exception', function() {
-      var lp = new OrdermindLogicalPermissions();
+    it('should call LogicalPermissions::checkAccess() with too few elements in OR value and catch an InvalidValueForLogicGate exception', function() {
+      var lp = new LogicalPermissions();
       var types = {
         role: function(role, context) {
           var access = false;
@@ -1018,8 +1018,8 @@ describe('OrdermindLogicalPermissions', function() {
     });
   });
   describe('testCheckAccessMultipleItemsOR', function() {
-    it('should call OrdermindLogicalPermissions::checkAccess() with multiple OR values', function() {
-      var lp = new OrdermindLogicalPermissions();
+    it('should call LogicalPermissions::checkAccess() with multiple OR values', function() {
+      var lp = new LogicalPermissions();
       var types = {
         role: function(role, context) {
           var access = false;
@@ -1108,8 +1108,8 @@ describe('OrdermindLogicalPermissions', function() {
     });
   });
   describe('testCheckAccessNORWrongValueType', function() {
-    it('should call OrdermindLogicalPermissions::checkAccess() with an illegal NOR value type and catch an InvalidValueForLogicGate exception', function() {
-      var lp = new OrdermindLogicalPermissions();
+    it('should call LogicalPermissions::checkAccess() with an illegal NOR value type and catch an InvalidValueForLogicGate exception', function() {
+      var lp = new LogicalPermissions();
       var types = {
         role: function(role, context) {
           var access = false;
@@ -1135,8 +1135,8 @@ describe('OrdermindLogicalPermissions', function() {
     });
   });
   describe('testCheckAccessNORTooFewElements', function() {
-    it('should call OrdermindLogicalPermissions::checkAccess() with too few elements in NOR value and catch an InvalidValueForLogicGate exception', function() {
-      var lp = new OrdermindLogicalPermissions();
+    it('should call LogicalPermissions::checkAccess() with too few elements in NOR value and catch an InvalidValueForLogicGate exception', function() {
+      var lp = new LogicalPermissions();
       var types = {
         role: function(role, context) {
           var access = false;
@@ -1171,8 +1171,8 @@ describe('OrdermindLogicalPermissions', function() {
     });
   });
   describe('testCheckAccessMultipleItemsNOR', function() {
-    it('should call OrdermindLogicalPermissions::checkAccess() with multiple NOR values', function() {
-      var lp = new OrdermindLogicalPermissions();
+    it('should call LogicalPermissions::checkAccess() with multiple NOR values', function() {
+      var lp = new LogicalPermissions();
       var types = {
         role: function(role, context) {
           var access = false;
@@ -1261,8 +1261,8 @@ describe('OrdermindLogicalPermissions', function() {
     });
   });
   describe('testCheckAccessXORWrongValueType', function() {
-    it('should call OrdermindLogicalPermissions::checkAccess() with an illegal XOR value type and catch an InvalidValueForLogicGate exception', function() {
-      var lp = new OrdermindLogicalPermissions();
+    it('should call LogicalPermissions::checkAccess() with an illegal XOR value type and catch an InvalidValueForLogicGate exception', function() {
+      var lp = new LogicalPermissions();
       var types = {
         role: function(role, context) {
           var access = false;
@@ -1288,8 +1288,8 @@ describe('OrdermindLogicalPermissions', function() {
     });
   });
   describe('testCheckAccessXORTooFewElements', function() {
-    it('should call OrdermindLogicalPermissions::checkAccess() with too few elements in XOR value and catch an InvalidValueForLogicGate exception', function() {
-      var lp = new OrdermindLogicalPermissions();
+    it('should call LogicalPermissions::checkAccess() with too few elements in XOR value and catch an InvalidValueForLogicGate exception', function() {
+      var lp = new LogicalPermissions();
       var types = {
         role: function(role, context) {
           var access = false;
@@ -1324,8 +1324,8 @@ describe('OrdermindLogicalPermissions', function() {
     });
   });
   describe('testCheckAccessMultipleItemsXOR', function() {
-    it('should call OrdermindLogicalPermissions::checkAccess() with multiple XOR values', function() {
-      var lp = new OrdermindLogicalPermissions();
+    it('should call LogicalPermissions::checkAccess() with multiple XOR values', function() {
+      var lp = new LogicalPermissions();
       var types = {
         role: function(role, context) {
           var access = false;
@@ -1414,8 +1414,8 @@ describe('OrdermindLogicalPermissions', function() {
     });
   });
   describe('testCheckAccessNOTWrongValueType', function() {
-    it('should call OrdermindLogicalPermissions::checkAccess() with an illegal NOT value type and catch an InvalidValueForLogicGate exception', function() {
-      var lp = new OrdermindLogicalPermissions();
+    it('should call LogicalPermissions::checkAccess() with an illegal NOT value type and catch an InvalidValueForLogicGate exception', function() {
+      var lp = new LogicalPermissions();
       var types = {
         role: function(role, context) {
           var access = false;
@@ -1441,8 +1441,8 @@ describe('OrdermindLogicalPermissions', function() {
     });
   });
   describe('testCheckAccessNOTTooFewElements', function() {
-    it('should call OrdermindLogicalPermissions::checkAccess() with too few elements in NOT value and catch an InvalidValueForLogicGate exception', function() {
-      var lp = new OrdermindLogicalPermissions();
+    it('should call LogicalPermissions::checkAccess() with too few elements in NOT value and catch an InvalidValueForLogicGate exception', function() {
+      var lp = new LogicalPermissions();
       var types = {
         role: function(role, context) {
           var access = false;
@@ -1477,8 +1477,8 @@ describe('OrdermindLogicalPermissions', function() {
     });
   });
   describe('testCheckAccessMultipleItemsNOT', function() {
-    it('should call OrdermindLogicalPermissions::checkAccess() with multiple NOT values and catch an InvalidValueForLogicGate exception', function() {
-      var lp = new OrdermindLogicalPermissions();
+    it('should call LogicalPermissions::checkAccess() with multiple NOT values and catch an InvalidValueForLogicGate exception', function() {
+      var lp = new LogicalPermissions();
       var types = {
         role: function(role, context) {
           var access = false;
@@ -1504,8 +1504,8 @@ describe('OrdermindLogicalPermissions', function() {
     });
   });
   describe('testCheckAccessSingleItemNOTString', function() {
-    it('should call OrdermindLogicalPermissions::checkAccess() with single NOT string', function() {
-      var lp = new OrdermindLogicalPermissions();
+    it('should call LogicalPermissions::checkAccess() with single NOT string', function() {
+      var lp = new LogicalPermissions();
       var types = {
         role: function(role, context) {
           var access = false;
@@ -1533,8 +1533,8 @@ describe('OrdermindLogicalPermissions', function() {
     });
   });
   describe('testCheckAccessSingleItemNOTObject', function() {
-    it('should call OrdermindLogicalPermissions::checkAccess() with single NOT object', function() {
-      var lp = new OrdermindLogicalPermissions();
+    it('should call LogicalPermissions::checkAccess() with single NOT object', function() {
+      var lp = new LogicalPermissions();
       var types = {
         role: function(role, context) {
           var access = false;
@@ -1562,8 +1562,8 @@ describe('OrdermindLogicalPermissions', function() {
     });
   });
   describe('testCheckAccessNestedLogic', function() {
-    it('should call OrdermindLogicalPermissions::checkAccess() with nested logic', function() {
-      var lp = new OrdermindLogicalPermissions();
+    it('should call LogicalPermissions::checkAccess() with nested logic', function() {
+      var lp = new LogicalPermissions();
       var types = {
         role: function(role, context) {
           var access = false;
@@ -1598,8 +1598,8 @@ describe('OrdermindLogicalPermissions', function() {
     });
   });
   describe('testCheckAccessLogicGateFirst', function() {
-    it('should call OrdermindLogicalPermissions::checkAccess() with nested logic and a logic gate as first element', function() {
-      var lp = new OrdermindLogicalPermissions();
+    it('should call LogicalPermissions::checkAccess() with nested logic and a logic gate as first element', function() {
+      var lp = new LogicalPermissions();
       var types = {
         role: function(role, context) {
           var access = false;
@@ -1636,8 +1636,8 @@ describe('OrdermindLogicalPermissions', function() {
     });
   });
   describe('testCheckAccessShorthandORMixedObjectsArrays', function() {
-    it('should call OrdermindLogicalPermissions::checkAccess() with shorthand OR and mixed objects and arrays', function() {
-      var lp = new OrdermindLogicalPermissions();
+    it('should call LogicalPermissions::checkAccess() with shorthand OR and mixed objects and arrays', function() {
+      var lp = new LogicalPermissions();
       var types = {
         role: function(role, context) {
           var access = false;
