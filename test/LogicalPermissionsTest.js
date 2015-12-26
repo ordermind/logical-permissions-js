@@ -649,7 +649,7 @@ describe('LogicalPermissions', function() {
     });
   });
   describe('testCheckAccessANDWrongValueType', function() {
-    it('should call LogicalPermissions::checkAccess() with an illegal AND value type and catch an InvalidValueForLogicGate exception', function() {
+    it('should call LogicalPermissions::checkAccess() with an illegal AND value type and catch an InvalidValueForLogicGateException exception', function() {
       var lp = new LogicalPermissions();
       var types = {
         role: function(role, context) {
@@ -672,11 +672,11 @@ describe('LogicalPermissions', function() {
       };
       assert.throws(function() {
         lp.checkAccess(permissions, {user: user});
-      }, function(err) {return err.name === 'InvalidValueForLogicGate';});
+      }, function(err) {return err.name === 'InvalidValueForLogicGateException';});
     });
   });
   describe('testCheckAccessANDTooFewElements', function() {
-    it('should call LogicalPermissions::checkAccess() with too few elements in AND value and catch an InvalidValueForLogicGate exception', function() {
+    it('should call LogicalPermissions::checkAccess() with too few elements in AND value and catch an InvalidValueForLogicGateException exception', function() {
       var lp = new LogicalPermissions();
       var types = {
         role: function(role, context) {
@@ -699,7 +699,7 @@ describe('LogicalPermissions', function() {
       };
       assert.throws(function() {
         lp.checkAccess(permissions, {user: user});
-      }, function(err) {return err.name === 'InvalidValueForLogicGate';});
+      }, function(err) {return err.name === 'InvalidValueForLogicGateException';});
       
       permissions = {
         role: {
@@ -708,7 +708,7 @@ describe('LogicalPermissions', function() {
       };
       assert.throws(function() {
         lp.checkAccess(permissions, {user: user});
-      }, function(err) {return err.name === 'InvalidValueForLogicGate';});
+      }, function(err) {return err.name === 'InvalidValueForLogicGateException';});
     });
   });
   describe('testCheckAccessMultipleItemsAND', function() {
@@ -802,7 +802,7 @@ describe('LogicalPermissions', function() {
     });
   });
   describe('testCheckAccessNANDWrongValueType', function() {
-    it('should call LogicalPermissions::checkAccess() with an illegal NAND value type and catch an InvalidValueForLogicGate exception', function() {
+    it('should call LogicalPermissions::checkAccess() with an illegal NAND value type and catch an InvalidValueForLogicGateException exception', function() {
       var lp = new LogicalPermissions();
       var types = {
         role: function(role, context) {
@@ -825,11 +825,11 @@ describe('LogicalPermissions', function() {
       };
       assert.throws(function() {
         lp.checkAccess(permissions, {user: user});
-      }, function(err) {return err.name === 'InvalidValueForLogicGate';});
+      }, function(err) {return err.name === 'InvalidValueForLogicGateException';});
     });
   });
   describe('testCheckAccessNANDTooFewElements', function() {
-    it('should call LogicalPermissions::checkAccess() with too few elements in NAND value and catch an InvalidValueForLogicGate exception', function() {
+    it('should call LogicalPermissions::checkAccess() with too few elements in NAND value and catch an InvalidValueForLogicGateException exception', function() {
       var lp = new LogicalPermissions();
       var types = {
         role: function(role, context) {
@@ -852,7 +852,7 @@ describe('LogicalPermissions', function() {
       };
       assert.throws(function() {
         lp.checkAccess(permissions, {user: user});
-      }, function(err) {return err.name === 'InvalidValueForLogicGate';});
+      }, function(err) {return err.name === 'InvalidValueForLogicGateException';});
       
       permissions = {
         role: {
@@ -861,7 +861,7 @@ describe('LogicalPermissions', function() {
       };
       assert.throws(function() {
         lp.checkAccess(permissions, {user: user});
-      }, function(err) {return err.name === 'InvalidValueForLogicGate';});
+      }, function(err) {return err.name === 'InvalidValueForLogicGateException';});
     });
   });
   describe('testCheckAccessMultipleItemsNAND', function() {
@@ -955,7 +955,7 @@ describe('LogicalPermissions', function() {
     });
   });
   describe('testCheckAccessORWrongValueType', function() {
-    it('should call LogicalPermissions::checkAccess() with an illegal OR value type and catch an InvalidValueForLogicGate exception', function() {
+    it('should call LogicalPermissions::checkAccess() with an illegal OR value type and catch an InvalidValueForLogicGateException exception', function() {
       var lp = new LogicalPermissions();
       var types = {
         role: function(role, context) {
@@ -978,11 +978,11 @@ describe('LogicalPermissions', function() {
       };
       assert.throws(function() {
         lp.checkAccess(permissions, {user: user});
-      }, function(err) {return err.name === 'InvalidValueForLogicGate';});
+      }, function(err) {return err.name === 'InvalidValueForLogicGateException';});
     });
   });
   describe('testCheckAccessORTooFewElements', function() {
-    it('should call LogicalPermissions::checkAccess() with too few elements in OR value and catch an InvalidValueForLogicGate exception', function() {
+    it('should call LogicalPermissions::checkAccess() with too few elements in OR value and catch an InvalidValueForLogicGateException exception', function() {
       var lp = new LogicalPermissions();
       var types = {
         role: function(role, context) {
@@ -1005,7 +1005,7 @@ describe('LogicalPermissions', function() {
       };
       assert.throws(function() {
         lp.checkAccess(permissions, {user: user});
-      }, function(err) {return err.name === 'InvalidValueForLogicGate';});
+      }, function(err) {return err.name === 'InvalidValueForLogicGateException';});
       
       permissions = {
         role: {
@@ -1014,7 +1014,7 @@ describe('LogicalPermissions', function() {
       };
       assert.throws(function() {
         lp.checkAccess(permissions, {user: user});
-      }, function(err) {return err.name === 'InvalidValueForLogicGate';});
+      }, function(err) {return err.name === 'InvalidValueForLogicGateException';});
     });
   });
   describe('testCheckAccessMultipleItemsOR', function() {
@@ -1108,7 +1108,7 @@ describe('LogicalPermissions', function() {
     });
   });
   describe('testCheckAccessNORWrongValueType', function() {
-    it('should call LogicalPermissions::checkAccess() with an illegal NOR value type and catch an InvalidValueForLogicGate exception', function() {
+    it('should call LogicalPermissions::checkAccess() with an illegal NOR value type and catch an InvalidValueForLogicGateException exception', function() {
       var lp = new LogicalPermissions();
       var types = {
         role: function(role, context) {
@@ -1131,11 +1131,11 @@ describe('LogicalPermissions', function() {
       };
       assert.throws(function() {
         lp.checkAccess(permissions, {user: user});
-      }, function(err) {return err.name === 'InvalidValueForLogicGate';});
+      }, function(err) {return err.name === 'InvalidValueForLogicGateException';});
     });
   });
   describe('testCheckAccessNORTooFewElements', function() {
-    it('should call LogicalPermissions::checkAccess() with too few elements in NOR value and catch an InvalidValueForLogicGate exception', function() {
+    it('should call LogicalPermissions::checkAccess() with too few elements in NOR value and catch an InvalidValueForLogicGateException exception', function() {
       var lp = new LogicalPermissions();
       var types = {
         role: function(role, context) {
@@ -1158,7 +1158,7 @@ describe('LogicalPermissions', function() {
       };
       assert.throws(function() {
         lp.checkAccess(permissions, {user: user});
-      }, function(err) {return err.name === 'InvalidValueForLogicGate';});
+      }, function(err) {return err.name === 'InvalidValueForLogicGateException';});
       
       permissions = {
         role: {
@@ -1167,7 +1167,7 @@ describe('LogicalPermissions', function() {
       };
       assert.throws(function() {
         lp.checkAccess(permissions, {user: user});
-      }, function(err) {return err.name === 'InvalidValueForLogicGate';});
+      }, function(err) {return err.name === 'InvalidValueForLogicGateException';});
     });
   });
   describe('testCheckAccessMultipleItemsNOR', function() {
@@ -1261,7 +1261,7 @@ describe('LogicalPermissions', function() {
     });
   });
   describe('testCheckAccessXORWrongValueType', function() {
-    it('should call LogicalPermissions::checkAccess() with an illegal XOR value type and catch an InvalidValueForLogicGate exception', function() {
+    it('should call LogicalPermissions::checkAccess() with an illegal XOR value type and catch an InvalidValueForLogicGateException exception', function() {
       var lp = new LogicalPermissions();
       var types = {
         role: function(role, context) {
@@ -1284,11 +1284,11 @@ describe('LogicalPermissions', function() {
       };
       assert.throws(function() {
         lp.checkAccess(permissions, {user: user});
-      }, function(err) {return err.name === 'InvalidValueForLogicGate';});
+      }, function(err) {return err.name === 'InvalidValueForLogicGateException';});
     });
   });
   describe('testCheckAccessXORTooFewElements', function() {
-    it('should call LogicalPermissions::checkAccess() with too few elements in XOR value and catch an InvalidValueForLogicGate exception', function() {
+    it('should call LogicalPermissions::checkAccess() with too few elements in XOR value and catch an InvalidValueForLogicGateException exception', function() {
       var lp = new LogicalPermissions();
       var types = {
         role: function(role, context) {
@@ -1311,7 +1311,7 @@ describe('LogicalPermissions', function() {
       };
       assert.throws(function() {
         lp.checkAccess(permissions, {user: user});
-      }, function(err) {return err.name === 'InvalidValueForLogicGate';});
+      }, function(err) {return err.name === 'InvalidValueForLogicGateException';});
       
       permissions = {
         role: {
@@ -1320,7 +1320,7 @@ describe('LogicalPermissions', function() {
       };
       assert.throws(function() {
         lp.checkAccess(permissions, {user: user});
-      }, function(err) {return err.name === 'InvalidValueForLogicGate';});
+      }, function(err) {return err.name === 'InvalidValueForLogicGateException';});
     });
   });
   describe('testCheckAccessMultipleItemsXOR', function() {
@@ -1414,7 +1414,7 @@ describe('LogicalPermissions', function() {
     });
   });
   describe('testCheckAccessNOTWrongValueType', function() {
-    it('should call LogicalPermissions::checkAccess() with an illegal NOT value type and catch an InvalidValueForLogicGate exception', function() {
+    it('should call LogicalPermissions::checkAccess() with an illegal NOT value type and catch an InvalidValueForLogicGateException exception', function() {
       var lp = new LogicalPermissions();
       var types = {
         role: function(role, context) {
@@ -1437,11 +1437,11 @@ describe('LogicalPermissions', function() {
       };
       assert.throws(function() {
         lp.checkAccess(permissions, {user: user});
-      }, function(err) {return err.name === 'InvalidValueForLogicGate';});
+      }, function(err) {return err.name === 'InvalidValueForLogicGateException';});
     });
   });
   describe('testCheckAccessNOTTooFewElements', function() {
-    it('should call LogicalPermissions::checkAccess() with too few elements in NOT value and catch an InvalidValueForLogicGate exception', function() {
+    it('should call LogicalPermissions::checkAccess() with too few elements in NOT value and catch an InvalidValueForLogicGateException exception', function() {
       var lp = new LogicalPermissions();
       var types = {
         role: function(role, context) {
@@ -1464,7 +1464,7 @@ describe('LogicalPermissions', function() {
       };
       assert.throws(function() {
         lp.checkAccess(permissions, {user: user});
-      }, function(err) {return err.name === 'InvalidValueForLogicGate';});
+      }, function(err) {return err.name === 'InvalidValueForLogicGateException';});
       
       permissions = {
         role: {
@@ -1473,11 +1473,11 @@ describe('LogicalPermissions', function() {
       };
       assert.throws(function() {
         lp.checkAccess(permissions, {user: user});
-      }, function(err) {return err.name === 'InvalidValueForLogicGate';});
+      }, function(err) {return err.name === 'InvalidValueForLogicGateException';});
     });
   });
   describe('testCheckAccessMultipleItemsNOT', function() {
-    it('should call LogicalPermissions::checkAccess() with multiple NOT values and catch an InvalidValueForLogicGate exception', function() {
+    it('should call LogicalPermissions::checkAccess() with multiple NOT values and catch an InvalidValueForLogicGateException exception', function() {
       var lp = new LogicalPermissions();
       var types = {
         role: function(role, context) {
@@ -1500,7 +1500,7 @@ describe('LogicalPermissions', function() {
       };
       assert.throws(function() {
         lp.checkAccess(permissions, {});
-      }, function(err) {return err.name === 'InvalidValueForLogicGate';});
+      }, function(err) {return err.name === 'InvalidValueForLogicGateException';});
     });
   });
   describe('testCheckAccessSingleItemNOTString', function() {
