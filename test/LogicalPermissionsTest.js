@@ -185,13 +185,12 @@ describe('LogicalPermissions', function() {
   describe('testGetTypes', function() {
     it('should call LogicalPermissions::getTypes() and successfully get all registered types', function() {
       var lp = new LogicalPermissions();
+      assert.deepEqual(lp.getTypes(), {});
       var callback = function(){};
       lp.addType('test', callback);
       var types = lp.getTypes();
-      for(var name in types) {
-        assert.equal(name, 'test');
-        assert.strictEqual(types[name], callback);
-      }
+      assert.deepEqual(types, {test: callback});
+      assert.strictEqual(types.test, callback);
       types.test2 = function(){};
       assert(!lp.getTypes().hasOwnProperty('test2'));
     });
@@ -249,10 +248,8 @@ describe('LogicalPermissions', function() {
       var types = {'test': callback};
       lp.setTypes(types);
       var existing_types = lp.getTypes();
-      for(var name in existing_types) {
-        assert.equal(name, 'test');
-        assert.strictEqual(types[name], callback);
-      }
+      assert.deepEqual(types, {test: callback});
+      assert.strictEqual(types.test, callback);
     });
   });
 
