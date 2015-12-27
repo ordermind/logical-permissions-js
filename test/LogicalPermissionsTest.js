@@ -449,8 +449,8 @@ describe('LogicalPermissions', function() {
             if(context.hasOwnProperty('user') && context.user.hasOwnProperty('never_bypass')) {
               access = !!context.user.never_bypass; 
             }
-            return access;
           }
+          return access;
         }
       };
       lp.setTypes(types);
@@ -480,8 +480,8 @@ describe('LogicalPermissions', function() {
             if(context.hasOwnProperty('user') && context.user.hasOwnProperty('never_bypass')) {
               access = !!context.user.never_bypass; 
             }
-            return access;
           }
+          return access;
         }
       };
       lp.setTypes(types);
@@ -511,8 +511,8 @@ describe('LogicalPermissions', function() {
             if(context.hasOwnProperty('user') && context.user.hasOwnProperty('testflag')) {
               access = !!context.user.testflag; 
             }
-            return access;
           }
+          return access;
         }
       };
       lp.setTypes(types);
@@ -539,8 +539,8 @@ describe('LogicalPermissions', function() {
             if(context.hasOwnProperty('user') && context.user.hasOwnProperty('testflag')) {
               access = !!context.user.testflag; 
             }
-            return access;
           }
+          return access;
         }
       };
       lp.setTypes(types);
@@ -563,8 +563,8 @@ describe('LogicalPermissions', function() {
             if(context.hasOwnProperty('user') && context.user.hasOwnProperty('testflag')) {
               access = !!context.user.testflag; 
             }
-            return access;
           }
+          return access;
         },
         role: function(role, context) {
           var access = false;
