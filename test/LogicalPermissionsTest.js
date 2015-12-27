@@ -407,6 +407,18 @@ describe('LogicalPermissions', function() {
       assert(!lp.checkAccess({}, {}));
     });
   });
+  describe('testCheckAccessNoBypassWrongType', function() {
+    it('should call LogicalPermissions::checkAccess() with an invalid no_bypass value type and catch an InvalidArgumentValueException exception', function() {
+      var lp = new LogicalPermissions();
+      var bypass_callback = function(context) {
+        return true;
+      };
+      lp.setBypassCallback(bypass_callback);
+      assert.throws(function() {
+        lp.checkAccess({no_bypass: 'test'}, {});
+      }, function(err) {return err.name === 'InvalidArgumentValueException';});
+    });
+  });
   describe('testCheckAccessNoBypassAccessBooleanAllow', function() {
     it('should call LogicalPermissions::checkAccess() with no_bypass set to false and allow access due to bypassing access', function() {
       var lp = new LogicalPermissions();
