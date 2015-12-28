@@ -3,6 +3,7 @@
 !/package.json
 !/README.md
 !/.travis.yml
+!/example.js
 !/lib
 !/lib/*
 !/test

@@ -11,5 +11,6 @@
   "keywords": ["permissions"],
   "scripts": {
     "test": "mocha"
-  }
+  },
+  "tonicExampleFilename": "example.js"
 }
