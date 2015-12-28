@@ -248,8 +248,8 @@ describe('LogicalPermissions', function() {
       var types = {'test': callback};
       lp.setTypes(types);
       var existing_types = lp.getTypes();
-      assert.deepEqual(types, {test: callback});
-      assert.strictEqual(types.test, callback);
+      assert.deepEqual(existing_types, {test: callback});
+      assert.strictEqual(existing_types.test, callback);
       types.test2 = function(){};
       assert(!lp.getTypes().hasOwnProperty('test2'));
     });
