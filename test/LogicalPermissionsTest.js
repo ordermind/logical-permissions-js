@@ -389,6 +389,18 @@ describe('LogicalPermissions', function() {
       lp.checkAccess({}, {user: user});
     });
   });
+  describe('testCheckAccessBypassAccessWrongReturnType', function() {
+    it('should call LogicalPermissions::checkAccess() and return an invalid data type from the bypass access callback and catch an InvalidCallbackReturnTypeException exception', function() {
+      var lp = new LogicalPermissions();
+      var bypass_callback = function(context) {
+        return 1;
+      };
+      lp.setBypassCallback(bypass_callback);
+      assert.throws(function() {
+        lp.checkAccess({}, {});
+      }, function(err) {return err.name === 'InvalidCallbackReturnTypeException';});
+    });
+  });
   describe('testCheckAccessBypassAccessAllow', function() {
     it('should call LogicalPermissions::checkAccess() and allow access due to bypassing access', function() {
       var lp = new LogicalPermissions();
@@ -506,6 +518,36 @@ describe('LogicalPermissions', function() {
         never_bypass: true
       };
       assert(!lp.checkAccess(permissions, {user: user}));
+    });
+  });
+  describe('testCheckAccessWrongPermissionCallbackReturnType', function() {
+    it('should call LogicalPermissions::checkAccess() and return an invalid data type from the registered permission type callback and catch an InvalidCallbackReturnTypeException exception', function() {
+      var lp = new LogicalPermissions();
+      var types = {
+        flag: function(flag, context) {
+          var access = false;
+          if(flag === 'testflag') {
+            if(context.hasOwnProperty('user') && context.user.hasOwnProperty('testflag')) {
+              access = !!context.user.testflag; 
+            }
+          }
+          return 0;
+        }
+      };
+      lp.setTypes(types);
+      var permissions = {
+        no_bypass: {
+          flag: 'never_bypass'
+        },
+        flag: 'testflag'
+      };
+      var user = {
+        id: 1,
+        testflag: true
+      };
+      assert.throws(function() {
+        lp.checkAccess(permissions, {user: user});
+      }, function(err) {return err.name === 'InvalidCallbackReturnTypeException';});
     });
   });
   describe('testCheckAccessSingleItemAllow', function() {
