@@ -11,6 +11,35 @@ This is a generic library that provides support for object-based permissions wit
 
 ### Usage
 
+```javascript
+//Simple example for checking user roles
+
+var LogicalPermissions = require("logical-permissions");
+var lp = new LogicalPermissions();
+
+var roleCallback = function(role, context) {
+  var access = false;
+  if(context.hasOwnProperty('user') && context.user.hasOwnProperty('roles')) {
+    access = context.user.roles.indexOf(role) > -1; 
+  }
+  return access;
+};
+lp.addType('role', roleCallback);
+
+var permissions = {
+  role: ['editor', 'writer']
+};
+
+var user = {
+  id: 1,
+  roles: ['writer']
+};
+
+var access = lp.checkAccess(permissions, {user: user});
+console.log('Access granted: ' + access);
+
+```
+
 The main api method is `LogicalPermissions::checkAccess()`, which checks the access for a **permission tree**. A permission tree is a bundle of permissions that apply to a specific action. Let's say for example that you want to restrict access for updating a user. You'd like only users with the role "admin" to be able to update any user, but users should also be able to update their own user data (or at least some of it). With the structure this package provides, these conditions could be expressed elegantly in a permission tree as such:
 
 ```javascript
