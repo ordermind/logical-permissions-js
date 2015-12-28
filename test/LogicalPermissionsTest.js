@@ -428,7 +428,12 @@ describe('LogicalPermissions', function() {
         return true;
       };
       lp.setBypassCallback(bypass_callback);
-      assert(lp.checkAccess({no_bypass: false}, {}));
+      var permissions = {
+        no_bypass: false
+      };
+      assert(lp.checkAccess(permissions, {}));
+      //Test that permission object is not changed
+      assert(permissions.hasOwnProperty('no_bypass'));
     });
   });
   describe('testCheckAccessNoBypassAccessBooleanDeny', function() {
