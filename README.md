@@ -255,7 +255,7 @@ Examples:
 
 ### addType(name, callback) 
 
-Add a permission type.
+Adds a permission type.
 
 **Parameters**
 
@@ -267,7 +267,7 @@ Add a permission type.
 
 ### removeType(name) 
 
-Remove a permission type.
+Removes a permission type.
 
 **Parameters**
 
@@ -288,7 +288,7 @@ Checks whether a permission type is registered.
 
 ### getTypeCallback(name) 
 
-Get the callback for a permission type.
+Gets the callback for a permission type.
 
 **Parameters**
 
@@ -299,14 +299,14 @@ Get the callback for a permission type.
 
 ### getTypes() 
 
-Get all defined permission types.
+Gets all defined permission types.
 
 **Returns**: `Object`, permission types with the structure {name: callback, name2: callback2, ...}. This object is shallow cloned.
 
 
 ### setTypes(new_types) 
 
-Overwrite all defined permission types.
+Overwrites all defined permission types.
 
 **Parameters**
 
@@ -316,14 +316,14 @@ Overwrite all defined permission types.
 
 ### getBypassCallback() 
 
-Get the current bypass access callback.
+Gets the current bypass access callback.
 
 **Returns**: `function`, callback for checking access bypass.
 
 
 ### setBypassCallback(callback) 
 
-Set the bypass access callback.
+Sets the bypass access callback.
 
 **Parameters**
 
@@ -333,7 +333,7 @@ Set the bypass access callback.
 
 ### checkAccess(permissions, context) 
 
-Check access for a permission tree.
+Checks access for a permission tree.
 
 **Parameters**
 
@@ -341,4 +341,4 @@ Check access for a permission tree.
 
 **context**: `Object`, A context object that could for example contain the evaluated user and document.
 
-**Returns**: `Boolean`, access
+**Returns**: `Boolean`, true if access is granted or false if access is denied.
