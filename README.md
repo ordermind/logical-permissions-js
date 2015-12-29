@@ -339,6 +339,6 @@ Check access for a permission tree.
 
 **permissions**: `Object`, The permission tree to be evaluated
 
-**context**: `Object`, A context array that could for example contain the evaluated user and document.
+**context**: `Object`, A context object that could for example contain the evaluated user and document.
 
 **Returns**: `Boolean`, access
