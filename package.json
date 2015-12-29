@@ -1,6 +1,6 @@
 {
   "name": "logical-permissions",
-  "version": "1.0.11",
+  "version": "1.0.12",
   "description": "Provides support for object-based permissions with logic gates such as AND and OR.",
   "main": "./lib/LogicalPermissions.js",
   "author": "Kristofer Tengström",
