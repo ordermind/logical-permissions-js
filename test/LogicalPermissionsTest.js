@@ -374,8 +374,8 @@ describe('LogicalPermissions', function() {
       }, function(err) {return err.name === 'InvalidArgumentTypeException';});
     });
   });
-  describe('testCheckAccessCheckContextPassing', function() {
-    it('should call LogicalPermissions::checkAccess() and check that the context parameter is passed to the registered callback', function() {
+  describe('testCheckAccessBypassAccessCheckContextPassing', function() {
+    it('should call LogicalPermissions::checkAccess() and check that the context parameter is passed to the bypass access callback', function() {
       var lp = new LogicalPermissions();
       var user = {
         id: 1
