@@ -673,7 +673,7 @@ describe('LogicalPermissions', function() {
       assert(lp.checkAccess(permissions, {user: user}));
     });
   });
-  describe('testCheckAccessMultipleValuesShorthandOR', function() {
+  describe('testCheckAccessMultipleItemsShorthandOR', function() {
     it('should call LogicalPermissions::checkAccess() with multiple permission type items (shorthand OR)', function() {
       var lp = new LogicalPermissions();
       var types = {
