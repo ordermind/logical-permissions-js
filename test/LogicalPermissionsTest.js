@@ -497,6 +497,14 @@ describe('LogicalPermissions', function() {
       }, function(err) {return err.name === 'InvalidArgumentTypeException';});
     });
   });
+  describe('testCheckAccessParamAllowBypassWrongType', function() {
+    it('should call LogicalPermissions::checkAccess() with the wrong data type for the "allow_bypass" parameter and catch an InvalidArgumentTypeException exception', function() {
+      var lp = new LogicalPermissions();
+      assert.throws(function() {
+        lp.checkAccess({}, {}, 'test');
+      }, function(err) {return err.name === 'InvalidArgumentTypeException';});
+    });
+  });
   describe('testCheckAccessBypassAccessCheckContextPassing', function() {
     it('should call LogicalPermissions::checkAccess() and check that the context parameter is passed to the bypass access callback', function() {
       var lp = new LogicalPermissions();
