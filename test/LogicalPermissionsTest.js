@@ -233,7 +233,7 @@ describe('LogicalPermissions', function() {
     });
   });
   describe('testSetTypeCallback', function() {
-    it('should call LogicalPermissions::setTypeCallback() and successfully set a registered permission type callback', function() {
+    it('should call LogicalPermissions::setTypeCallback() and successfully set a permission type callback', function() {
       var lp = new LogicalPermissions();
       lp.addType('test', function(){});
       var callback = function(){};
