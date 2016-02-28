@@ -358,4 +358,6 @@ Checks access for a permission tree.
 
 **context**: `Object`, A context object that could for example contain the evaluated user and document.
 
+**allow_bypass**: `Boolean` (optional), Determines whether bypassing access should be allowed. Default value is true.
+
 **Returns**: `Boolean`, true if access is granted or false if access is denied.

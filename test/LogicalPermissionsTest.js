@@ -544,6 +544,16 @@ describe('LogicalPermissions', function() {
       assert(!lp.checkAccess({}, {}));
     });
   });
+  describe('testCheckAccessBypassAccessDeny2', function() {
+    it('should call LogicalPermissions::checkAccess() and deny access due to overriding allow_bypass parameter', function() {
+      var lp = new LogicalPermissions();
+      var bypass_callback = function(context) {
+        return true;
+      };
+      lp.setBypassCallback(bypass_callback);
+      assert(!lp.checkAccess({}, {}, false));
+    });
+  });
   describe('testCheckAccessNoBypassWrongType', function() {
     it('should call LogicalPermissions::checkAccess() with an invalid no_bypass value type and catch an InvalidArgumentValueException exception', function() {
       var lp = new LogicalPermissions();
