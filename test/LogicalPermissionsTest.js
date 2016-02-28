@@ -35,6 +35,23 @@ describe('LogicalPermissions', function() {
       }, function(err) {return err.name === 'InvalidArgumentValueException';});
     });
   });
+  describe('testAddTypeParamNameIsCoreKey', function() {
+    it('should call LogicalPermissions::addType() with an illegal "name" parameter and catch an InvalidArgumentValueException exception', function() {
+      var lp = new LogicalPermissions();
+      assert.throws(function() {
+        lp.addType('AND', function(){});
+      }, function(err) {return err.name === 'InvalidArgumentValueException';});
+    });
+  });
+  describe('testAddTypeParamNameExists', function() {
+    it('should call LogicalPermissions::addType() with a "name" parameter that already exists and catch a PermissionTypeAlreadyExistsException exception', function() {
+      var lp = new LogicalPermissions();
+      assert.throws(function() {
+        lp.addType('test', function(){});
+        lp.addType('test', function(){});
+      }, function(err) {return err.name === 'PermissionTypeAlreadyExistsException';});
+    });
+  });
   describe('testAddTypeParamCallbackMissing', function() {
     it('should call LogicalPermissions::addType() with no "callback" parameter and catch a MissingArgumentException exception', function() {
       var lp = new LogicalPermissions();
@@ -291,6 +308,15 @@ describe('LogicalPermissions', function() {
       var lp = new LogicalPermissions();
       assert.throws(function() {
         var types = {'': function(){}};
+        lp.setTypes(types);
+      }, function(err) {return err.name === 'InvalidArgumentValueException';});
+    });
+  });
+  describe('testSetTypesParamTypesNameIsCoreKey', function() {
+    it('should call LogicalPermissions::setTypes() with an illegal name key and catch an InvalidArgumentValueException exception', function() {
+      var lp = new LogicalPermissions();
+      assert.throws(function() {
+        var types = {'AND': function(){}};
         lp.setTypes(types);
       }, function(err) {return err.name === 'InvalidArgumentValueException';});
     });
