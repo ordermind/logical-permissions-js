@@ -44,7 +44,7 @@ describe('LogicalPermissions', function() {
     });
   });
   describe('testAddTypeParamCallbackWrongType', function() {
-    it('should call LogicalPermissions::addType() with the wrong data type for the "name" parameter and catch an InvalidArgumentTypeException exception', function() {
+    it('should call LogicalPermissions::addType() with the wrong data type for the "callback" parameter and catch an InvalidArgumentTypeException exception', function() {
       var lp = new LogicalPermissions();
       assert.throws(function() {
         lp.addType('test', 0);
@@ -176,6 +176,69 @@ describe('LogicalPermissions', function() {
       var lp = new LogicalPermissions();
       var callback = function(){};
       lp.addType('test', callback);
+      assert.strictEqual(lp.getTypeCallback('test'), callback);
+    });
+  });
+  
+  /*-------------LogicalPermissions::setTypeCallback()--------------*/
+  
+  describe('testSetTypeCallbackParamNameMissing', function() {
+    it('should call LogicalPermissions::setTypeCallback() with no "name" parameter and catch a MissingArgumentException exception', function() {
+      var lp = new LogicalPermissions();
+      assert.throws(function() {
+        lp.setTypeCallback();
+      }, function(err) {return err.name === 'MissingArgumentException';});
+    });
+  });
+  describe('testSetTypeCallbackParamNameWrongType', function() {
+    it('should call LogicalPermissions::setTypeCallback() with the wrong data type for the "name" parameter and catch an InvalidArgumentTypeException exception', function() {
+      var lp = new LogicalPermissions();
+      assert.throws(function() {
+        lp.setTypeCallback(0);
+      }, function(err) {return err.name === 'InvalidArgumentTypeException';});
+    });
+  });
+  describe('testSetTypeCallbackParamNameEmpty', function() {
+    it('should call LogicalPermissions::setTypeCallback() with an empty string for "name" parameter and catch an InvalidArgumentValueException exception', function() {
+      var lp = new LogicalPermissions();
+      assert.throws(function() {
+        lp.setTypeCallback('');
+      }, function(err) {return err.name === 'InvalidArgumentValueException';});
+    });
+  });
+  describe('testSetTypeCallbackParamNameDoesntExist', function() {
+    it('should call LogicalPermissions::setTypeCallback() with a "name" parameter that is not registered and catch a PermissionTypeNotRegisteredException exception', function() {
+      var lp = new LogicalPermissions();
+      assert.throws(function() {
+        lp.setTypeCallback('test');
+      }, function(err) {return err.name === 'PermissionTypeNotRegisteredException';});
+    });
+  });
+  describe('testSetTypeCallbackParamCallbackMissing', function() {
+    it('should call LogicalPermissions::setTypeCallback() with no "callback" parameter and catch a MissingArgumentException exception', function() {
+      var lp = new LogicalPermissions();
+      lp.addType('test', function(){});
+      assert.throws(function() {
+        lp.setTypeCallback('test');
+      }, function(err) {return err.name === 'MissingArgumentException';});
+    });
+  });
+  describe('testSetTypeCallbackParamCallbackWrongType', function() {
+    it('should call LogicalPermissions::setTypeCallback() with the wrong data type for the "callback" parameter and catch an InvalidArgumentTypeException exception', function() {
+      var lp = new LogicalPermissions();
+      lp.addType('test', function(){});
+      assert.throws(function() {
+        lp.setTypeCallback('test', 0);
+      }, function(err) {return err.name === 'InvalidArgumentTypeException';});
+    });
+  });
+  describe('testSetTypeCallback', function() {
+    it('should call LogicalPermissions::setTypeCallback() and successfully set a registered permission type callback', function() {
+      var lp = new LogicalPermissions();
+      lp.addType('test', function(){});
+      var callback = function(){};
+      assert.notStrictEqual(lp.getTypeCallback('test'), callback);
+      lp.setTypeCallback('test', callback);
       assert.strictEqual(lp.getTypeCallback('test'), callback);
     });
   });
