@@ -290,6 +290,40 @@ describe('LogicalPermissions', function() {
       assert.strictEqual(lp.getBypassCallback(), callback);
     });
   });
+  
+  /*------------LogicalPermissions::getValidPermissionKeys()---------------*/
+  
+  describe('testGetValidPermissionKeys', function() {
+    var lp = new LogicalPermissions();
+    assert.deepEqual(lp.getValidPermissionKeys(), ['no_bypass', 'AND', 'NAND', 'OR', 'NOR', 'XOR', 'NOT']);
+    var types = {
+      flag: function(flag, context) {
+        var access = false;
+        if(flag === 'testflag') {
+          if(context.hasOwnProperty('user') && context.user.hasOwnProperty('testflag')) {
+            access = !!context.user.testflag; 
+          }
+        }
+        return access;
+      },
+      role: function(role, context) {
+        var access = false;
+        if(context.hasOwnProperty('user') && context.user.hasOwnProperty('roles')) {
+          access = context.user.roles.indexOf(role) > -1; 
+        }
+        return access;
+      },
+      misc: function(item, context) {
+        var access = false;
+        if(context.hasOwnProperty('user') && context.user.hasOwnProperty(item)) {
+          access = !!context.user[item]; 
+        }
+        return access;
+      }
+    };
+    lp.setTypes(types);
+    assert.deepEqual(lp.getValidPermissionKeys(), ['no_bypass', 'AND', 'NAND', 'OR', 'NOR', 'XOR', 'NOT', 'flag', 'role', 'misc']);
+  });
  
   /*-------------LogicalPermissions::checkAccess()--------------*/
   
