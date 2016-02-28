@@ -330,6 +330,12 @@ Sets the bypass access callback.
 **callback**: `function`, The callback that evaluates access bypassing. Upon calling checkAccess() the registered bypass callback will be passed one parameter, which is the context object passed to checkAccess(). It should return a boolean which determines whether bypass access should be granted.
 
 
+### getValidPermissionKeys() 
+
+Gets all keys that can be part of a permission tree.
+
+**Returns**: `Array`, valid permission keys
+
 
 ### checkAccess(permissions, context) 
 
