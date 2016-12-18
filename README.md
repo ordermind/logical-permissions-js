@@ -250,6 +250,59 @@ Examples:
 }
 ```
 
+## Boolean Permissions
+
+Boolean permissions are a special kind of permission. They can be used for allowing or disallowing access for everyone (except those with bypass access). They are not allowed as descendants to a permission type and they may not contain children. Both true booleans and booleans represented as uppercase strings are supported. Of course a simpler way to allow access to everyone is to not define any permissions at all for that action, but it might be nice sometimes to explicitly allow access for everyone.
+
+Examples:
+
+```javascript
+//Allow access for anyone
+[
+  true,
+]
+
+//Using a boolean without an array is also permitted
+true
+```
+
+```javascript
+//Example with string representation
+[
+  'TRUE',
+]
+
+//Using a string representation without an array is also permitted
+'TRUE'
+```
+
+```javascript
+//Deny access for everyone except those with bypass access
+[
+  false,
+]
+
+//Using a boolean without an array is also permitted
+false
+```
+
+```javascript
+//Example with string representation
+[
+  'FALSE',
+]
+
+//Using a string representation without an array is also permitted
+'FALSE'
+```
+
+```javascript
+//Deny access for everyone including those with bypass access
+[
+  false,
+  'no_bypass' => true,
+]
+```
 
 ## API Documentation
 
@@ -354,7 +407,7 @@ Checks access for a permission tree.
 
 **Parameters**
 
-**permissions**: `Object|Array`, The permission tree to be evaluated
+**permissions**: `Object|Array|String|Boolean`, The permission tree to be evaluated
 
 **context**: `Object` (optional), A context object that could for example contain the evaluated user and document. Default value is an empty object.
 
