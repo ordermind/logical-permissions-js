@@ -428,7 +428,7 @@ describe('LogicalPermissions', function() {
     it('should call LogicalPermissions::checkAccess() with the wrong data type for the "permissions" parameter and catch an InvalidArgumentTypeException exception', function() {
       var lp = new LogicalPermissions();
       assert.throws(function() {
-        lp.checkAccess([]);
+        lp.checkAccess(50);
       }, function(err) {return err.name === 'InvalidArgumentTypeException';});
     });
   });
@@ -527,7 +527,7 @@ describe('LogicalPermissions', function() {
   describe('testCheckAccessBypassAccessIllegalDescendant', function() {
     it('should call LogicalPermissions::checkAccess() with no_bypass in a nether part of a permissions tree and catch an InvalidArgumentValueException exception', function() {
       var lp = new LogicalPermissions();
-      permissions = {
+      var permissions = {
         'OR': {
           'no_bypass': true
         }
@@ -1763,6 +1763,182 @@ describe('LogicalPermissions', function() {
       assert(lp.checkAccess(permissions, {user: user}));
       user.roles = ['editor'];
       assert(lp.checkAccess(permissions, {user: user}));
+    });
+  });
+  describe('testCheckAccessBoolTRUEIllegalDescendant', function() {
+    it('should call LogicalPermissions::checkAccess() with a boolean TRUE permission as a descendant to a permission key and catch an InvalidArgumentValueException', function() {
+      var lp = new LogicalPermissions();
+      var permissions = {
+        'role': [true]
+      };
+      assert.throws(function() {
+        lp.checkAccess(permissions);
+      }, function(err) {return err.name === 'InvalidArgumentValueException';});
+    });
+  });
+  describe('testCheckAccessBoolTRUE', function() {
+    it('should call LogicalPermissions::checkAccess() with a boolean TRUE permission', function() {
+      var lp = new LogicalPermissions();
+      var permissions = [
+        true
+      ];
+      assert(lp.checkAccess(permissions));
+    });
+  });
+  describe('testCheckAccessBoolFALSEIllegalDescendant', function() {
+    it('should call LogicalPermissions::checkAccess() with a boolean FALSE permission as a descendant to a permission key and catch an InvalidArgumentValueException', function() {
+      var lp = new LogicalPermissions();
+      var permissions = {
+        'role': [false]
+      };
+      assert.throws(function() {
+        lp.checkAccess(permissions);
+      }, function(err) {return err.name === 'InvalidArgumentValueException';});
+    });
+  });
+  describe('testCheckAccessBoolFALSE', function() {
+    it('should call LogicalPermissions::checkAccess() with a boolean FALSE permission', function() {
+      var lp = new LogicalPermissions();
+      var permissions = [
+        false
+      ];
+      assert(!lp.checkAccess(permissions));
+    });
+  });
+  describe('testCheckAccessBoolFALSEBypass', function() {
+    it('should call LogicalPermissions::checkAccess() with a boolean FALSE permission and check that bypassing access still works', function() {
+      var lp = new LogicalPermissions();
+      var bypass_callback = function(context) {
+        return true;
+      };
+      lp.setBypassCallback(bypass_callback);
+      var permissions = [
+        false
+      ];
+      assert(lp.checkAccess(permissions));
+    });
+  });
+  describe('testCheckAccessBoolFALSENoBypass', function() {
+    it('should call LogicalPermissions::checkAccess() with a boolean FALSE permission and check that it is possible to restrict access to everyone by using no_bypass in conjuction with FALSE', function() {
+      var lp = new LogicalPermissions();
+      var bypass_callback = function(context) {
+        return true;
+      };
+      lp.setBypassCallback(bypass_callback);
+      var permissions = {
+        0: false,
+        'no_bypass': true
+      };
+      assert(!lp.checkAccess(permissions));
+    });
+  });
+  describe('testCheckAccessStringTRUEIllegalChildren', function() {
+    it('should call LogicalPermissions::checkAccess() with a string TRUE permission used as key with children and catch an InvalidArgumentValueException exception', function() {
+      var lp = new LogicalPermissions();
+      var permissions = {
+        'TRUE': false
+      };
+      assert.throws(function() {
+        lp.checkAccess(permissions);
+      }, function(err) {return err.name === 'InvalidArgumentValueException';});
+      permissions = {
+        'TRUE': []
+      };
+      assert.throws(function() {
+        lp.checkAccess(permissions);
+      }, function(err) {return err.name === 'InvalidArgumentValueException';});
+      permissions = {
+        'TRUE': {}
+      };
+      assert.throws(function() {
+        lp.checkAccess(permissions);
+      }, function(err) {return err.name === 'InvalidArgumentValueException';});
+    });
+  });
+  describe('testCheckAccessStringTRUEIllegalDescendant', function() {
+    it('should call LogicalPermissions::checkAccess() with a string TRUE permission as a descendant to a permission key and catch an InvalidArgumentValueException exception', function() {
+      var lp = new LogicalPermissions();
+      var permissions = {
+        'role': ['TRUE']
+      };
+      assert.throws(function() {
+        lp.checkAccess(permissions);
+      }, function(err) {return err.name === 'InvalidArgumentValueException';});
+    });
+  });
+  describe('testCheckAccessStringTRUE', function() {
+    it('should call LogicalPermissions::checkAccess() with a string TRUE permission', function() {
+      var lp = new LogicalPermissions();
+      var permissions = ['TRUE'];
+      assert(lp.checkAccess(permissions));
+    });
+  });
+  describe('testCheckAccessStringFALSEIllegalChildren', function() {
+    it('should call LogicalPermissions::checkAccess() with a string FALSE permission used as key with children and catch an InvalidArgumentValueException exception', function() {
+      var lp = new LogicalPermissions();
+      var permissions = {
+        'FALSE': false
+      };
+      assert.throws(function() {
+        lp.checkAccess(permissions);
+      }, function(err) {return err.name === 'InvalidArgumentValueException';});
+      permissions = {
+        'FALSE': []
+      };
+      assert.throws(function() {
+        lp.checkAccess(permissions);
+      }, function(err) {return err.name === 'InvalidArgumentValueException';});
+      permissions = {
+        'FALSE': {}
+      };
+      assert.throws(function() {
+        lp.checkAccess(permissions);
+      }, function(err) {return err.name === 'InvalidArgumentValueException';});
+    });
+  });
+  describe('testCheckAccessStringFALSEIllegalDescendant', function() {
+    it('should call LogicalPermissions::checkAccess() with a string FALSE permission as a descendant to a permission key and catch an InvalidArgumentValueException exception', function() {
+      var lp = new LogicalPermissions();
+      var permissions = {
+        'role': ['FALSE']
+      };
+      assert.throws(function() {
+        lp.checkAccess(permissions);
+      }, function(err) {return err.name === 'InvalidArgumentValueException';});
+    });
+  });
+  describe('testCheckAccessStringFALSE', function() {
+    it('should call LogicalPermissions::checkAccess() with a string FALSE permission', function() {
+      var lp = new LogicalPermissions();
+      var permissions = ['FALSE'];
+      assert(!lp.checkAccess(permissions));
+    });
+  });
+  describe('testCheckAccessStringFALSEBypass', function() {
+    it('should call LogicalPermissions::checkAccess() with a string FALSE permission and check that bypassing access still works', function() {
+      var lp = new LogicalPermissions();
+      var bypass_callback = function(context) {
+        return true;
+      };
+      lp.setBypassCallback(bypass_callback);
+      var permissions = [
+        'FALSE'
+      ];
+      assert(lp.checkAccess(permissions));
+    });
+  });
+  describe('testCheckAccessStringFALSENoBypass', function() {
+    it('should call LogicalPermissions::checkAccess() with a string FALSE permission and check that it is possible to restrict access to everyone by using no_bypass in conjuction with FALSE', function() {
+      var lp = new LogicalPermissions();
+      var bypass_callback = function(context) {
+        return true;
+      };
+      lp.setBypassCallback(bypass_callback);
+      var permissions = {
+        0: 'FALSE',
+        'no_bypass': true
+      };
+      assert(!lp.checkAccess(permissions));
     });
   });
   describe('testCheckAccessNestedLogic', function() {
