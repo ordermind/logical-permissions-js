@@ -481,6 +481,18 @@ describe('LogicalPermissions', function() {
       }, function(err) {return err.name === 'PermissionTypeNotRegisteredException';});
     });
   });
+  describe('testCheckAccessParamPermissionsArrayValue', function() {
+    it('should call LogicalPermissions::checkAccess() with an array containing only values and catch a MissingArgumentException exception', function() {
+      var lp = new LogicalPermissions();
+      var permissions = [
+        'test1',
+        'test2'
+      ];
+      assert.throws(function() {
+        lp.checkAccess(permissions);
+      }, function(err) {return err.name === 'MissingArgumentException';});
+    });
+  });
   describe('testCheckAccessParamContextWrongType', function() {
     it('should call LogicalPermissions::checkAccess() with the wrong data type for the "context" parameter and catch an InvalidArgumentTypeException exception', function() {
       var lp = new LogicalPermissions();
