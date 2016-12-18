@@ -298,10 +298,10 @@ false
 
 ```javascript
 //Deny access for everyone including those with bypass access
-[
-  false,
+{
+  0: false,
   'no_bypass' => true,
-]
+}
 ```
 
 ## API Documentation
