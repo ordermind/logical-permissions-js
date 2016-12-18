@@ -1964,7 +1964,9 @@ describe('LogicalPermissions', function() {
               ]
             }
           }
-        }
+        },
+        0: false,
+        1: 'FALSE'
       };
       var user = {
         id: 1,
@@ -2001,7 +2003,9 @@ describe('LogicalPermissions', function() {
                 ]
               }
             }
-          }
+          },
+          0: true,
+          1: 'TRUE'
         }
       };
       var user = {
