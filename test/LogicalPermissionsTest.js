@@ -1791,6 +1791,13 @@ describe('LogicalPermissions', function() {
   describe('testCheckAccessBoolTRUE', function() {
     it('should call LogicalPermissions::checkAccess() with a boolean TRUE permission', function() {
       var lp = new LogicalPermissions();
+      var permissions = true;
+      assert(lp.checkAccess(permissions));
+    });
+  });
+  describe('testCheckAccessBoolTRUEArray', function() {
+    it('should call LogicalPermissions::checkAccess() with a boolean TRUE permission encapsulated within an array', function() {
+      var lp = new LogicalPermissions();
       var permissions = [
         true
       ];
@@ -1810,6 +1817,13 @@ describe('LogicalPermissions', function() {
   });
   describe('testCheckAccessBoolFALSE', function() {
     it('should call LogicalPermissions::checkAccess() with a boolean FALSE permission', function() {
+      var lp = new LogicalPermissions();
+      var permissions = false;
+      assert(!lp.checkAccess(permissions));
+    });
+  });
+  describe('testCheckAccessBoolFALSEArray', function() {
+    it('should call LogicalPermissions::checkAccess() with a boolean FALSE permission encapsulated within an array', function() {
       var lp = new LogicalPermissions();
       var permissions = [
         false
@@ -1881,6 +1895,13 @@ describe('LogicalPermissions', function() {
   describe('testCheckAccessStringTRUE', function() {
     it('should call LogicalPermissions::checkAccess() with a string TRUE permission', function() {
       var lp = new LogicalPermissions();
+      var permissions = 'TRUE';
+      assert(lp.checkAccess(permissions));
+    });
+  });
+  describe('testCheckAccessStringTRUEArray', function() {
+    it('should call LogicalPermissions::checkAccess() with a string TRUE permission encapsulated within an array', function() {
+      var lp = new LogicalPermissions();
       var permissions = ['TRUE'];
       assert(lp.checkAccess(permissions));
     });
@@ -1921,6 +1942,13 @@ describe('LogicalPermissions', function() {
   });
   describe('testCheckAccessStringFALSE', function() {
     it('should call LogicalPermissions::checkAccess() with a string FALSE permission', function() {
+      var lp = new LogicalPermissions();
+      var permissions = 'FALSE';
+      assert(!lp.checkAccess(permissions));
+    });
+  });
+  describe('testCheckAccessStringFALSEArray', function() {
+    it('should call LogicalPermissions::checkAccess() with a string FALSE permission encapsulated within an array', function() {
       var lp = new LogicalPermissions();
       var permissions = ['FALSE'];
       assert(!lp.checkAccess(permissions));
