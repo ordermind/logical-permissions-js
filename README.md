@@ -20,7 +20,7 @@ var lp = new LogicalPermissions();
 var roleCallback = function(role, context) {
   var access = false;
   if(context.hasOwnProperty('user') && context.user.hasOwnProperty('roles')) {
-    access = context.user.roles.indexOf(role) > -1; 
+    access = context.user.roles.indexOf(role) > -1;
   }
   return access;
 };
@@ -56,7 +56,7 @@ In this example `role` and `flag` are the evaluated permission types. For this e
 ### Bypassing permissions
 This packages also supports rules for bypassing permissions completely for superusers. In order to use this functionality you need to register a callback with `LogicalPermissions::setBypassCallback()`. The registered callback will run on every permission check and if it returns `true`, access will automatically be granted. If you want to make exceptions you can do so by adding `'no_bypass': true` to the first level of a permission tree. You can even use permissions as conditions for `no_bypass`.
 
-Examples: 
+Examples:
 
 ```javascript
 //Disallow access bypassing
@@ -179,7 +179,7 @@ is interpreted exactly the same way as this permission tree:
 
 A logic NOR gate returns true if all of its children returns false. Otherwise it returns false.
 
-Examples: 
+Examples:
 
 ```javascript
 //Allow access if the user is neither an editor nor a sales person
@@ -253,7 +253,7 @@ Examples:
 
 ## API Documentation
 
-### addType(name, callback) 
+### addType(name, callback)
 
 Adds a permission type.
 
@@ -265,7 +265,7 @@ Adds a permission type.
 
 
 
-### removeType(name) 
+### removeType(name)
 
 Removes a permission type.
 
@@ -275,7 +275,7 @@ Removes a permission type.
 
 
 
-### typeExists(name) 
+### typeExists(name)
 
 Checks whether a permission type is registered.
 
@@ -286,7 +286,7 @@ Checks whether a permission type is registered.
 **Returns**: `Boolean`, true if the type is found or false if the type isn't found.
 
 
-### getTypeCallback(name) 
+### getTypeCallback(name)
 
 Gets the callback for a permission type.
 
@@ -297,7 +297,7 @@ Gets the callback for a permission type.
 **Returns**: `function`, Callback for the permission type.
 
 
-### setTypeCallback(name, callback) 
+### setTypeCallback(name, callback)
 
 Changes the callback for an existing permission type.
 
@@ -308,14 +308,14 @@ Changes the callback for an existing permission type.
 **callback**: `function`, The callback that evaluates the permission type. Upon calling checkAccess() the registered callback will be passed two parameters: a permission string (such as a role) and the context object passed to checkAccess(). The permission will always be a single string even if for example multiple roles are accepted. In that case the callback will be called once for each role that is to be evaluated. The callback should return a boolean which determines whether access should be granted.
 
 
-### getTypes() 
+### getTypes()
 
 Gets all defined permission types.
 
 **Returns**: `Object`, permission types with the structure {name: callback, name2: callback2, ...}. This object is shallow cloned.
 
 
-### setTypes(new_types) 
+### setTypes(new_types)
 
 Overwrites all defined permission types.
 
@@ -325,14 +325,14 @@ Overwrites all defined permission types.
 
 
 
-### getBypassCallback() 
+### getBypassCallback()
 
 Gets the current bypass access callback.
 
 **Returns**: `function`, callback for checking access bypass.
 
 
-### setBypassCallback(callback) 
+### setBypassCallback(callback)
 
 Sets the bypass access callback.
 
@@ -341,22 +341,22 @@ Sets the bypass access callback.
 **callback**: `function`, The callback that evaluates access bypassing. Upon calling checkAccess() the registered bypass callback will be passed one parameter, which is the context object passed to checkAccess(). It should return a boolean which determines whether bypass access should be granted.
 
 
-### getValidPermissionKeys() 
+### getValidPermissionKeys()
 
 Gets all keys that can be part of a permission tree.
 
 **Returns**: `Array`, valid permission keys
 
 
-### checkAccess(permissions, context) 
+### checkAccess(permissions, context)
 
 Checks access for a permission tree.
 
 **Parameters**
 
-**permissions**: `Object`, The permission tree to be evaluated
+**permissions**: `Object|Array`, The permission tree to be evaluated
 
-**context**: `Object`, A context object that could for example contain the evaluated user and document.
+**context**: `Object` (optional), A context object that could for example contain the evaluated user and document. Default value is an empty object.
 
 **allow_bypass**: `Boolean` (optional), Determines whether bypassing access should be allowed. Default value is true.
 
