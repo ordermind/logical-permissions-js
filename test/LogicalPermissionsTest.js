@@ -436,7 +436,7 @@ describe('LogicalPermissions', function() {
     it('should call LogicalPermissions::checkAccess() with an invalid permission value and catch an InvalidArgumentTypeException exception', function() {
       var lp = new LogicalPermissions();
       var permissions = {
-        flag: true
+        flag: 50
       };
       assert.throws(function() {
         lp.checkAccess(permissions, {});
