@@ -75,9 +75,9 @@ describe('LogicalPermissions', function() {
       assert(lp.typeExists('test'));
     });
   });
-  
+
   /*-------------LogicalPermissions::removeType()--------------*/
-  
+
   describe('testRemoveTypeParamNameMissing', function() {
     it('should call LogicalPermissions::removeType() with no "name" parameter and catch a MissingArgumentException exception', function() {
       var lp = new LogicalPermissions();
@@ -118,9 +118,9 @@ describe('LogicalPermissions', function() {
       assert(!lp.typeExists('test'));
     });
   });
-  
+
   /*-------------LogicalPermissions::typeExists()--------------*/
-  
+
   describe('testTypeExistsParamNameMissing', function() {
     it('should call LogicalPermissions::typeExists() with no "name" parameter and catch a MissingArgumentException exception', function() {
       var lp = new LogicalPermissions();
@@ -153,9 +153,9 @@ describe('LogicalPermissions', function() {
       assert(lp.typeExists('test'));
     });
   });
-  
+
   /*-------------LogicalPermissions::getTypeCallback()--------------*/
-  
+
   describe('testGetTypeCallbackParamNameMissing', function() {
     it('should call LogicalPermissions::getTypeCallback() with no "name" parameter and catch a MissingArgumentException exception', function() {
       var lp = new LogicalPermissions();
@@ -196,9 +196,9 @@ describe('LogicalPermissions', function() {
       assert.strictEqual(lp.getTypeCallback('test'), callback);
     });
   });
-  
+
   /*-------------LogicalPermissions::setTypeCallback()--------------*/
-  
+
   describe('testSetTypeCallbackParamNameMissing', function() {
     it('should call LogicalPermissions::setTypeCallback() with no "name" parameter and catch a MissingArgumentException exception', function() {
       var lp = new LogicalPermissions();
@@ -259,9 +259,9 @@ describe('LogicalPermissions', function() {
       assert.strictEqual(lp.getTypeCallback('test'), callback);
     });
   });
-  
+
   /*-------------LogicalPermissions::getTypes()--------------*/
-  
+
   describe('testGetTypes', function() {
     it('should call LogicalPermissions::getTypes() and successfully get all registered types', function() {
       var lp = new LogicalPermissions();
@@ -275,7 +275,7 @@ describe('LogicalPermissions', function() {
       assert(!lp.getTypes().hasOwnProperty('test2'));
     });
   });
-  
+
   /*-------------LogicalPermissions::setTypes()--------------*/
 
   describe('testSetTypesParamTypesMissing', function() {
@@ -345,16 +345,16 @@ describe('LogicalPermissions', function() {
   });
 
   /*-------------LogicalPermissions::getBypassCallback()--------------*/
-  
+
   describe('testGetBypassCallback', function() {
     it('should call LogicalPermissions::getBypassCallback() and check that the callback is null', function() {
       var lp = new LogicalPermissions();
       assert.equal(lp.getBypassCallback(), null);
     });
   });
-  
+
   /*-------------LogicalPermissions::setBypassCallback()--------------*/
-  
+
   describe('testSetBypassCallbackParamCallbackMissing', function() {
     it('should call LogicalPermissions::setBypassCallback() with no "callback" parameter and catch a MissingArgumentException exception', function() {
       var lp = new LogicalPermissions();
@@ -379,18 +379,18 @@ describe('LogicalPermissions', function() {
       assert.strictEqual(lp.getBypassCallback(), callback);
     });
   });
-  
+
   /*------------LogicalPermissions::getValidPermissionKeys()---------------*/
-  
+
   describe('testGetValidPermissionKeys', function() {
     var lp = new LogicalPermissions();
-    assert.deepEqual(lp.getValidPermissionKeys(), ['no_bypass', 'AND', 'NAND', 'OR', 'NOR', 'XOR', 'NOT']);
+    assert.deepEqual(lp.getValidPermissionKeys(), ['no_bypass', 'AND', 'NAND', 'OR', 'NOR', 'XOR', 'NOT', 'TRUE', 'FALSE']);
     var types = {
       flag: function(flag, context) {
         var access = false;
         if(flag === 'testflag') {
           if(context.hasOwnProperty('user') && context.user.hasOwnProperty('testflag')) {
-            access = !!context.user.testflag; 
+            access = !!context.user.testflag;
           }
         }
         return access;
@@ -398,24 +398,24 @@ describe('LogicalPermissions', function() {
       role: function(role, context) {
         var access = false;
         if(context.hasOwnProperty('user') && context.user.hasOwnProperty('roles')) {
-          access = context.user.roles.indexOf(role) > -1; 
+          access = context.user.roles.indexOf(role) > -1;
         }
         return access;
       },
       misc: function(item, context) {
         var access = false;
         if(context.hasOwnProperty('user') && context.user.hasOwnProperty(item)) {
-          access = !!context.user[item]; 
+          access = !!context.user[item];
         }
         return access;
       }
     };
     lp.setTypes(types);
-    assert.deepEqual(lp.getValidPermissionKeys(), ['no_bypass', 'AND', 'NAND', 'OR', 'NOR', 'XOR', 'NOT', 'flag', 'role', 'misc']);
+    assert.deepEqual(lp.getValidPermissionKeys(), ['no_bypass', 'AND', 'NAND', 'OR', 'NOR', 'XOR', 'NOT', 'TRUE', 'FALSE', 'flag', 'role', 'misc']);
   });
- 
+
   /*-------------LogicalPermissions::checkAccess()--------------*/
-  
+
   describe('testCheckAccessParamPermissionsMissing', function() {
     it('should call LogicalPermissions::checkAccess() with no "permissions" parameter and catch a MissingArgumentException exception', function() {
       var lp = new LogicalPermissions();
@@ -450,13 +450,13 @@ describe('LogicalPermissions', function() {
       //Directly nested
       var permissions = {
         flag: {
-          flag: 'testflag' 
+          flag: 'testflag'
         }
       };
       assert.throws(function() {
         lp.checkAccess(permissions, {});
       }, function(err) {return err.name === 'InvalidArgumentValueException';});
-      
+
       //Indirectly nested
       var permissions = {
         flag: {
@@ -607,7 +607,7 @@ describe('LogicalPermissions', function() {
           var access = false;
           if(flag === 'never_bypass') {
             if(context.hasOwnProperty('user') && context.user.hasOwnProperty('never_bypass')) {
-              access = !!context.user.never_bypass; 
+              access = !!context.user.never_bypass;
             }
           }
           return access;
@@ -620,7 +620,7 @@ describe('LogicalPermissions', function() {
       lp.setBypassCallback(bypass_callback);
       var permissions = {
         no_bypass: {
-          flag: 'never_bypass' 
+          flag: 'never_bypass'
         }
       };
       var user = {
@@ -638,7 +638,7 @@ describe('LogicalPermissions', function() {
           var access = false;
           if(flag === 'never_bypass') {
             if(context.hasOwnProperty('user') && context.user.hasOwnProperty('never_bypass')) {
-              access = !!context.user.never_bypass; 
+              access = !!context.user.never_bypass;
             }
           }
           return access;
@@ -651,7 +651,7 @@ describe('LogicalPermissions', function() {
       lp.setBypassCallback(bypass_callback);
       var permissions = {
         no_bypass: {
-          flag: 'never_bypass' 
+          flag: 'never_bypass'
         }
       };
       var user = {
@@ -669,7 +669,7 @@ describe('LogicalPermissions', function() {
           var access = false;
           if(flag === 'testflag') {
             if(context.hasOwnProperty('user') && context.user.hasOwnProperty('testflag')) {
-              access = !!context.user.testflag; 
+              access = !!context.user.testflag;
             }
           }
           return 0;
@@ -699,7 +699,7 @@ describe('LogicalPermissions', function() {
           var access = false;
           if(flag === 'testflag') {
             if(context.hasOwnProperty('user') && context.user.hasOwnProperty('testflag')) {
-              access = !!context.user.testflag; 
+              access = !!context.user.testflag;
             }
           }
           return access;
@@ -727,7 +727,7 @@ describe('LogicalPermissions', function() {
           var access = false;
           if(flag === 'testflag') {
             if(context.hasOwnProperty('user') && context.user.hasOwnProperty('testflag')) {
-              access = !!context.user.testflag; 
+              access = !!context.user.testflag;
             }
           }
           return access;
@@ -751,7 +751,7 @@ describe('LogicalPermissions', function() {
           var access = false;
           if(flag === 'testflag') {
             if(context.hasOwnProperty('user') && context.user.hasOwnProperty('testflag')) {
-              access = !!context.user.testflag; 
+              access = !!context.user.testflag;
             }
           }
           return access;
@@ -759,14 +759,14 @@ describe('LogicalPermissions', function() {
         role: function(role, context) {
           var access = false;
           if(context.hasOwnProperty('user') && context.user.hasOwnProperty('roles')) {
-            access = context.user.roles.indexOf(role) > -1; 
+            access = context.user.roles.indexOf(role) > -1;
           }
           return access;
         },
         misc: function(item, context) {
           var access = false;
           if(context.hasOwnProperty('user') && context.user.hasOwnProperty(item)) {
-            access = !!context.user[item]; 
+            access = !!context.user[item];
           }
           return access;
         }
@@ -774,7 +774,7 @@ describe('LogicalPermissions', function() {
       lp.setTypes(types);
       var permissions = {
         no_bypass: {
-          flag: 'never_bypass' 
+          flag: 'never_bypass'
         },
         flag: 'testflag',
         role: 'admin',
@@ -821,7 +821,7 @@ describe('LogicalPermissions', function() {
         role: function(role, context) {
           var access = false;
           if(context.hasOwnProperty('user') && context.user.hasOwnProperty('roles')) {
-            access = context.user.roles.indexOf(role) > -1; 
+            access = context.user.roles.indexOf(role) > -1;
           }
           return access;
         }
@@ -854,7 +854,7 @@ describe('LogicalPermissions', function() {
         role: function(role, context) {
           var access = false;
           if(context.hasOwnProperty('user') && context.user.hasOwnProperty('roles')) {
-            access = context.user.roles.indexOf(role) > -1; 
+            access = context.user.roles.indexOf(role) > -1;
           }
           return access;
         }
@@ -881,7 +881,7 @@ describe('LogicalPermissions', function() {
         role: function(role, context) {
           var access = false;
           if(context.hasOwnProperty('user') && context.user.hasOwnProperty('roles')) {
-            access = context.user.roles.indexOf(role) > -1; 
+            access = context.user.roles.indexOf(role) > -1;
           }
           return access;
         }
@@ -899,7 +899,7 @@ describe('LogicalPermissions', function() {
       assert.throws(function() {
         lp.checkAccess(permissions, {user: user});
       }, function(err) {return err.name === 'InvalidValueForLogicGateException';});
-      
+
       permissions = {
         role: {
           AND: {}
@@ -917,7 +917,7 @@ describe('LogicalPermissions', function() {
         role: function(role, context) {
           var access = false;
           if(context.hasOwnProperty('user') && context.user.hasOwnProperty('roles')) {
-            access = context.user.roles.indexOf(role) > -1; 
+            access = context.user.roles.indexOf(role) > -1;
           }
           return access;
         }
@@ -1007,7 +1007,7 @@ describe('LogicalPermissions', function() {
         role: function(role, context) {
           var access = false;
           if(context.hasOwnProperty('user') && context.user.hasOwnProperty('roles')) {
-            access = context.user.roles.indexOf(role) > -1; 
+            access = context.user.roles.indexOf(role) > -1;
           }
           return access;
         }
@@ -1034,7 +1034,7 @@ describe('LogicalPermissions', function() {
         role: function(role, context) {
           var access = false;
           if(context.hasOwnProperty('user') && context.user.hasOwnProperty('roles')) {
-            access = context.user.roles.indexOf(role) > -1; 
+            access = context.user.roles.indexOf(role) > -1;
           }
           return access;
         }
@@ -1052,7 +1052,7 @@ describe('LogicalPermissions', function() {
       assert.throws(function() {
         lp.checkAccess(permissions, {user: user});
       }, function(err) {return err.name === 'InvalidValueForLogicGateException';});
-      
+
       permissions = {
         role: {
           NAND: {}
@@ -1070,7 +1070,7 @@ describe('LogicalPermissions', function() {
         role: function(role, context) {
           var access = false;
           if(context.hasOwnProperty('user') && context.user.hasOwnProperty('roles')) {
-            access = context.user.roles.indexOf(role) > -1; 
+            access = context.user.roles.indexOf(role) > -1;
           }
           return access;
         }
@@ -1160,7 +1160,7 @@ describe('LogicalPermissions', function() {
         role: function(role, context) {
           var access = false;
           if(context.hasOwnProperty('user') && context.user.hasOwnProperty('roles')) {
-            access = context.user.roles.indexOf(role) > -1; 
+            access = context.user.roles.indexOf(role) > -1;
           }
           return access;
         }
@@ -1187,7 +1187,7 @@ describe('LogicalPermissions', function() {
         role: function(role, context) {
           var access = false;
           if(context.hasOwnProperty('user') && context.user.hasOwnProperty('roles')) {
-            access = context.user.roles.indexOf(role) > -1; 
+            access = context.user.roles.indexOf(role) > -1;
           }
           return access;
         }
@@ -1205,7 +1205,7 @@ describe('LogicalPermissions', function() {
       assert.throws(function() {
         lp.checkAccess(permissions, {user: user});
       }, function(err) {return err.name === 'InvalidValueForLogicGateException';});
-      
+
       permissions = {
         role: {
           OR: {}
@@ -1223,7 +1223,7 @@ describe('LogicalPermissions', function() {
         role: function(role, context) {
           var access = false;
           if(context.hasOwnProperty('user') && context.user.hasOwnProperty('roles')) {
-            access = context.user.roles.indexOf(role) > -1; 
+            access = context.user.roles.indexOf(role) > -1;
           }
           return access;
         }
@@ -1313,7 +1313,7 @@ describe('LogicalPermissions', function() {
         role: function(role, context) {
           var access = false;
           if(context.hasOwnProperty('user') && context.user.hasOwnProperty('roles')) {
-            access = context.user.roles.indexOf(role) > -1; 
+            access = context.user.roles.indexOf(role) > -1;
           }
           return access;
         }
@@ -1340,7 +1340,7 @@ describe('LogicalPermissions', function() {
         role: function(role, context) {
           var access = false;
           if(context.hasOwnProperty('user') && context.user.hasOwnProperty('roles')) {
-            access = context.user.roles.indexOf(role) > -1; 
+            access = context.user.roles.indexOf(role) > -1;
           }
           return access;
         }
@@ -1358,7 +1358,7 @@ describe('LogicalPermissions', function() {
       assert.throws(function() {
         lp.checkAccess(permissions, {user: user});
       }, function(err) {return err.name === 'InvalidValueForLogicGateException';});
-      
+
       permissions = {
         role: {
           NOR: {}
@@ -1376,7 +1376,7 @@ describe('LogicalPermissions', function() {
         role: function(role, context) {
           var access = false;
           if(context.hasOwnProperty('user') && context.user.hasOwnProperty('roles')) {
-            access = context.user.roles.indexOf(role) > -1; 
+            access = context.user.roles.indexOf(role) > -1;
           }
           return access;
         }
@@ -1466,7 +1466,7 @@ describe('LogicalPermissions', function() {
         role: function(role, context) {
           var access = false;
           if(context.hasOwnProperty('user') && context.user.hasOwnProperty('roles')) {
-            access = context.user.roles.indexOf(role) > -1; 
+            access = context.user.roles.indexOf(role) > -1;
           }
           return access;
         }
@@ -1493,7 +1493,7 @@ describe('LogicalPermissions', function() {
         role: function(role, context) {
           var access = false;
           if(context.hasOwnProperty('user') && context.user.hasOwnProperty('roles')) {
-            access = context.user.roles.indexOf(role) > -1; 
+            access = context.user.roles.indexOf(role) > -1;
           }
           return access;
         }
@@ -1511,7 +1511,7 @@ describe('LogicalPermissions', function() {
       assert.throws(function() {
         lp.checkAccess(permissions, {user: user});
       }, function(err) {return err.name === 'InvalidValueForLogicGateException';});
-      
+
       permissions = {
         role: {
           XOR: {0: 'admin'}
@@ -1529,7 +1529,7 @@ describe('LogicalPermissions', function() {
         role: function(role, context) {
           var access = false;
           if(context.hasOwnProperty('user') && context.user.hasOwnProperty('roles')) {
-            access = context.user.roles.indexOf(role) > -1; 
+            access = context.user.roles.indexOf(role) > -1;
           }
           return access;
         }
@@ -1619,7 +1619,7 @@ describe('LogicalPermissions', function() {
         role: function(role, context) {
           var access = false;
           if(context.hasOwnProperty('user') && context.user.hasOwnProperty('roles')) {
-            access = context.user.roles.indexOf(role) > -1; 
+            access = context.user.roles.indexOf(role) > -1;
           }
           return access;
         }
@@ -1646,7 +1646,7 @@ describe('LogicalPermissions', function() {
         role: function(role, context) {
           var access = false;
           if(context.hasOwnProperty('user') && context.user.hasOwnProperty('roles')) {
-            access = context.user.roles.indexOf(role) > -1; 
+            access = context.user.roles.indexOf(role) > -1;
           }
           return access;
         }
@@ -1664,7 +1664,7 @@ describe('LogicalPermissions', function() {
       assert.throws(function() {
         lp.checkAccess(permissions, {user: user});
       }, function(err) {return err.name === 'InvalidValueForLogicGateException';});
-      
+
       permissions = {
         role: {
           NOT: {}
@@ -1682,7 +1682,7 @@ describe('LogicalPermissions', function() {
         role: function(role, context) {
           var access = false;
           if(context.hasOwnProperty('user') && context.user.hasOwnProperty('roles')) {
-            access = context.user.roles.indexOf(role) > -1; 
+            access = context.user.roles.indexOf(role) > -1;
           }
           return access;
         }
@@ -1709,7 +1709,7 @@ describe('LogicalPermissions', function() {
         role: function(role, context) {
           var access = false;
           if(context.hasOwnProperty('user') && context.user.hasOwnProperty('roles')) {
-            access = context.user.roles.indexOf(role) > -1; 
+            access = context.user.roles.indexOf(role) > -1;
           }
           return access;
         }
@@ -1738,7 +1738,7 @@ describe('LogicalPermissions', function() {
         role: function(role, context) {
           var access = false;
           if(context.hasOwnProperty('user') && context.user.hasOwnProperty('roles')) {
-            access = context.user.roles.indexOf(role) > -1; 
+            access = context.user.roles.indexOf(role) > -1;
           }
           return access;
         }
@@ -1767,7 +1767,7 @@ describe('LogicalPermissions', function() {
         role: function(role, context) {
           var access = false;
           if(context.hasOwnProperty('user') && context.user.hasOwnProperty('roles')) {
-            access = context.user.roles.indexOf(role) > -1; 
+            access = context.user.roles.indexOf(role) > -1;
           }
           return access;
         }
@@ -1803,7 +1803,7 @@ describe('LogicalPermissions', function() {
         role: function(role, context) {
           var access = false;
           if(context.hasOwnProperty('user') && context.user.hasOwnProperty('roles')) {
-            access = context.user.roles.indexOf(role) > -1; 
+            access = context.user.roles.indexOf(role) > -1;
           }
           return access;
         }
@@ -1841,7 +1841,7 @@ describe('LogicalPermissions', function() {
         role: function(role, context) {
           var access = false;
           if(context.hasOwnProperty('user') && context.user.hasOwnProperty('roles')) {
-            access = context.user.roles.indexOf(role) > -1; 
+            access = context.user.roles.indexOf(role) > -1;
           }
           return access;
         }
