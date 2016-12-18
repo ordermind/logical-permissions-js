@@ -439,7 +439,7 @@ describe('LogicalPermissions', function() {
         flag: 50
       };
       assert.throws(function() {
-        lp.checkAccess(permissions, {});
+        lp.checkAccess(permissions);
       }, function(err) {return err.name === 'InvalidArgumentTypeException';});
     });
   });
@@ -454,7 +454,7 @@ describe('LogicalPermissions', function() {
         }
       };
       assert.throws(function() {
-        lp.checkAccess(permissions, {});
+        lp.checkAccess(permissions);
       }, function(err) {return err.name === 'InvalidArgumentValueException';});
 
       //Indirectly nested
@@ -466,7 +466,7 @@ describe('LogicalPermissions', function() {
         }
       };
       assert.throws(function() {
-        lp.checkAccess(permissions, {});
+        lp.checkAccess(permissions);
       }, function(err) {return err.name === 'InvalidArgumentValueException';});
     });
   });
@@ -477,16 +477,8 @@ describe('LogicalPermissions', function() {
         flag: 'testflag'
       };
       assert.throws(function() {
-        lp.checkAccess(permissions, {});
+        lp.checkAccess(permissions);
       }, function(err) {return err.name === 'PermissionTypeNotRegisteredException';});
-    });
-  });
-  describe('testCheckAccessParamContextMissing', function() {
-    it('should call LogicalPermissions::checkAccess() with no "context" parameter and catch a MissingArgumentException exception', function() {
-      var lp = new LogicalPermissions();
-      assert.throws(function() {
-        lp.checkAccess({});
-      }, function(err) {return err.name === 'MissingArgumentException';});
     });
   });
   describe('testCheckAccessParamContextWrongType', function() {
@@ -528,7 +520,7 @@ describe('LogicalPermissions', function() {
       };
       lp.setBypassCallback(bypass_callback);
       assert.throws(function() {
-        lp.checkAccess({}, {});
+        lp.checkAccess({});
       }, function(err) {return err.name === 'InvalidCallbackReturnTypeException';});
     });
   });
@@ -539,7 +531,7 @@ describe('LogicalPermissions', function() {
         return true;
       };
       lp.setBypassCallback(bypass_callback);
-      assert(lp.checkAccess({}, {}));
+      assert(lp.checkAccess({}));
     });
   });
   describe('testCheckAccessBypassAccessDeny', function() {
@@ -549,7 +541,7 @@ describe('LogicalPermissions', function() {
         return false;
       };
       lp.setBypassCallback(bypass_callback);
-      assert(!lp.checkAccess({}, {}));
+      assert(!lp.checkAccess({}));
     });
   });
   describe('testCheckAccessBypassAccessDeny2', function() {
@@ -584,7 +576,7 @@ describe('LogicalPermissions', function() {
       var permissions = {
         no_bypass: false
       };
-      assert(lp.checkAccess(permissions, {}));
+      assert(lp.checkAccess(permissions));
       //Test that permission object is not changed
       assert(permissions.hasOwnProperty('no_bypass'));
     });
@@ -1698,7 +1690,7 @@ describe('LogicalPermissions', function() {
         }
       };
       assert.throws(function() {
-        lp.checkAccess(permissions, {});
+        lp.checkAccess(permissions);
       }, function(err) {return err.name === 'InvalidValueForLogicGateException';});
     });
   });
