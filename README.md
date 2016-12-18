@@ -401,7 +401,7 @@ Gets all keys that can be part of a permission tree.
 **Returns**: `Array`, valid permission keys
 
 
-### checkAccess(permissions, context)
+### checkAccess(permissions, context, allow_bypass)
 
 Checks access for a permission tree.
 
