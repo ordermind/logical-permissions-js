@@ -524,6 +524,19 @@ describe('LogicalPermissions', function() {
       }, function(err) {return err.name === 'InvalidCallbackReturnTypeException';});
     });
   });
+  describe('testCheckAccessBypassAccessIllegalDescendant', function() {
+    it('should call LogicalPermissions::checkAccess() with no_bypass in a nether part of a permissions tree and catch an InvalidArgumentValueException exception', function() {
+      var lp = new LogicalPermissions();
+      permissions = {
+        'OR': {
+          'no_bypass': true
+        }
+      };
+      assert.throws(function() {
+        lp.checkAccess(permissions);
+      }, function(err) {return err.name === 'InvalidArgumentValueException';});
+    });
+  });
   describe('testCheckAccessBypassAccessAllow', function() {
     it('should call LogicalPermissions::checkAccess() and allow access due to bypassing access', function() {
       var lp = new LogicalPermissions();
