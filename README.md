@@ -259,7 +259,7 @@ Examples:
 ```javascript
 //Allow access for anyone
 [
-  true,
+  true
 ]
 
 //Using a boolean without an array is also permitted
@@ -269,7 +269,7 @@ true
 ```javascript
 //Example with string representation
 [
-  'TRUE',
+  'TRUE'
 ]
 
 //Using a string representation without an array is also permitted
@@ -279,7 +279,7 @@ true
 ```javascript
 //Deny access for everyone except those with bypass access
 [
-  false,
+  false
 ]
 
 //Using a boolean without an array is also permitted
@@ -289,7 +289,7 @@ false
 ```javascript
 //Example with string representation
 [
-  'FALSE',
+  'FALSE'
 ]
 
 //Using a string representation without an array is also permitted
@@ -300,7 +300,7 @@ false
 //Deny access for everyone including those with bypass access
 {
   0: false,
-  'no_bypass' => true,
+  'no_bypass' => true
 }
 ```
 
