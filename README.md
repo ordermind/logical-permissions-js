@@ -300,7 +300,7 @@ false
 //Deny access for everyone including those with bypass access
 {
   0: false,
-  'no_bypass' => true
+  no_bypass: true
 }
 ```
 
