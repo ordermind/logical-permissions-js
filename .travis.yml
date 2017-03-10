@@ -8,3 +8,5 @@ node_js:
   - "iojs"
   - "node"
 install: npm install mocha
+notifications:
+  email: false
