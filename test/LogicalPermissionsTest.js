@@ -384,7 +384,7 @@ describe('LogicalPermissions', function() {
 
   describe('testGetValidPermissionKeys', function() {
     var lp = new LogicalPermissions();
-    assert.deepEqual(lp.getValidPermissionKeys(), ['no_bypass', 'AND', 'NAND', 'OR', 'NOR', 'XOR', 'NOT', 'TRUE', 'FALSE']);
+    assert.deepEqual(lp.getValidPermissionKeys(), ['NO_BYPASS', 'AND', 'NAND', 'OR', 'NOR', 'XOR', 'NOT', 'TRUE', 'FALSE']);
     var types = {
       flag: function(flag, context) {
         var access = false;
@@ -411,7 +411,7 @@ describe('LogicalPermissions', function() {
       }
     };
     lp.setTypes(types);
-    assert.deepEqual(lp.getValidPermissionKeys(), ['no_bypass', 'AND', 'NAND', 'OR', 'NOR', 'XOR', 'NOT', 'TRUE', 'FALSE', 'flag', 'role', 'misc']);
+    assert.deepEqual(lp.getValidPermissionKeys(), ['NO_BYPASS', 'AND', 'NAND', 'OR', 'NOR', 'XOR', 'NOT', 'TRUE', 'FALSE', 'flag', 'role', 'misc']);
   });
 
   /*-------------LogicalPermissions::checkAccess()--------------*/
