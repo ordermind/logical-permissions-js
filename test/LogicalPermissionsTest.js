@@ -497,7 +497,7 @@ describe('LogicalPermissions', function() {
     it('should call LogicalPermissions::checkAccess() with the wrong data type for the "context" parameter and catch an InvalidArgumentTypeException exception', function() {
       var lp = new LogicalPermissions();
       assert.throws(function() {
-        lp.checkAccess({}, []);
+        lp.checkAccess(false, []);
       }, function(err) {return err.name === 'InvalidArgumentTypeException';});
     });
   });
@@ -505,8 +505,14 @@ describe('LogicalPermissions', function() {
     it('should call LogicalPermissions::checkAccess() with the wrong data type for the "allow_bypass" parameter and catch an InvalidArgumentTypeException exception', function() {
       var lp = new LogicalPermissions();
       assert.throws(function() {
-        lp.checkAccess({}, {}, 'test');
+        lp.checkAccess(false, {}, 'test');
       }, function(err) {return err.name === 'InvalidArgumentTypeException';});
+    });
+  });
+  describe('testCheckAccessEmptyObjectAllow', function() {
+    it('should call LogicalPermissions::checkAccess() with an empty permissions object and allow access', function() {
+      var lp = new LogicalPermissions();
+      assert(lp.checkAccess({}));
     });
   });
   describe('testCheckAccessBypassAccessCheckContextPassing', function() {
@@ -521,7 +527,7 @@ describe('LogicalPermissions', function() {
         return true;
       };
       lp.setBypassCallback(bypass_callback);
-      lp.checkAccess({}, {user: user});
+      lp.checkAccess(false, {user: user});
     });
   });
   describe('testCheckAccessBypassAccessWrongReturnType', function() {
@@ -532,7 +538,7 @@ describe('LogicalPermissions', function() {
       };
       lp.setBypassCallback(bypass_callback);
       assert.throws(function() {
-        lp.checkAccess({});
+        lp.checkAccess(false);
       }, function(err) {return err.name === 'InvalidCallbackReturnTypeException';});
     });
   });
@@ -556,7 +562,7 @@ describe('LogicalPermissions', function() {
         return true;
       };
       lp.setBypassCallback(bypass_callback);
-      assert(lp.checkAccess({}));
+      assert(lp.checkAccess(false));
     });
   });
   describe('testCheckAccessBypassAccessDeny', function() {
@@ -566,7 +572,7 @@ describe('LogicalPermissions', function() {
         return false;
       };
       lp.setBypassCallback(bypass_callback);
-      assert(!lp.checkAccess({}));
+      assert(!lp.checkAccess(false));
     });
   });
   describe('testCheckAccessBypassAccessDeny2', function() {
@@ -576,7 +582,7 @@ describe('LogicalPermissions', function() {
         return true;
       };
       lp.setBypassCallback(bypass_callback);
-      assert(!lp.checkAccess({}, {}, false));
+      assert(!lp.checkAccess(false, {}, false));
     });
   });
   describe('testCheckAccessNoBypassWrongType', function() {
@@ -589,6 +595,12 @@ describe('LogicalPermissions', function() {
       assert.throws(function() {
         lp.checkAccess({no_bypass: 'test'}, {});
       }, function(err) {return err.name === 'InvalidArgumentValueException';});
+    });
+  });
+  describe('testCheckAccessNoBypassEmptyPermissionsAllow', function() {
+    it('should call LogicalPermissions::checkAccess() with only a no_bypass key and allow access', function() {
+      var lp = new LogicalPermissions();
+      assert(lp.checkAccess({no_bypass: true}));
     });
   });
   describe('testCheckAccessNoBypassAccessBooleanAllow', function() {
@@ -613,7 +625,7 @@ describe('LogicalPermissions', function() {
         return true;
       };
       lp.setBypassCallback(bypass_callback);
-      assert(!lp.checkAccess({no_bypass: true}, {}));
+      assert(!lp.checkAccess({no_bypass: true, 0: false}, {}));
     });
   });
   describe('testCheckAccessNoBypassAccessStringAllow', function() {
@@ -697,7 +709,8 @@ describe('LogicalPermissions', function() {
       var permissions = {
         no_bypass: {
           flag: 'never_bypass'
-        }
+        },
+        0: false
       };
       var user = {
         id: 1,
