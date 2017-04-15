@@ -616,6 +616,34 @@ describe('LogicalPermissions', function() {
       assert(!lp.checkAccess({no_bypass: true}, {}));
     });
   });
+  describe('testCheckAccessNoBypassAccessStringAllow', function() {
+    it('should call LogicalPermissions::checkAccess() with no_bypass set to string "False" and allow bypass access',
+    function() {
+      var lp = new LogicalPermissions();
+      var bypass_callback = function(context) {
+        return true;
+      };
+      lp.setBypassCallback(bypass_callback);
+      var permissions = {
+        no_bypass: 'False'
+      };
+      assert(lp.checkAccess(permissions));
+      //Test that permission object is not changed
+      assert(permissions.hasOwnProperty('no_bypass'));
+    });
+  });
+
+  describe('testCheckAccessNoBypassAccessStringDeny', function() {
+    it('should call LogicalPermissions::checkAccess() with no_bypass set to string "True" and deny bypass access and regular access',
+    function() {
+      var lp = new LogicalPermissions();
+      var bypass_callback = function(context) {
+        return true;
+      };
+      lp.setBypassCallback(bypass_callback);
+      assert(!lp.checkAccess({no_bypass: 'True', 0: false}, {}));
+    });
+  });
   describe('testCheckAccessNoBypassAccessObjectAllow', function() {
     it('should call LogicalPermissions::checkAccess() with no_bypass set to an object and allow access due to bypassing access', function() {
       var lp = new LogicalPermissions();
