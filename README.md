@@ -54,14 +54,14 @@ The main api method is `LogicalPermissions::checkAccess()`, which checks the acc
 In this example `role` and `flag` are the evaluated permission types. For this example to work you will need to register the permission types 'role' and 'flag' so that the class knows which callbacks are responsible for evaluating the respective permission types. You can do that with `LogicalPermissions::addType()`.
 
 ### Bypassing permissions
-This packages also supports rules for bypassing permissions completely for superusers. In order to use this functionality you need to register a callback with `LogicalPermissions::setBypassCallback()`. The registered callback will run on every permission check and if it returns `true`, access will automatically be granted. If you want to make exceptions you can do so by adding `'no_bypass': true` to the first level of a permission tree. You can even use permissions as conditions for `no_bypass`.
+This packages also supports rules for bypassing permissions completely for superusers. In order to use this functionality you need to register a callback with `LogicalPermissions::setBypassCallback()`. The registered callback will run on every permission check and if it returns `true`, access will automatically be granted. If you want to make exceptions you can do so by adding `'NO_BYPASS': true` to the first level of a permission tree. You can even use permissions as conditions for `NO_BYPASS`.
 
 Examples:
 
 ```javascript
 //Disallow access bypassing
 {
-  'no_bypass': true,
+  'NO_BYPASS': true,
   'role': 'editor'
 }
 ```
@@ -69,7 +69,7 @@ Examples:
 ```javascript
 //Disallow access bypassing only if the user is an admin
 {
-  'no_bypass': {
+  'NO_BYPASS': {
     'role': 'admin'
   },
   'role': 'editor'
@@ -300,7 +300,7 @@ false
 //Deny access for everyone including those with bypass access
 {
   0: false,
-  no_bypass: true
+  NO_BYPASS: true
 }
 ```
 
