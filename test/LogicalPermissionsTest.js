@@ -435,6 +435,7 @@ describe('LogicalPermissions', function() {
   describe('testCheckAccessParamPermissionsWrongPermissionType', function() {
     it('should call LogicalPermissions::checkAccess() with an invalid permission value and catch an InvalidArgumentTypeException exception', function() {
       var lp = new LogicalPermissions();
+      lp.addType('flag', function(){});
       var permissions = {
         flag: 50
       };
@@ -446,6 +447,7 @@ describe('LogicalPermissions', function() {
   describe('testCheckAccessParamPermissionsNestedTypes', function() {
     it('should call LogicalPermissions::checkAccess() with nested permission types and catch an InvalidArgumentValueException exception', function() {
       var lp = new LogicalPermissions();
+      lp.addType('flag', function(){});
 
       //Directly nested
       var permissions = {
@@ -1821,6 +1823,7 @@ describe('LogicalPermissions', function() {
   describe('testCheckAccessBoolTRUEIllegalDescendant', function() {
     it('should call LogicalPermissions::checkAccess() with a boolean TRUE permission as a descendant to a permission key and catch an InvalidArgumentValueException', function() {
       var lp = new LogicalPermissions();
+      lp.addType('role', function(){});
       var permissions = {
         'role': [true]
       };
@@ -1848,6 +1851,7 @@ describe('LogicalPermissions', function() {
   describe('testCheckAccessBoolFALSEIllegalDescendant', function() {
     it('should call LogicalPermissions::checkAccess() with a boolean FALSE permission as a descendant to a permission key and catch an InvalidArgumentValueException', function() {
       var lp = new LogicalPermissions();
+      lp.addType('role', function(){});
       var permissions = {
         'role': [false]
       };
@@ -1925,6 +1929,7 @@ describe('LogicalPermissions', function() {
   describe('testCheckAccessStringTRUEIllegalDescendant', function() {
     it('should call LogicalPermissions::checkAccess() with a string TRUE permission as a descendant to a permission key and catch an InvalidArgumentValueException exception', function() {
       var lp = new LogicalPermissions();
+      lp.addType('role', function(){});
       var permissions = {
         'role': ['TRUE']
       };
@@ -1973,6 +1978,7 @@ describe('LogicalPermissions', function() {
   describe('testCheckAccessStringFALSEIllegalDescendant', function() {
     it('should call LogicalPermissions::checkAccess() with a string FALSE permission as a descendant to a permission key and catch an InvalidArgumentValueException exception', function() {
       var lp = new LogicalPermissions();
+      lp.addType('role', function(){});
       var permissions = {
         'role': ['FALSE']
       };
